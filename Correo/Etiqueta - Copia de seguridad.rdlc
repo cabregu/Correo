@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="DummyDataSource">
+      <rd:DataSourceID>4a5a6799-8fd6-453f-a6d1-e04ac50e4682</rd:DataSourceID>
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+    </DataSource>
+  </DataSources>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:GridSpacing>0.25cm</rd:GridSpacing>
+  <rd:SnapToGrid>false</rd:SnapToGrid>
+  <RightMargin>1cm</RightMargin>
+  <LeftMargin>1cm</LeftMargin>
+  <BottomMargin>1cm</BottomMargin>
+  <rd:ReportID>7cc4c2fe-7d3a-4e5b-8b5c-9941763245da</rd:ReportID>
+  <PageWidth>21cm</PageWidth>
+  <DataSets>
+    <DataSet Name="CorreoDSCartas_cartas">
+      <Fields>
+        <Field Name="NRO_CARTA">
+          <DataField>NRO_CARTA</DataField>
+          <rd:TypeName>System.UInt32</rd:TypeName>
+        </Field>
+        <Field Name="REMITENTE">
+          <DataField>REMITENTE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TRABAJO">
+          <DataField>TRABAJO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FECH_TRAB">
+          <DataField>FECH_TRAB</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="NOMBRE_APELLIDO">
+          <DataField>NOMBRE_APELLIDO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CP">
+          <DataField>CP</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CALLE">
+          <DataField>CALLE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LOCALIDAD">
+          <DataField>LOCALIDAD</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PROVINCIA">
+          <DataField>PROVINCIA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ESTADO">
+          <DataField>ESTADO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NRO_PLANILLA">
+          <DataField>NRO_PLANILLA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FECHA_PLANILLA">
+          <DataField>FECHA_PLANILLA</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="CARTERO">
+          <DataField>CARTERO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FECHA_ENTREGA">
+          <DataField>FECHA_ENTREGA</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ACUSE">
+          <DataField>ACUSE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FECHA1">
+          <DataField>FECHA1</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PLANILLA1">
+          <DataField>PLANILLA1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TEMA1">
+          <DataField>TEMA1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CARTERO1">
+          <DataField>CARTERO1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FECHA2">
+          <DataField>FECHA2</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PLANILLA2">
+          <DataField>PLANILLA2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TEMA2">
+          <DataField>TEMA2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CARTERO2">
+          <DataField>CARTERO2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FECHA3">
+          <DataField>FECHA3</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PLANILLA3">
+          <DataField>PLANILLA3</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TEMA3">
+          <DataField>TEMA3</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CARTERO3">
+          <DataField>CARTERO3</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="MOTIVO">
+          <DataField>MOTIVO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FECHA_DEVOLUCION">
+          <DataField>FECHA_DEVOLUCION</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PLANILLA_DEVOLUCION">
+          <DataField>PLANILLA_DEVOLUCION</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DEVOLUCION_ACUSE">
+          <DataField>DEVOLUCION_ACUSE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FECHA_DEVO_ACUSE">
+          <DataField>FECHA_DEVO_ACUSE</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="NRO_ORDEN">
+          <DataField>NRO_ORDEN</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="REMINOM">
+          <DataField>REMINOM</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="RECIBIO">
+          <DataField>RECIBIO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TIPO_DOC">
+          <DataField>TIPO_DOC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DOCUMENTO">
+          <DataField>DOCUMENTO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OBS">
+          <DataField>OBS</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="D_ENTRY">
+          <DataField>D_ENTRY</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ZONA">
+          <DataField>ZONA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="EMPRESA">
+          <DataField>EMPRESA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NRO_CARTA2">
+          <DataField>NRO_CARTA2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SERVICIO">
+          <DataField>SERVICIO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PRECIO">
+          <DataField>PRECIO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="F_LIMITE">
+          <DataField>F_LIMITE</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="SOCIO">
+          <DataField>SOCIO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AUDITORIA">
+          <DataField>AUDITORIA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PLANILLA_AUDITORIA">
+          <DataField>PLANILLA_AUDITORIA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ARTICULO">
+          <DataField>ARTICULO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="VALOR">
+          <DataField>VALOR</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="COBRAR">
+          <DataField>COBRAR</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LAT_IZQ">
+          <DataField>LAT_IZQ</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LAT_DER">
+          <DataField>LAT_DER</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="MOTIVO_ANT">
+          <DataField>MOTIVO_ANT</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FECHA_MOT_ANT">
+          <DataField>FECHA_MOT_ANT</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ERR">
+          <DataField>ERR</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OBS2">
+          <DataField>OBS2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OBS3">
+          <DataField>OBS3</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OBS4">
+          <DataField>OBS4</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ID">
+          <DataField>ID</DataField>
+          <rd:TypeName>System.UInt32</rd:TypeName>
+        </Field>
+        <Field Name="FECHA_IMPORTACION">
+          <DataField>FECHA_IMPORTACION</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="CAMPO_MODIFICADO">
+          <DataField>CAMPO_MODIFICADO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="MODIFICACION">
+          <DataField>MODIFICACION</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DummyDataSource</DataSourceName>
+        <CommandText />
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <rd:DataSetInfo>
+        <rd:DataSetName>CorreoDSCartas</rd:DataSetName>
+        <rd:TableName>cartas</rd:TableName>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <Width>21.00529cm</Width>
+  <Body>
+    <ColumnSpacing>0.5cm</ColumnSpacing>
+    <ReportItems>
+      <List Name="list1">
+        <Left>0.31747cm</Left>
+        <ReportItems>
+          <Textbox Name="NRO_CARTA">
+            <rd:DefaultName>NRO_CARTA</rd:DefaultName>
+            <Top>0.39682cm</Top>
+            <Width>1.75cm</Width>
+            <Style>
+              <FontFamily>Free 3 of 9</FontFamily>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>7</ZIndex>
+            <Left>0.30291cm</Left>
+            <Height>0.5cm</Height>
+            <Value>="*" &amp; Fields!NRO_CARTA.Value &amp; "*"</Value>
+          </Textbox>
+          <Textbox Name="OBS2">
+            <rd:DefaultName>OBS2</rd:DefaultName>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
+            <Top>1.89683cm</Top>
+            <Width>2cm</Width>
+            <Style>
+              <FontSize>6.5pt</FontSize>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>6</ZIndex>
+            <CanGrow>true</CanGrow>
+            <Left>3.55291cm</Left>
+            <Height>0.45cm</Height>
+            <Value>=Fields!LOCALIDAD.Value</Value>
+          </Textbox>
+          <Textbox Name="CP">
+            <rd:DefaultName>CP</rd:DefaultName>
+            <Top>0.89683cm</Top>
+            <Width>1cm</Width>
+            <Style>
+              <FontSize>6.5pt</FontSize>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>5</ZIndex>
+            <Left>4.55291cm</Left>
+            <Height>0.45cm</Height>
+            <Value>=Fields!CP.Value</Value>
+          </Textbox>
+          <Textbox Name="CALLE">
+            <rd:DefaultName>CALLE</rd:DefaultName>
+            <Top>1.39683cm</Top>
+            <Width>5.5cm</Width>
+            <Style>
+              <FontSize>6.5pt</FontSize>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>4</ZIndex>
+            <Left>0.30291cm</Left>
+            <Height>0.45cm</Height>
+            <Value>=Fields!CALLE.Value &amp; "  " &amp; Fields!LOCALIDAD.Value</Value>
+          </Textbox>
+          <Textbox Name="NRO_CARTA2">
+            <rd:DefaultName>NRO_CARTA2</rd:DefaultName>
+            <Top>1.89683cm</Top>
+            <Width>3.5cm</Width>
+            <Style>
+              <FontSize>6.5pt</FontSize>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>3</ZIndex>
+            <Left>0.30291cm</Left>
+            <Height>0.45cm</Height>
+            <Value>=" "&amp; Fields!NRO_CARTA2.Value</Value>
+          </Textbox>
+          <Textbox Name="OBS">
+            <rd:DefaultName>OBS</rd:DefaultName>
+            <Top>0.39682cm</Top>
+            <Width>2cm</Width>
+            <Style>
+              <FontSize>6.5pt</FontSize>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>2</ZIndex>
+            <Left>107.8125pt</Left>
+            <Height>14.175pt</Height>
+            <Value>=" " &amp; Fields!FECH_TRAB.Value.ToShortDateString</Value>
+          </Textbox>
+          <Textbox Name="NOMBRE_APELLIDO">
+            <rd:DefaultName>NOMBRE_APELLIDO</rd:DefaultName>
+            <Top>0.89683cm</Top>
+            <Width>4.5cm</Width>
+            <Style>
+              <FontSize>6.5pt</FontSize>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <ZIndex>1</ZIndex>
+            <Left>0.30291cm</Left>
+            <Height>0.45cm</Height>
+            <Value>=Fields!NOMBRE_APELLIDO.Value</Value>
+          </Textbox>
+          <Textbox Name="REMITENTE">
+            <rd:DefaultName>REMITENTE</rd:DefaultName>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
+            <Top>0.39682cm</Top>
+            <Width>1.25cm</Width>
+            <Style>
+              <FontSize>6.5pt</FontSize>
+              <TextAlign>Left</TextAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+            <Left>2.30291cm</Left>
+            <Height>0.5cm</Height>
+            <Value>=First(Fields!REMITENTE.Value)</Value>
+          </Textbox>
+        </ReportItems>
+        <Top>0.29101cm</Top>
+        <Width>6.19048cm</Width>
+        <Height>2.53968cm</Height>
+      </List>
+    </ReportItems>
+    <Height>3.9418cm</Height>
+  </Body>
+  <Language>es-ES</Language>
+  <TopMargin>1cm</TopMargin>
+  <PageHeight>28cm</PageHeight>
+</Report>
