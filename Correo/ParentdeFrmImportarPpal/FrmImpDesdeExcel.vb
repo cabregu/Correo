@@ -555,10 +555,16 @@ Public Class FrmImpDesdeExcel
                     If kvp.Key = zonal AndAlso nroInicial <= nroFinal Then
                         ' Verificar si el número inicial es impar o par
                         If nroInicial Mod 2 <> 0 Then
-                            fila("obs2") = "ModoS" ' Si es impar
+
+                            If zonal.ToString.Contains("COOR") Then
+                                fila("obs2") = "REFEREN" ' Si es impar
+                            Else
+                                fila("obs2") = "MODO S" ' Si es impar
+
+                            End If
                         Else
 
-                            'fila("obs2") = "normal" ' Si es par
+                            'fila("obs2") = "VACIO" ' Si es par
 
 
                         End If
