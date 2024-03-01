@@ -272,7 +272,7 @@ Public Class FrmArm
 
         ' Obtener datos para el lado derecho
         For Each row As DataRow In dataTable.Rows
-            datosDerecha.Add(row("nro_cart2").ToString())
+            datosDerecha.Add(row("nro_cart2").ToString() & "    " & row("nro_carta").ToString())
         Next
 
         Return datosDerecha
@@ -303,22 +303,52 @@ Public Class FrmArm
 
     End Function
 
+
+
+    'Public Function Combinar()
+    '    Dim rutaCarpeta As String = "C:\temp"
+    '    Dim archivoFinal As String = Path.Combine(rutaCarpeta, "archivo_final.pdf")
+
+    '    Dim listaRutasArchivos As New List(Of String)()
+    '    If File.Exists(archivoFinal) Then
+    '        Try
+    '            File.Delete(archivoFinal)
+    '        Catch ex As Exception
+    '        End Try
+    '    End If
+
+    '    CombinarPDFsEnCarpeta(rutaCarpeta, archivoFinal, listaRutasArchivos)
+    '    MsgBox("Ok. Archivos combinados en 'archivo_final.pdf'.")
+    '    EliminarArchivosEspecificos(listaRutasArchivos)
+
+    '    'OrdenDeRetiro
+    'End Function
+
+
     Public Function Combinar()
         Dim rutaCarpeta As String = "C:\temp"
         Dim archivoFinal As String = Path.Combine(rutaCarpeta, "archivo_final.pdf")
 
-        Dim listaRutasArchivos As New List(Of String)()
         If File.Exists(archivoFinal) Then
             Try
                 File.Delete(archivoFinal)
+
             Catch ex As Exception
+                MsgBox("Error al eliminar el archivo existente 'archivo_final.pdf': " & ex.Message)
+
             End Try
         End If
 
+        Dim listaRutasArchivos As New List(Of String)()
+
         CombinarPDFsEnCarpeta(rutaCarpeta, archivoFinal, listaRutasArchivos)
+
         MsgBox("Ok. Archivos combinados en 'archivo_final.pdf'.")
         EliminarArchivosEspecificos(listaRutasArchivos)
+
+
     End Function
+
 
 
     Sub CombinarPDFsEnCarpeta(rutaCarpeta As String, archivoFinal As String, ByRef listaRutasArchivos As List(Of String))

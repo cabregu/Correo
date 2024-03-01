@@ -2932,11 +2932,12 @@ Public Class CN_Correo
 
     Public Shared Function LlenarDatatableImprimirArm(ByVal Remito As String) As DataTable
 
-        Dim sql As String = "SELECT COUNT(*) AS CANTIDAD, TRABAJO, EMPRESA, CALLE, CP, LOCALIDAD, PROVINCIA " &
+        Dim sql As String = "SELECT COUNT(CALLE) AS CANTIDAD, TRABAJO, EMPRESA, CALLE, CP, LOCALIDAD, PROVINCIA " &
                         "FROM cartas " &
                         "WHERE TRABAJO='" & Remito & "' AND OBS2='ARM' " &
                         "GROUP BY EMPRESA, CALLE, CP, LOCALIDAD, PROVINCIA " &
-                        "ORDER BY EMPRESA, CALLE, NRO_CARTA"
+                        "ORDER BY EMPRESA, CALLE"
+
 
         Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
         Dim cm As New MySqlCommand(sql, cn)
@@ -2950,6 +2951,7 @@ Public Class CN_Correo
 
         Return DtCartasImprimir
     End Function
+
 
     Public Shared Function LlenarDatatableImprimirArmPorEmpresaYCalle(ByVal Empresa As String, ByVal Calle As String, ByVal Remito As Integer) As DataTable
 
