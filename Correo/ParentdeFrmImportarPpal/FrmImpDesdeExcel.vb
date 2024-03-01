@@ -557,7 +557,10 @@ Public Class FrmImpDesdeExcel
                         If nroInicial Mod 2 <> 0 Then
                             fila("obs2") = "ModoS" ' Si es impar
                         Else
-                            fila("obs2") = "normal" ' Si es par
+
+                            'fila("obs2") = "normal" ' Si es par
+
+
                         End If
 
                         nroInicial += 1 ' Incrementar el número inicial para el siguiente ciclo
