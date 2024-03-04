@@ -46,6 +46,7 @@
 
     End Sub
     Private Sub FrmimprimirEtiqueta_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
         Dim ArrayRemitentes As New ArrayList
         ArrayRemitentes = ConfigCorreo.CN_Correo.CargarTodoslosremitente
         CmbRemitente.Items.Clear()

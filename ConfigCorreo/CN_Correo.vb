@@ -2914,7 +2914,8 @@ Public Class CN_Correo
     End Function
     Public Shared Function LlenarDatatableImprimir(ByVal Remito As String) As DataTable
 
-        Dim sql As String = "Select NRO_CARTA, REMITENTE, TRABAJO, FECH_TRAB, APELLIDO, CP, CALLE, NRO, PISO_DEPTO, LOCALIDAD, PROVINCIA, NRO_CART2, EMPRESA, SOCIO, OBS, OBS2, OBS3, OBS4 from cartas where TRABAJO='" & Remito & "'"
+        Dim sql As String = "Select NRO_CARTA, REMITENTE, TRABAJO, FECH_TRAB, APELLIDO, CP, CALLE, NRO, PISO_DEPTO, LOCALIDAD, PROVINCIA, NRO_CART2, EMPRESA, SOCIO, OBS, OBS2, OBS3, OBS4 from cartas where TRABAJO='" & Remito & "' AND OBS2<>'ARM' AND OBS2<>'MODO S' AND OBS2<>'REFEREN'"
+
 
         Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
         Dim cm As New MySqlCommand(sql, cn)
@@ -2929,7 +2930,23 @@ Public Class CN_Correo
 
 
     End Function
+    Public Shared Function LlenarDatatableImprimirSoloModoS(ByVal Remito As String) As DataTable
 
+        Dim sql As String = "Select NRO_CARTA, REMITENTE, TRABAJO, FECH_TRAB, APELLIDO, CP, CALLE, NRO, PISO_DEPTO, LOCALIDAD, PROVINCIA, NRO_CART2, EMPRESA, SOCIO, OBS, OBS2, OBS3, OBS4 from cartas where TRABAJO='" & Remito & "' AND (OBS2='MODO S' OR OBS2='REFEREN')"
+
+        Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
+        Dim cm As New MySqlCommand(sql, cn)
+        Dim da As New MySqlDataAdapter(cm)
+        Dim ds As New DataSet
+        Dim DtCartasImprimir As New DataTable
+        cn.Open()
+        da.Fill(ds, "remitos")
+        cn.Close()
+        DtCartasImprimir = ds.Tables("remitos")
+        Return DtCartasImprimir
+
+
+    End Function
     Public Shared Function LlenarDatatableImprimirArm(ByVal Remito As String) As DataTable
 
         Dim sql As String = "SELECT COUNT(CALLE) AS CANTIDAD, TRABAJO, EMPRESA, CALLE, CP, LOCALIDAD, PROVINCIA " &
