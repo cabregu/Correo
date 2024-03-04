@@ -64,6 +64,8 @@ Partial Class FrmDevolucion
         Me.BtnDevolucionSeprit = New System.Windows.Forms.Button()
         Me.ChkFijarBarraCliente = New System.Windows.Forms.CheckBox()
         Me.ChkFijarcarta = New System.Windows.Forms.CheckBox()
+        Me.btnAgregarCarta = New System.Windows.Forms.Button()
+        Me.BtnActualizar = New System.Windows.Forms.Button()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         CType(Me.DgvCartaDev, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -72,14 +74,16 @@ Partial Class FrmDevolucion
         '
         'PBLogo
         '
-        Me.PBLogo.Location = New System.Drawing.Point(5, 550)
+        Me.PBLogo.Location = New System.Drawing.Point(5, 701)
         '
         'BtnSalir
         '
-        Me.BtnSalir.Location = New System.Drawing.Point(852, 550)
+        Me.BtnSalir.Location = New System.Drawing.Point(877, 701)
         '
         'Gb
         '
+        Me.Gb.Controls.Add(Me.BtnActualizar)
+        Me.Gb.Controls.Add(Me.btnAgregarCarta)
         Me.Gb.Controls.Add(Me.ChkFijarcarta)
         Me.Gb.Controls.Add(Me.ChkFijarBarraCliente)
         Me.Gb.Controls.Add(Me.BtnDevolucionSeprit)
@@ -110,7 +114,7 @@ Partial Class FrmDevolucion
         Me.Gb.Controls.Add(Me.LblCartas)
         Me.Gb.Controls.Add(Me.TxtCantidad)
         Me.Gb.Location = New System.Drawing.Point(1, 1)
-        Me.Gb.Size = New System.Drawing.Size(999, 601)
+        Me.Gb.Size = New System.Drawing.Size(1024, 752)
         Me.Gb.Controls.SetChildIndex(Me.TxtCantidad, 0)
         Me.Gb.Controls.SetChildIndex(Me.LblCartas, 0)
         Me.Gb.Controls.SetChildIndex(Me.TxtCartas, 0)
@@ -142,6 +146,8 @@ Partial Class FrmDevolucion
         Me.Gb.Controls.SetChildIndex(Me.ChkFijarcarta, 0)
         Me.Gb.Controls.SetChildIndex(Me.PBLogo, 0)
         Me.Gb.Controls.SetChildIndex(Me.BtnSalir, 0)
+        Me.Gb.Controls.SetChildIndex(Me.btnAgregarCarta, 0)
+        Me.Gb.Controls.SetChildIndex(Me.BtnActualizar, 0)
         '
         'TxtPlanillaDevo
         '
@@ -195,7 +201,7 @@ Partial Class FrmDevolucion
         '
         Me.TxtCantidad.Enabled = False
         Me.TxtCantidad.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtCantidad.Location = New System.Drawing.Point(14, 448)
+        Me.TxtCantidad.Location = New System.Drawing.Point(14, 443)
         Me.TxtCantidad.Name = "TxtCantidad"
         Me.TxtCantidad.Size = New System.Drawing.Size(50, 20)
         Me.TxtCantidad.TabIndex = 59
@@ -225,7 +231,7 @@ Partial Class FrmDevolucion
         Me.DgvCartaDev.Name = "DgvCartaDev"
         Me.DgvCartaDev.ReadOnly = True
         Me.DgvCartaDev.RowHeadersVisible = False
-        Me.DgvCartaDev.Size = New System.Drawing.Size(979, 300)
+        Me.DgvCartaDev.Size = New System.Drawing.Size(1004, 300)
         Me.DgvCartaDev.TabIndex = 57
         '
         'Asociado
@@ -338,7 +344,7 @@ Partial Class FrmDevolucion
         Me.BtnFinalizar.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BtnFinalizar.BackColor = System.Drawing.Color.LightGreen
         Me.BtnFinalizar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.BtnFinalizar.Location = New System.Drawing.Point(899, 437)
+        Me.BtnFinalizar.Location = New System.Drawing.Point(924, 437)
         Me.BtnFinalizar.Name = "BtnFinalizar"
         Me.BtnFinalizar.Size = New System.Drawing.Size(90, 40)
         Me.BtnFinalizar.TabIndex = 62
@@ -423,7 +429,7 @@ Partial Class FrmDevolucion
         '
         Me.BtnGenerar.BackColor = System.Drawing.Color.LightGreen
         Me.BtnGenerar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.BtnGenerar.Location = New System.Drawing.Point(544, 439)
+        Me.BtnGenerar.Location = New System.Drawing.Point(544, 444)
         Me.BtnGenerar.Name = "BtnGenerar"
         Me.BtnGenerar.Size = New System.Drawing.Size(120, 40)
         Me.BtnGenerar.TabIndex = 103
@@ -433,7 +439,7 @@ Partial Class FrmDevolucion
         'CmbHasta
         '
         Me.CmbHasta.FormattingEnabled = True
-        Me.CmbHasta.Location = New System.Drawing.Point(417, 439)
+        Me.CmbHasta.Location = New System.Drawing.Point(417, 444)
         Me.CmbHasta.Name = "CmbHasta"
         Me.CmbHasta.Size = New System.Drawing.Size(121, 21)
         Me.CmbHasta.TabIndex = 104
@@ -441,7 +447,7 @@ Partial Class FrmDevolucion
         'CmbDesde
         '
         Me.CmbDesde.FormattingEnabled = True
-        Me.CmbDesde.Location = New System.Drawing.Point(290, 439)
+        Me.CmbDesde.Location = New System.Drawing.Point(290, 444)
         Me.CmbDesde.Name = "CmbDesde"
         Me.CmbDesde.Size = New System.Drawing.Size(121, 21)
         Me.CmbDesde.TabIndex = 105
@@ -449,7 +455,7 @@ Partial Class FrmDevolucion
         'LblDesde
         '
         Me.LblDesde.AutoSize = True
-        Me.LblDesde.Location = New System.Drawing.Point(287, 423)
+        Me.LblDesde.Location = New System.Drawing.Point(287, 428)
         Me.LblDesde.Name = "LblDesde"
         Me.LblDesde.Size = New System.Drawing.Size(38, 13)
         Me.LblDesde.TabIndex = 106
@@ -458,7 +464,7 @@ Partial Class FrmDevolucion
         'Lblhasta
         '
         Me.Lblhasta.AutoSize = True
-        Me.Lblhasta.Location = New System.Drawing.Point(414, 423)
+        Me.Lblhasta.Location = New System.Drawing.Point(414, 428)
         Me.Lblhasta.Name = "Lblhasta"
         Me.Lblhasta.Size = New System.Drawing.Size(35, 13)
         Me.Lblhasta.TabIndex = 107
@@ -469,17 +475,16 @@ Partial Class FrmDevolucion
         Me.DgvExcel.AllowUserToAddRows = False
         Me.DgvExcel.AllowUserToDeleteRows = False
         Me.DgvExcel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DgvExcel.Location = New System.Drawing.Point(290, 466)
+        Me.DgvExcel.Location = New System.Drawing.Point(290, 471)
         Me.DgvExcel.Name = "DgvExcel"
         Me.DgvExcel.ReadOnly = True
         Me.DgvExcel.Size = New System.Drawing.Size(150, 50)
         Me.DgvExcel.TabIndex = 108
-        Me.DgvExcel.Visible = False
         '
         'LblVerPLanillaAnerior
         '
         Me.LblVerPLanillaAnerior.AutoSize = True
-        Me.LblVerPLanillaAnerior.Location = New System.Drawing.Point(119, 432)
+        Me.LblVerPLanillaAnerior.Location = New System.Drawing.Point(119, 427)
         Me.LblVerPLanillaAnerior.Name = "LblVerPLanillaAnerior"
         Me.LblVerPLanillaAnerior.Size = New System.Drawing.Size(59, 13)
         Me.LblVerPLanillaAnerior.TabIndex = 110
@@ -488,7 +493,7 @@ Partial Class FrmDevolucion
         'CmbVolverAVerPlanilla
         '
         Me.CmbVolverAVerPlanilla.FormattingEnabled = True
-        Me.CmbVolverAVerPlanilla.Location = New System.Drawing.Point(115, 448)
+        Me.CmbVolverAVerPlanilla.Location = New System.Drawing.Point(115, 443)
         Me.CmbVolverAVerPlanilla.Name = "CmbVolverAVerPlanilla"
         Me.CmbVolverAVerPlanilla.Size = New System.Drawing.Size(121, 21)
         Me.CmbVolverAVerPlanilla.TabIndex = 109
@@ -496,7 +501,7 @@ Partial Class FrmDevolucion
         'LblCantidad
         '
         Me.LblCantidad.AutoSize = True
-        Me.LblCantidad.Location = New System.Drawing.Point(11, 432)
+        Me.LblCantidad.Location = New System.Drawing.Point(11, 427)
         Me.LblCantidad.Name = "LblCantidad"
         Me.LblCantidad.Size = New System.Drawing.Size(49, 13)
         Me.LblCantidad.TabIndex = 111
@@ -506,7 +511,7 @@ Partial Class FrmDevolucion
         '
         Me.BtnDevolucionSeprit.BackColor = System.Drawing.Color.LightGreen
         Me.BtnDevolucionSeprit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.BtnDevolucionSeprit.Location = New System.Drawing.Point(544, 485)
+        Me.BtnDevolucionSeprit.Location = New System.Drawing.Point(544, 490)
         Me.BtnDevolucionSeprit.Name = "BtnDevolucionSeprit"
         Me.BtnDevolucionSeprit.Size = New System.Drawing.Size(120, 40)
         Me.BtnDevolucionSeprit.TabIndex = 112
@@ -533,10 +538,34 @@ Partial Class FrmDevolucion
         Me.ChkFijarcarta.Text = "Bloquear"
         Me.ChkFijarcarta.UseVisualStyleBackColor = True
         '
+        'btnAgregarCarta
+        '
+        Me.btnAgregarCarta.BackColor = System.Drawing.Color.LightGreen
+        Me.btnAgregarCarta.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnAgregarCarta.Location = New System.Drawing.Point(115, 470)
+        Me.btnAgregarCarta.Name = "btnAgregarCarta"
+        Me.btnAgregarCarta.Size = New System.Drawing.Size(90, 40)
+        Me.btnAgregarCarta.TabIndex = 115
+        Me.btnAgregarCarta.Text = "Agregar Carta"
+        Me.btnAgregarCarta.UseVisualStyleBackColor = False
+        Me.btnAgregarCarta.Visible = False
+        '
+        'BtnActualizar
+        '
+        Me.BtnActualizar.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BtnActualizar.BackColor = System.Drawing.Color.LightGreen
+        Me.BtnActualizar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BtnActualizar.Location = New System.Drawing.Point(923, 483)
+        Me.BtnActualizar.Name = "BtnActualizar"
+        Me.BtnActualizar.Size = New System.Drawing.Size(90, 40)
+        Me.BtnActualizar.TabIndex = 116
+        Me.BtnActualizar.Text = "Actualizar"
+        Me.BtnActualizar.UseVisualStyleBackColor = False
+        '
         'FrmDevolucion
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.ClientSize = New System.Drawing.Size(1000, 603)
+        Me.ClientSize = New System.Drawing.Size(1025, 754)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Location = New System.Drawing.Point(0, 0)
         Me.Name = "FrmDevolucion"
@@ -594,5 +623,6 @@ Partial Class FrmDevolucion
     Friend WithEvents BtnDevolucionSeprit As System.Windows.Forms.Button
     Friend WithEvents ChkFijarcarta As System.Windows.Forms.CheckBox
     Friend WithEvents ChkFijarBarraCliente As System.Windows.Forms.CheckBox
-
+    Friend WithEvents btnAgregarCarta As Button
+    Friend WithEvents BtnActualizar As Button
 End Class

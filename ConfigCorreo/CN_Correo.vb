@@ -736,9 +736,9 @@ Public Class CN_Correo
         Return Dt
     End Function
     Public Shared Function CargarPlanillasDev() As DataTable
-
         Dim ArrMotivos As New ArrayList
-        Dim sql As String = "Select Plani_devo from devueltaspl"
+        Dim year As Integer = DateTime.Now.Year ' Obtener el año actual
+        Dim sql As String = "SELECT Plani_devo FROM devueltaspl WHERE YEAR(Fecha_plani) = " & year & " AND TRIM(Plani_devo) <> ''"
         Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
         Dim cm As New MySqlCommand(sql, cn)
         Dim da As New MySqlDataAdapter(cm)
@@ -751,6 +751,8 @@ Public Class CN_Correo
 
         Return dt
     End Function
+
+
     Public Shared Function CargarCarterosMailParaZonales() As DataTable
 
         Dim ArrMotivos As New ArrayList
@@ -2706,18 +2708,87 @@ Public Class CN_Correo
     End Function
     Public Shared Function InsertarDevolucionDetalle(ByVal asociado As String, ByVal lote As String, ByVal integrante As String, ByVal fech_trab As String, ByVal tema1 As String, ByVal fecha1 As String, ByVal tema2 As String, ByVal fecha2 As String, ByVal motivo_devo As String, ByVal fech_devo As String, ByVal devo_plani As String, ByVal apellido As String, ByVal calle As String, ByVal cp As String, ByVal localidad As String, ByVal nro_carta As String) As Boolean
 
-
-        Dim sqlinsert As String = "INSERT INTO devueltas (asociado, lote, integrante, fech_trab, tema1, fecha1, tema2, fecha2, motivo_devo, fech_devo, devo_plani, apellido, calle, cp, localidad, nro_carta) VALUES ('" _
-                                  & asociado & "', '" & lote & "', '" & integrante & "', '" & fech_trab & "', '" & tema1 & "', '" & fecha1 & "', '" & tema2 & "', '" & fecha2 & "', '" & motivo_devo & "', '" & fech_devo & "', '" & devo_plani & "', '" & apellido & "', '" & Trim(calle) & "', '" & cp & "', '" & localidad & "', '" & nro_carta & "')"
+        Dim sqlCheck As String = "SELECT COUNT(*) FROM devueltas WHERE devo_plani = @devo_plani AND nro_carta = @nro_carta"
         Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
-        Dim cm As New MySqlCommand(sqlinsert, cn)
+        Dim cmCheck As New MySqlCommand(sqlCheck, cn)
+        cmCheck.Parameters.AddWithValue("@devo_plani", devo_plani)
+        cmCheck.Parameters.AddWithValue("@nro_carta", nro_carta)
+
+        Dim count As Integer = 0
+
+        Try
+            cn.Open()
+            count = Convert.ToInt32(cmCheck.ExecuteScalar())
+            If count > 0 Then
+                Return False ' Si ya existe el nro_carta para la misma devo_plani, devolvemos False
+            End If
+        Catch ex As Exception
+            ' Manejar la excepción si ocurre alguna
+            Return False ' Devolver False en caso de error
+        Finally
+            cn.Close()
+        End Try
+
+        Dim sqlInsert As String = "INSERT INTO devueltas (asociado, lote, integrante, fech_trab, tema1, fecha1, tema2, fecha2, motivo_devo, fech_devo, devo_plani, apellido, calle, cp, localidad, nro_carta) VALUES ('" & asociado & "', '" & lote & "', '" & integrante & "', '" & fech_trab & "', '" & tema1 & "', '" & fecha1 & "', '" & tema2 & "', '" & fecha2 & "', '" & motivo_devo & "', '" & fech_devo & "', '" & devo_plani & "', '" & apellido & "', '" & Trim(calle) & "', '" & cp & "', '" & localidad & "', '" & nro_carta & "')"
+        Dim cmInsert As New MySqlCommand(sqlInsert, cn)
+
+        Try
+            cn.Open()
+            cmInsert.ExecuteNonQuery()
+            Return True ' Si la inserción se realizó con éxito, devolvemos True
+        Catch ex As Exception
+            ' Manejar la excepción si ocurre alguna
+            Return False ' Devolver False en caso de error
+        Finally
+            cn.Close()
+        End Try
+    End Function
+
+
+
+    Public Shared Function NumeroCartaYaIngresadoEnDevolucion(ByVal nro_carta As String) As Boolean
+
+        Dim sql As String = "SELECT COUNT(*) FROM devueltas WHERE nro_carta = @nro_carta"
+        Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
+        Dim cm As New MySqlCommand(sql, cn)
+        cm.Parameters.AddWithValue("@nro_carta", nro_carta)
+
+        Dim count As Integer = 0
 
         cn.Open()
-        cm.ExecuteNonQuery()
+        count = Convert.ToInt32(cm.ExecuteScalar())
         cn.Close()
-        Return True
+
+
+        If count > 0 Then
+            Return True
+        Else
+            Return False
+        End If
+
 
     End Function
+
+    Public Shared Function ActualizarCantidadEnPlanillaDeDevolucion(ByVal NroPlanilla As String) As Boolean
+        Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
+        Dim sql As String = "UPDATE devueltaspl SET cantidad = cantidad + 1 WHERE Plani_devo = @NroPlanilla"
+        Dim cm As New MySqlCommand(sql, cn)
+        cm.Parameters.AddWithValue("@NroPlanilla", NroPlanilla)
+
+        Try
+            cn.Open()
+            cm.ExecuteNonQuery()
+            Return True ' Si la actualización se realizó con éxito, devolvemos True
+        Catch ex As Exception
+            ' Manejar la excepción si ocurre alguna
+            Return False ' Devolver False en caso de error
+        Finally
+            cn.Close()
+        End Try
+    End Function
+
+
+
     Public Shared Function ActualizarNroPlanillaDevolucion(ByVal NroActual As String) As Boolean
         'Cargar insert sql
         Dim sqlNumero As String = "UPDATE configuracion SET Desde='" & NroActual + 1 & "'" & " Where Operacion='NRO_PLANILLA_DEVO'"

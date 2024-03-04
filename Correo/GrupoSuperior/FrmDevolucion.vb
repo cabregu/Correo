@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Office.Interop
+﻿Imports iTextSharp.text.pdf
+Imports Microsoft.Office.Interop
 
 Public Class FrmDevolucion
 
@@ -51,6 +52,11 @@ Public Class FrmDevolucion
         CargarPLanillasDesde()
         CargarPLanillasHasta()
         CargarPlanillaParaVolver()
+        btnAgregarCarta.Visible = False
+        BtnActualizar.Visible = False
+
+
+
 
 
     End Sub
@@ -168,12 +174,16 @@ Public Class FrmDevolucion
         If DgvCartaDev.RowCount > 0 Then
 
             If ConfigCorreo.CN_Correo.InsertarPlanillaDevo(DtpFechaDevo.Value.ToShortDateString, TxtPlanillaDevo.Text, TxtCantidad.Text, "") = True Then
+                Dim Devoplani As String = TxtPlanillaDevo.Text
+
+
+
                 For Each drw As DataGridViewRow In DgvCartaDev.Rows
-                    ConfigCorreo.CN_Correo.InsertarDevolucionDetalle(drw.Cells("asociado").Value, drw.Cells("lote").Value, drw.Cells("integrante").Value, drw.Cells("fech_trab").Value, drw.Cells("tema1").Value, drw.Cells("fecha1").Value, drw.Cells("tema2").Value, drw.Cells("fecha2").Value, drw.Cells("motivo_devo").Value, drw.Cells("fech_devo").Value, drw.Cells("devo_plani").Value, drw.Cells("apellido").Value, drw.Cells("calle").Value, drw.Cells("cp").Value, drw.Cells("localidad").Value, drw.Cells("nro_carta").Value)
+                    ConfigCorreo.CN_Correo.InsertarDevolucionDetalle(drw.Cells("asociado").Value, drw.Cells("lote").Value, drw.Cells("integrante").Value, drw.Cells("fech_trab").Value, drw.Cells("tema1").Value, drw.Cells("fecha1").Value, drw.Cells("tema2").Value, drw.Cells("fecha2").Value, drw.Cells("motivo_devo").Value, drw.Cells("fech_devo").Value, Devoplani, drw.Cells("apellido").Value, drw.Cells("calle").Value, drw.Cells("cp").Value, drw.Cells("localidad").Value, drw.Cells("nro_carta").Value)
                     ConfigCorreo.CN_Correo.ActualizarEstadoDevolucion(drw.Cells("nro_carta").Value)
                     ConfigCorreo.CN_Correo.VerificarEstadoAlerta(drw.Cells("nro_carta").Value, "Devuelta")
-
                 Next
+
                 ConfigCorreo.CN_Correo.ActualizarNroPlaniDevo(TxtPlanillaDevo.Text + 1)
                 DgvCartaDev.Rows.Clear()
                 TxtPlanillaDevo.Text = ""
@@ -185,79 +195,11 @@ Public Class FrmDevolucion
             CargarPlanillaParaVolver()
 
         End If
-    
+
+
 
     End Sub
 
-    'Public Function CargarNroCarta(ByVal nroc As String) As Boolean
-    '    BtnFinalizar.Enabled = True
-    '    If Not ArrNroCartaLeido.Contains(nroc) Then
-
-    '        If Len(CmbMotivos.Text) > 0 And Len(TxtCartas.Text) > 0 Then
-    '            If ArrMotiv.Contains(CmbMotivos.Text) Then
-    '                If TxtCartas.Text <> "" Then
-    '                    '**
-    '                    Dim Dt As DataTable = ConfigCorreo.CN_Correo.BuscarCartaPorNroCarta(nroc)
-    '                    If Dt.Rows.Count > 0 Then
-    '                        For Each drw As DataRow In Dt.Rows
-    '                            'If Len(drw("NRO_CART2").ToString) > 15 Then
-
-    '                            Dim NroCart2 As String = drw("NRO_CART2").ToString
-    '                            Dim Socio As String = ""
-    '                            Dim Lote As String = ""
-    '                            Dim integrante As String = ""
-
-    '                            Try
-    '                                Socio = NroCart2.Substring(0, 7)
-    '                                Lote = NroCart2.Substring(8, 7)
-    '                                integrante = NroCart2.Substring(16, Len(NroCart2) - 16)
-    '                            Catch ex As Exception
-
-    '                            End Try
-
-
-    '                            Dim Fech_trab As Date = drw("fech_trab").ToString
-
-    '                            DgvCartaDev.Rows.Insert(0, Socio, Lote, integrante, Fech_trab.ToShortDateString, " - ", " - ", " - ", " - ", CmbMotivos.Text, DtpFechaDevo.Value.ToShortDateString, TxtPlanillaDevo.Text, drw("apellido").ToString, drw("calle").ToString, drw("cp").ToString, drw("localidad").ToString, drw("nro_carta").ToString)
-
-    '                            'DgvCartaDev.Rows.Add(Socio, Lote, integrante, Fech_trab.ToShortDateString, " - ", " - ", " - ", " - ", CmbMotivos.Text, DtpFechaDevo.Value.ToShortDateString, TxtPlanillaDevo.Text, drw("apellido").ToString, drw("calle").ToString, drw("cp").ToString, drw("localidad").ToString, drw("nro_carta").ToString)
-
-    '                            DgvCartaDev.CurrentCell = DgvCartaDev.Rows(0).Cells(0)
-
-    '                        Next
-    '                        TxtCantidad.Text = DgvCartaDev.Rows.Count
-    '                        ArrNroCartaLeido.Add(nroc)
-
-    '                        If ChkFijarMotivo.Checked = False Then
-
-    '                            CmbMotivos.Text = ""
-    '                        End If
-
-    '                        If ChkFijarMotivo.Checked = True Then
-    '                            TxtBarraCliente.Text = ""
-    '                            TxtBarraCliente.Focus()
-    '                        Else
-    '                            TxtCartas.Text = ""
-    '                            TxtCartas.Focus()
-    '                        End If
-
-    '                    End If
-
-    '                End If
-
-    '            Else
-    '                MsgBox("El motivo no corresponde")
-    '                CmbMotivos.Focus()
-
-    '            End If
-    '            Return True
-
-    '        End If
-
-
-    '    End If
-
-    'End Function
 
     Public Function CargarNroCarta(ByVal nroc As String) As Boolean
         BtnFinalizar.Enabled = True
@@ -685,7 +627,65 @@ Public Class FrmDevolucion
         End If
     End Sub
 
-    Private Sub TxtCartas_TextChanged(sender As Object, e As EventArgs) Handles TxtCartas.TextChanged
+    Private Sub btnAgregarCarta_Click(sender As Object, e As EventArgs) Handles btnAgregarCarta.Click
+
+        BtnNuevo.Visible = False
+
+        LblFecha.Visible = False
+        LblNroCarta2.Visible = False
+        ChkFijarcarta.Visible = False
+        ChkFijarBarraCliente.Visible = False
+        ChkFijarMotivo.Visible = False
+        BtnNuevo.Visible = False
+        TxtBarraCliente.Visible = False
+        DtpFechaDevo.Visible = False
+        BtnFinalizar.Visible = False
+        BtnActualizar.Visible = True
+        TxtCartas.Enabled = True
+        CmbMotivos.Enabled = True
+        TxtPlanillaDevo.Text = CmbVolverAVerPlanilla.Text
+
+
+
+
 
     End Sub
+
+    Private Sub CmbVolverAVerPlanilla_SelectedValueChanged(sender As Object, e As EventArgs) Handles CmbVolverAVerPlanilla.SelectedValueChanged
+        If CmbVolverAVerPlanilla.Text <> "" Then
+            btnAgregarCarta.Visible = True
+            TxtCantidad.Text = DgvCartaDev.RowCount
+        End If
+
+    End Sub
+
+    Private Sub BtnActualizar_Click(sender As Object, e As EventArgs) Handles BtnActualizar.Click
+
+        For Each drw As DataGridViewRow In DgvCartaDev.Rows
+            Dim NroCarta As String = drw.Cells("nro_carta").Value
+            Dim Devoplani As String = TxtPlanillaDevo.Text
+
+
+
+
+            If ConfigCorreo.CN_Correo.NumeroCartaYaIngresadoEnDevolucion(NroCarta) = False Then
+
+                ConfigCorreo.CN_Correo.InsertarDevolucionDetalle(drw.Cells("asociado").Value, drw.Cells("lote").Value, drw.Cells("integrante").Value, drw.Cells("fech_trab").Value, drw.Cells("tema1").Value, drw.Cells("fecha1").Value, drw.Cells("tema2").Value, drw.Cells("fecha2").Value, drw.Cells("motivo_devo").Value, drw.Cells("fech_devo").Value, Devoplani, drw.Cells("apellido").Value, drw.Cells("calle").Value, drw.Cells("cp").Value, drw.Cells("localidad").Value, drw.Cells("nro_carta").Value)
+                ConfigCorreo.CN_Correo.ActualizarEstadoDevolucion(drw.Cells("nro_carta").Value)
+                ConfigCorreo.CN_Correo.ActualizarCantidadEnPlanillaDeDevolucion(TxtPlanillaDevo.Text)
+
+            End If
+
+        Next
+        DgvCartaDev.Rows.Clear()
+        ArrNroCartaLeido.Clear()
+        ArrNroCart2Leido.Clear()
+        CargarPLanillasDesde()
+        CargarPLanillasHasta()
+        CargarPlanillaParaVolver()
+
+
+    End Sub
+
+
 End Class
