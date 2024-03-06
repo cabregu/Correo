@@ -43,7 +43,7 @@ Partial Class FrmImportarPpal
         '
         Me.Menu.BackColor = System.Drawing.Color.SteelBlue
         Me.Menu.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CargarRemitoToolStripMenuItem1, Me.ImportarDesdeXlsToolStripMenuItem, Me.BusquedaExcelsToolStripMenuItem, Me.EtiquetasToolStripMenuItem, Me.ToolStripMenuItem4, Me.ToolStripMenuItem5, Me.ToolStripMenuItem6, Me.ToolStripMenuItem2, Me.EliminarRemitoToolStripMenuItem, Me.AplocativoToolStripMenuItem, Me.ToolStripMenuItem3, Me.ToolStripMenuItem1})
+        Me.Menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CargarRemitoToolStripMenuItem1, Me.ImportarDesdeXlsToolStripMenuItem, Me.BusquedaExcelsToolStripMenuItem, Me.ToolStripMenuItem4, Me.ToolStripMenuItem5, Me.ToolStripMenuItem6, Me.EtiquetasToolStripMenuItem, Me.ToolStripMenuItem2, Me.EliminarRemitoToolStripMenuItem, Me.AplocativoToolStripMenuItem, Me.ToolStripMenuItem3, Me.ToolStripMenuItem1})
         Me.Menu.Location = New System.Drawing.Point(0, 0)
         Me.Menu.Name = "Menu"
         Me.Menu.Size = New System.Drawing.Size(1370, 40)
@@ -87,8 +87,8 @@ Partial Class FrmImportarPpal
         Me.EtiquetasToolStripMenuItem.Image = Global.Correo.My.Resources.Resources.Print
         Me.EtiquetasToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.EtiquetasToolStripMenuItem.Name = "EtiquetasToolStripMenuItem"
-        Me.EtiquetasToolStripMenuItem.Size = New System.Drawing.Size(95, 36)
-        Me.EtiquetasToolStripMenuItem.Text = "Etiquetas"
+        Me.EtiquetasToolStripMenuItem.Size = New System.Drawing.Size(103, 36)
+        Me.EtiquetasToolStripMenuItem.Text = "ACUSES 4"
         '
         'ToolStripMenuItem4
         '
@@ -99,8 +99,8 @@ Partial Class FrmImportarPpal
         Me.ToolStripMenuItem4.Image = Global.Correo.My.Resources.Resources.BOProductGroup_32x32
         Me.ToolStripMenuItem4.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(69, 36)
-        Me.ToolStripMenuItem4.Text = "Arm"
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(84, 36)
+        Me.ToolStripMenuItem4.Text = "ARM 1"
         '
         'ToolStripMenuItem5
         '
@@ -111,8 +111,8 @@ Partial Class FrmImportarPpal
         Me.ToolStripMenuItem5.Image = Global.Correo.My.Resources.Resources.BOProduct_32x32
         Me.ToolStripMenuItem5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(88, 36)
-        Me.ToolStripMenuItem5.Text = "Modo S"
+        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(103, 36)
+        Me.ToolStripMenuItem5.Text = "MODO S 2"
         '
         'ToolStripMenuItem6
         '
@@ -123,8 +123,8 @@ Partial Class FrmImportarPpal
         Me.ToolStripMenuItem6.Image = Global.Correo.My.Resources.Resources.BOProduct_32x32
         Me.ToolStripMenuItem6.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
-        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(115, 36)
-        Me.ToolStripMenuItem6.Text = "Referenciado"
+        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(144, 36)
+        Me.ToolStripMenuItem6.Text = "REFERENCIADO 3"
         '
         'ToolStripMenuItem2
         '
