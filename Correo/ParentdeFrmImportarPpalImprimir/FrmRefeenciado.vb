@@ -1,5 +1,5 @@
-﻿
-Public Class FrmModoS
+﻿Public Class FrmRefeenciado
+
     Public DtImprimir As New DataTable
 
 
@@ -31,7 +31,7 @@ Public Class FrmModoS
         If Len(CmbRemitente.Text) > 0 Then
             CmbRemitoPendiente.Enabled = False
             BtnSelectEtic.Enabled = True
-            DtImprimir = ConfigCorreo.CN_Correo.LlenarDatatableImprimirSoloModoS(CmbRemitoPendiente.Text)
+            DtImprimir = ConfigCorreo.CN_Correo.LlenarDatatableImprimirSoloReferenciado(CmbRemitoPendiente.Text)
             DgvImprimir.DataSource = DtImprimir
             LblCant.Text = DgvImprimir.RowCount
 
@@ -64,6 +64,3 @@ Public Class FrmModoS
 
 
 End Class
-
-
-

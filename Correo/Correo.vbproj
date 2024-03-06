@@ -346,6 +346,12 @@
     <Compile Include="ParentdeFrmConsulta\FrmConsultaUndato.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ParentdeFrmImportarPpalImprimir\FrmRefeenciado.Designer.vb">
+      <DependentUpon>FrmRefeenciado.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ParentdeFrmImportarPpalImprimir\FrmRefeenciado.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ParentdeFrmImportarPpalImprimir\FrmArm.Designer.vb">
       <DependentUpon>FrmArm.vb</DependentUpon>
     </Compile>
@@ -678,6 +684,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ParentdeFrmConsulta\FrmConsultaUndato.resx">
       <DependentUpon>FrmConsultaUndato.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ParentdeFrmImportarPpalImprimir\FrmRefeenciado.resx">
+      <DependentUpon>FrmRefeenciado.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ParentdeFrmImportarPpalImprimir\FrmArm.resx">
       <DependentUpon>FrmArm.vb</DependentUpon>

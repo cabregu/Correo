@@ -63,4 +63,9 @@
         FrmModoS.MdiParent = Me
         FrmModoS.Show()
     End Sub
+
+    Private Sub ToolStripMenuItem6_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem6.Click
+        FrmRefeenciado.MdiParent = Me
+        FrmRefeenciado.Show()
+    End Sub
 End Class
