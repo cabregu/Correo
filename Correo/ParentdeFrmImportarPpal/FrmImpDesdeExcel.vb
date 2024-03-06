@@ -543,34 +543,58 @@ Public Class FrmImpDesdeExcel
                 End If
             Next
 
+            Dim lista As New List(Of String) From {
+             "TB ROSARIO",
+             "TB SF RESTO",
+             "SDI CORDOBA",
+             "TB PERGAMINO",
+             "TB MISIONES",
+             "LV TUCUMAN",
+             "LV SALTA",
+             "LV JUJUY",
+             "MEX SJ",
+             "MEX M",
+             "MEX SL",
+             "TB NEUQUEN"}
+
+
 
             For Each kvp As KeyValuePair(Of String, Integer) In contador
                 Dim nroFinal As Integer = kvp.Value
                 Dim nroInicial As Integer = 1
 
                 For Each fila As DataRow In dt2.Rows
-                    Dim zonal As String = fila("piso_depto").ToString()
 
-                    ' Verificar si el piso_depto actual coincide con la clave actual y si el número inicial es menor o igual al número final
-                    If kvp.Key = zonal AndAlso nroInicial <= nroFinal Then
-                        ' Verificar si el número inicial es impar o par
-                        If nroInicial Mod 2 <> 0 Then
+                    Dim obs2 As String = fila("obs2").ToString()
 
-                            If zonal.ToString.Contains("COOR") Then
-                                fila("obs2") = "REFEREN" ' Si es impar
+                    If String.IsNullOrEmpty(obs2) Then 'Elcampo OBS2 esta vacio arranca
+
+                        Dim zonal As String = fila("piso_depto").ToString()
+                        If kvp.Key = zonal AndAlso nroInicial <= nroFinal Then
+
+                            If nroInicial Mod 2 <> 0 Then
+
+                                If zonal.ToString.Contains("COOR") Then
+                                    If Convert.ToInt32(fila("cp")) > 1400 Then
+                                        fila("obs2") = "REFEREN" ' 
+                                    End If
+                                Else
+
+                                    If lista.Contains(zonal) Then
+                                        fila("obs2") = "MODO S"
+                                    End If
+
+                                End If
                             Else
-                                fila("obs2") = "MODO S" ' Si es impar
-
+                                'fila("obs2") = "VACIO" ' Si es par
                             End If
-                        Else
 
-                            'fila("obs2") = "VACIO" ' Si es par
-
-
+                            nroInicial += 1
                         End If
 
-                        nroInicial += 1 ' Incrementar el número inicial para el siguiente ciclo
+
                     End If
+
                 Next
             Next
 
