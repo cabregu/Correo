@@ -566,6 +566,7 @@ Public Class FrmImpDesdeExcel
                 For Each fila As DataRow In dt2.Rows
 
                     Dim obs2 As String = fila("obs2").ToString()
+                    Dim obs3 As String = fila("obs3").ToString()
 
                     If String.IsNullOrEmpty(obs2) Then 'Elcampo OBS2 esta vacio arranca
 
@@ -576,15 +577,25 @@ Public Class FrmImpDesdeExcel
 
                                 If zonal.ToString.Contains("COOR") Then
                                     If Convert.ToInt32(fila("cp")) > 1400 Then
-                                        fila("obs2") = "REFEREN" ' 
+
+                                        If Not obs3.ToString.Contains("Q") Then
+                                            fila("obs2") = "REFEREN"
+                                        End If
+
                                     End If
                                 Else
 
                                     If lista.Contains(zonal) Then
-                                        fila("obs2") = "MODO S"
+
+                                        If Not obs3.ToString.Contains("Q") Then
+                                            fila("obs2") = "MODO S"
+                                        End If
+
+
+
                                     End If
 
-                                End If
+                                    End If
                             Else
                                 'fila("obs2") = "VACIO" ' Si es par
                             End If
