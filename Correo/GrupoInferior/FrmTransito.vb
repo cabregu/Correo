@@ -736,84 +736,58 @@ Public Class FrmTransito
                 If Not IsDBNull(DRG.Cells("FECH_TRAB").Value) Then
                     fechaF = DRG.Cells("FECH_TRAB").Value
                 Else
-                    fechaF = Now.ToShortDateString
+                    fechaF = Now.Date
                 End If
-
-
 
                 FECHA_ULT_ESTADO = DRG.Cells("Fecha Ultimo Estado DESC").Value
 
-                fechaF = fechaF.ToShortDateString
-                FECHA_ULT_ESTADO = FECHA_ULT_ESTADO.ToShortDateString
-
-
                 Dim FECH1 As Date = Nothing
-                If Not IsDBNull(DRG.Cells("fech1").Value) Then
+                If Not IsDBNull(DRG.Cells("fech1").Value) AndAlso DRG.Cells("fech1").Value <> "" Then
                     Try
-                        If DRG.Cells("fech1").Value <> "" Then
-                            FECH1 = DRG.Cells("fech1").Value
-                        End If
+                        FECH1 = DRG.Cells("fech1").Value
                     Catch ex As Exception
-
+                        ' Manejar la excepción si es necesario
                     End Try
-
                 End If
 
-                fechaF = fechaF.ToShortDateString
                 fechaF = AgregardiaFeriado(fechaF)
 
-                ''*****AGREGAR FERIADO****
-                If FECH1 <> Nothing Then
-                    If fechaF <= FECH1 Then
-                        fechaF = FECH1.AddDays(2)
-                    End If
+                '*****AGREGAR FERIADO****
+                If FECH1 <> Nothing AndAlso fechaF <= FECH1 Then
+                    fechaF = FECH1.AddDays(2)
                 End If
 
-                'Dim Fechatransito As Date = VerificarSiFueEntregadaEnTransito(DRG.Cells("contra").Value, DRG.Cells("lote").Value)
                 Dim FechaEntregada As Date = VerificarSiFueEntregadaEnDiario(DRG.Cells("contra").Value, DRG.Cells("lote").Value)
 
-                'If Fechatransito <> Nothing Then
-                '    If Fechatransito > FECHA_ULT_ESTADO Then
-                '        fechaF = Fechatransito
-                '        DRG.Cells("INFORMADO").Value = Fechatransito & " EN TRANSITO"
-                '    End If
-                'End If
-
-                If FechaEntregada > Nothing Then
-                    If FechaEntregada > FECHA_ULT_ESTADO Then
-                        fechaF = FechaEntregada
-                        DRG.Cells("INFORMADO").Value = FechaEntregada & "EN DIARIO"
-                    End If
+                If FechaEntregada > Nothing AndAlso FechaEntregada > FECHA_ULT_ESTADO Then
+                    fechaF = FechaEntregada
+                    DRG.Cells("INFORMADO").Value = FechaEntregada & " EN DIARIO"
                 End If
-
 
                 If fechaF <= FECHA_ULT_ESTADO Then
                     '*****AGREGAR DIAS DESDE FECHA ULTIMO ESTADO SWISS
                     fechaF = FECHA_ULT_ESTADO.AddDays(2)
                 End If
 
-
                 fechaF = Sabadoydomingo(fechaF)
-                '****SABADO Y DOMINGO 
 
-                If fechaF > Now.ToShortDateString Then
-                    fechaF = Now.ToShortDateString
+                ' Si la fecha es futura, establecerla como la fecha actual
+                If fechaF > Now.Date Then
+                    fechaF = Now.Date
                 End If
             End If
 
-
-            DRG.Cells("FECHAF").Value = Normalizar(fechaF.ToShortDateString)
-
+            DRG.Cells("FECHAF").Value = fechaF.ToString("dd/MM/yyyy")
 
             If DRG.Cells("ESTADOF").Value = "DEVUELTA" Then
                 DRG.Cells("MOTIVOF").Value = DRG.Cells("TEMA4").Value
-                DRG.Cells("FECHAF").Value = DRG.Cells("FECH4").Value
+                DRG.Cells("FECHAF").Value = DRG.Cells("FECH4").Value.ToString("dd/MM/yyyy")
             End If
         Next
-
-
-
     End Sub
+
+
+
     Private Function DiferenciaFechas(ByVal fecha_swiss As Date, ByVal Fecha_lexs As Date) As String
 
         If (DateDiff(DateInterval.Day, fecha_swiss, Fecha_lexs)) > 2 Then
