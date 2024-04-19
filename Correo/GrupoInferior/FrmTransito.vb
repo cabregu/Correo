@@ -780,9 +780,27 @@ Public Class FrmTransito
             DRG.Cells("FECHAF").Value = fechaF.ToString("dd/MM/yyyy")
 
             If DRG.Cells("ESTADOF").Value = "DEVUELTA" Then
+                Dim FECH4 As Date = Nothing
+                FECH4 = DRG.Cells("FECH4").Value
+
                 DRG.Cells("MOTIVOF").Value = DRG.Cells("TEMA4").Value
-                DRG.Cells("FECHAF").Value = DRG.Cells("FECH4").Value.ToString("dd/MM/yyyy")
+                DRG.Cells("FECHAF").Value = FECH4.ToString("dd/MM/yyyy")
+
+
             End If
+
+
+            If DRG.Cells("ESTADOF").Value = "VISITADA" Then
+                Dim FECHAULTESTADO As Date = Nothing
+                FECHAULTESTADO = DRG.Cells("Fecha Ultimo Estado DESC").Value
+                DRG.Cells("FECHAF").Value = FECHAULTESTADO.AddDays(14).ToString("dd/MM/yyyy")
+            End If
+
+            If DRG.Cells("FECHAF").Value = "01/01/0001" Then
+                DRG.Cells("FECHAF").Value = ""
+            End If
+
+
         Next
     End Sub
 
