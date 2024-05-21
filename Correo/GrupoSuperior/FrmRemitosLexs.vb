@@ -7,7 +7,9 @@ Imports System.IO
 Public Class FrmRemitosLexs
 
     Dim NroRemito As Integer = 0
-
+    Dim empresa As String = ""
+    Dim direccion As String = ""
+    Dim sector As String = ""
     Private Sub PbRemito_Click(sender As Object, e As EventArgs) Handles PbRemito.Click
         ' Obtén las coordenadas del mouse en relación con el formulario
         Dim mousePosition As Point = PbRemito.PointToClient(Control.MousePosition)
@@ -75,7 +77,20 @@ Public Class FrmRemitosLexs
     End Sub
 
     Private Sub BtnDibujar_Click(sender As Object, e As EventArgs) Handles BtnConfirmar.Click
-        DibujarEnImagen()
+
+        If CmbRemitente.Text.ToString = "SWISSC" Then
+            empresa = "SWISS MEDICAL"
+            direccion = "ARMADO Y DISTRIBUCION"
+            sector = "SECTOR CREDENCIALES AT:ROMINA ARRIETA"
+
+        ElseIf CmbRemitente.Text.ToString = "SWCPFM" Then
+
+            empresa = "SWISS MEDICAL S.A."
+            direccion = "SAN MARTIN 323"
+            sector = "SECTOR FACTURACIÓN"
+
+        End If
+        DibujarEnImagen(empresa, direccion, sector)
         BtnPegar.Enabled = True
         BtnConfirmar.Enabled = False
 
@@ -97,13 +112,13 @@ Public Class FrmRemitosLexs
 
     End Sub
 
-    Private Sub DibujarEnImagen()
+    Private Sub DibujarEnImagen(ByVal empre As String, ByVal dire As String, ByVal sect As String)
         ' Obtén los valores del TextBox y otras variables
         Dim numero As String = TxtRemito.Text
         Dim fecha As Date = DtpDesde.Value
-        Dim empresa As String = "SWISS MEDICAL"
-        Dim direccion As String = "ARMADO Y DISTRIBUCION"
-        Dim sector As String = "SECTOR CREDENCIALES AT:ROMINA ARRIETA"
+        Dim empresa As String = empre
+        Dim direccion As String = dire
+        Dim sector As String = sect
 
         ' Configura la fuente y el color del texto
         Dim fuente As New Font("Arial", 12, FontStyle.Bold)
@@ -282,5 +297,7 @@ Public Class FrmRemitosLexs
 
     End Sub
 
+    Private Sub DtpDesde_ValueChanged(sender As Object, e As EventArgs) Handles DtpDesde.ValueChanged
 
+    End Sub
 End Class
