@@ -137,7 +137,7 @@ Public Class FrmZonales
             ArrArchivos.Add("C:\temp\PlanillaZonal" & "_" & NroPLanil & "_" & FechaTx & "_" & Servico & ".xls")
             wBook.Close()
 
-            enviaCorreo(ArrArchivos, "Archivos Zonal", Mail)
+            'enviaCorreo(ArrArchivos, "Archivos Zonal", Mail)
 
 
 
@@ -168,45 +168,45 @@ Public Class FrmZonales
 
     End Sub
 
-    Private Shared Function enviaCorreo(ByVal ArrArchivos As ArrayList, ByVal Asunto As String, ByVal Mail As String) As Boolean
+    'Private Shared Function enviaCorreo(ByVal ArrArchivos As ArrayList, ByVal Asunto As String, ByVal Mail As String) As Boolean
 
 
-        'Try
-        Dim oApp As Outlook._Application
-        oApp = New Outlook.Application()
+    '    'Try
+    '    Dim oApp As Outlook._Application
+    '    oApp = New Outlook.Application()
 
 
-        Dim oMsg As Outlook._MailItem
-        oMsg = oApp.CreateItem(Outlook.OlItemType.olMailItem)
-        oMsg.Subject = Asunto
+    '    Dim oMsg As Outlook._MailItem
+    '    oMsg = oApp.CreateItem(Outlook.OlItemType.olMailItem)
+    '    oMsg.Subject = Asunto
 
-        oMsg.Body = " * SOLICITAMOS LA CONFIRMACIÓN DE LA RECEPCIÓN DEL MATERIAL FÍSICO CORRESPONDIENTE A ESTAS PLANILLAS*" & vbCrLf & vbCrLf &
-                "Buenos días/ tardes" & vbCrLf & vbCrLf &
-                "Se adjuntan planillas de referencia."
+    '    oMsg.Body = " * SOLICITAMOS LA CONFIRMACIÓN DE LA RECEPCIÓN DEL MATERIAL FÍSICO CORRESPONDIENTE A ESTAS PLANILLAS*" & vbCrLf & vbCrLf &
+    '            "Buenos días/ tardes" & vbCrLf & vbCrLf &
+    '            "Se adjuntan planillas de referencia."
 
-        Dim Destinatarios As String = ""
-        Destinatarios = Mail
+    '    Dim Destinatarios As String = ""
+    '    Destinatarios = Mail
 
-        oMsg.To = Destinatarios
+    '    oMsg.To = Destinatarios
 
-        Dim sDisplayName As String = "Archivo"
+    '    Dim sDisplayName As String = "Archivo"
 
-        Dim oAttachs As Outlook.Attachments = oMsg.Attachments
-        Dim oAttach As Outlook.Attachment
+    '    Dim oAttachs As Outlook.Attachments = oMsg.Attachments
+    '    Dim oAttach As Outlook.Attachment
 
-        For i As Integer = 0 To ArrArchivos.Count - 1
-            oAttach = oAttachs.Add(ArrArchivos.Item(i).ToString)
-        Next
+    '    For i As Integer = 0 To ArrArchivos.Count - 1
+    '        oAttach = oAttachs.Add(ArrArchivos.Item(i).ToString)
+    '    Next
 
-        oMsg.Save()
-
-
-        Return True
+    '    oMsg.Save()
 
 
+    '    Return True
 
 
-    End Function
+
+
+    'End Function
 
     Private Function OutLookAbierto() As Boolean
 

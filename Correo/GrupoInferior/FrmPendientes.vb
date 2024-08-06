@@ -94,7 +94,7 @@ Public Class FrmPendientes
 
             If MessageBox.Show("Archivo generado correctamente desea enviar mail?", "Enviar?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
 
-                enviaCorreo(NombreArch, "Se Adjunta pendientes " & CmbCarteros.Text, CmbCarteros.Text)
+                'enviaCorreo(NombreArch, "Se Adjunta pendientes " & CmbCarteros.Text, CmbCarteros.Text)
 
                 'EnviarCorreoSinOutlook(CmbCarteros.Text, NombreArch)
                 ActualizarNroPendiente(CmbCarteros.Text, numero + 1)
@@ -204,49 +204,49 @@ Public Class FrmPendientes
 
     End Function
 
-    Private Function enviaCorreo(ByVal Archivo As String, ByVal Asunto As String, ByVal Cartero As String) As Boolean
+    'Private Function enviaCorreo(ByVal Archivo As String, ByVal Asunto As String, ByVal Cartero As String) As Boolean
 
-        'Try
-        Dim oApp As Outlook._Application
-        oApp = New Outlook.Application()
+    '    'Try
+    '    Dim oApp As Outlook._Application
+    '    oApp = New Outlook.Application()
 
-        Dim oMsg As Outlook._MailItem
-        oMsg = oApp.CreateItem(Outlook.OlItemType.olMailItem)
-        oMsg.Subject = Asunto
-        oMsg.Body = ObtenerTextoMails(Cartero)
+    '    Dim oMsg As Outlook._MailItem
+    '    oMsg = oApp.CreateItem(Outlook.OlItemType.olMailItem)
+    '    oMsg.Subject = Asunto
+    '    oMsg.Body = ObtenerTextoMails(Cartero)
 
-        Dim Destinatarios As String = ""
-
-
-        Dim DtMails As New DataTable
-        DtMails = ObtenerMailCarteros(Cartero)
-
-        For Each dtr As DataRow In DtMails.Rows
-            Destinatarios = Destinatarios & dtr("mail").ToString & " ;"
-        Next
-        Destinatarios = Destinatarios.Substring(0, Len(Destinatarios) - 2)
-        oMsg.To = Destinatarios
-        Dim sSource As String = Archivo
-
-        Dim sDisplayName As String = "Archivo"
-
-        Dim oAttachs As Outlook.Attachments = oMsg.Attachments
-        Dim oAttach As Outlook.Attachment
-
-        oAttach = oAttachs.Add(sSource)
-        oMsg.Save()
+    '    Dim Destinatarios As String = ""
 
 
-        Return True
+    '    Dim DtMails As New DataTable
+    '    DtMails = ObtenerMailCarteros(Cartero)
+
+    '    For Each dtr As DataRow In DtMails.Rows
+    '        Destinatarios = Destinatarios & dtr("mail").ToString & " ;"
+    '    Next
+    '    Destinatarios = Destinatarios.Substring(0, Len(Destinatarios) - 2)
+    '    oMsg.To = Destinatarios
+    '    Dim sSource As String = Archivo
+
+    '    Dim sDisplayName As String = "Archivo"
+
+    '    Dim oAttachs As Outlook.Attachments = oMsg.Attachments
+    '    Dim oAttach As Outlook.Attachment
+
+    '    oAttach = oAttachs.Add(sSource)
+    '    oMsg.Save()
 
 
-        'Catch ex As Exception
-        '    Return False
+    '    Return True
 
-        '    MsgBox(ex.ToString)
 
-        'End Try
+    '    'Catch ex As Exception
+    '    '    Return False
 
-    End Function
+    '    '    MsgBox(ex.ToString)
+
+    '    'End Try
+
+    'End Function
 
 End Class
