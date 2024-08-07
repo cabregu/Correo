@@ -3241,7 +3241,8 @@ Public Class CN_Correo
         Dim resultados As New Dictionary(Of String, String)()
 
         Try
-            Dim fechaDesde As Date = Date.Now.AddDays(-240)
+
+            Dim fechaDesde As Date = Date.Now.AddDays(-800)
             Dim fechaHasta As Date = Date.Now
             Dim fechaDesdetxt As String = fechaDesde.ToString("yyyy-MM-dd")
             Dim fechaHastatxt As String = fechaHasta.ToString("yyyy-MM-dd")
