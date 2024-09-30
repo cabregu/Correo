@@ -455,11 +455,11 @@ Public Class FrmImprimirPlanificacion
             Archtxt3 = Mid(Archtxt3, 1, Len(Archtxt3) - 2)
         End If
 
-        If ConfigCorreo.CN_Correo.InstertarRecorridosWeb(Archtxt3) = True Then
-            MsgBox("OK")
-        Else
-            MsgBox("Error")
-        End If
+        'If ConfigCorreo.CN_Correo.InstertarRecorridosWeb(Archtxt3) = True Then
+        '    MsgBox("OK")
+        'Else
+        '    MsgBox("Error")
+        'End If
 
 
     End Sub

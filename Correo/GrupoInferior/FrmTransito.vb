@@ -330,8 +330,6 @@ Public Class FrmTransito
 
 
 
-
-
     'Private Sub ProcesarDatos()
     '    Dim Numero As Integer = 0
     '    Me.Invoke(Sub()

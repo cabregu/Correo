@@ -11,7 +11,6 @@ Imports iTextSharp.text
 Public Class CN_Correo
     Public Shared CadenaDeConeccionProduccion As String = ""
     Public Shared CadenaDeConeccionAnterior As String = ""
-    Public Shared CadenaWeb As String = "server=sql221.main-hosting.eu;User Id=u905475182_cga;password=H159753cga_1;database=u905475182_lxs;Persist Security Info=True"
 
 
     Public Shared Function ConsultarRecorridosParaEnviarWeb(ByVal Planilla As String) As DataTable
@@ -28,39 +27,39 @@ Public Class CN_Correo
         DtServ = ds.Tables("recorridos")
         Return DtServ
     End Function
-    Public Shared Function InstertarRecorridosWeb(ByVal Texto As String) As Boolean
+    'Public Shared Function InstertarRecorridosWeb(ByVal Texto As String) As Boolean
 
-        Using tx3 As New TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(5))
-            Dim cadenac As New System.Text.StringBuilder
-            Dim cadenav As New System.Text.StringBuilder
-            Dim detallecadenac As New System.Text.StringBuilder
-            Dim detallecadenav As New System.Text.StringBuilder
+    '    Using tx3 As New TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(5))
+    '        Dim cadenac As New System.Text.StringBuilder
+    '        Dim cadenav As New System.Text.StringBuilder
+    '        Dim detallecadenac As New System.Text.StringBuilder
+    '        Dim detallecadenav As New System.Text.StringBuilder
 
-            Dim cn As New MySqlConnection(CadenaWeb & ";Connection Timeout=60")
-            Dim SQLINSERT As String = "insert into recorridos (NRO_CARTA, PLANILLA_RECORRIDO, FECHA_RECORRIDO, CARTERO, ZONA, REMITENTE, TRABAJO, FECHA_TRABAJO, NOMBRE_APELLIDO, CP, CALLE, LOCALIDAD, PROVINCIA, EMPRESA, NRO_CARTA2, ORDEN_LECT, ESTADO, IDENTIFICADOR, RECORRIDO) values " & Texto
-            cn.Open()
+    '        Dim cn As New MySqlConnection(CadenaWeb & ";Connection Timeout=60")
+    '        Dim SQLINSERT As String = "insert into recorridos (NRO_CARTA, PLANILLA_RECORRIDO, FECHA_RECORRIDO, CARTERO, ZONA, REMITENTE, TRABAJO, FECHA_TRABAJO, NOMBRE_APELLIDO, CP, CALLE, LOCALIDAD, PROVINCIA, EMPRESA, NRO_CARTA2, ORDEN_LECT, ESTADO, IDENTIFICADOR, RECORRIDO) values " & Texto
+    '        cn.Open()
 
-            Dim cm As New MySqlCommand(SQLINSERT, cn)
-            cm.ExecuteNonQuery()
-            cn.Close()
+    '        Dim cm As New MySqlCommand(SQLINSERT, cn)
+    '        cm.ExecuteNonQuery()
+    '        cn.Close()
 
-            tx3.Complete()
-            Return True
-        End Using
+    '        tx3.Complete()
+    '        Return True
+    '    End Using
 
-    End Function
-    Public Shared Function Obtenerdatoweb() As String
-        Dim nivel As String = ""
-        Dim sql As String = "Select Confirmacion from coneccion where dato='INFORMAR'"
-        Dim cn As New MySqlConnection(CadenaWeb)
-        Dim cm As New MySqlCommand(sql, cn)
-        cn.Open()
-        nivel = cm.ExecuteScalar
-        cn.Close()
+    'End Function
+    'Public Shared Function Obtenerdatoweb() As String
+    '    Dim nivel As String = ""
+    '    Dim sql As String = "Select Confirmacion from coneccion where dato='INFORMAR'"
+    '    Dim cn As New MySqlConnection(CadenaWeb)
+    '    Dim cm As New MySqlCommand(sql, cn)
+    '    cn.Open()
+    '    nivel = cm.ExecuteScalar
+    '    cn.Close()
 
-        Return nivel
+    '    Return nivel
 
-    End Function
+    'End Function
     Public Shared Function ObtenerNroCartaDeEstadosParaDevueltaAnalisis() As DataTable
 
         'Cargar insert sql
@@ -148,9 +147,6 @@ Public Class CN_Correo
         DtServ = ds.Tables("recorridos")
         Return DtServ
     End Function
-
-
-    'para crear
     Public Shared Function InsertarAlerta(ByVal nro_carta As String, ByVal comentario As String) As Boolean
         Try
             Dim sqlinsert As String = "INSERT INTO alertas (nro_carta, comentario, estado) VALUES (" & "'" & nro_carta & "'" & ", " & "'" & comentario & "', 'ingresado')"

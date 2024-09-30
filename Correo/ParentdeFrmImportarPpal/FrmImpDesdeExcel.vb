@@ -452,8 +452,8 @@ Public Class FrmImpDesdeExcel
                     row("OBS") = "NOVEDADES"
                 End If
 
+                row("OBS2") = ConsultaAsignacionSeprit(cp)
 
-                '
 
 
             Next
