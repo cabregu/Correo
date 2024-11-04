@@ -529,8 +529,18 @@ Public Class FrmImpDesdeExcel
                 End If
             Next
 
-            '*********************************modo simple*********************
+            '***********************NuevaVarificacion oca******************************
 
+
+            For Each fila As DataRow In dt2.Rows
+                If Not IsDBNull(fila("obs2")) AndAlso fila("obs2").ToString = "" Then
+                    fila("OBS2") = ConsultaAsignacionSeprit(fila("CP"))
+                End If
+            Next
+
+
+
+            '*****************************modo simple*************************************
             Dim contador As New Dictionary(Of String, Integer)
 
             For Each fila As DataRow In dt2.Rows
