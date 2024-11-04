@@ -350,6 +350,10 @@ Public Class FrmImpDesdeExcel
 
     End Function
 
+
+
+
+
     Public Function LeerExcelComoDataTable(ByVal rutaArchivo As String) As DataTable
         Dim NombreHoja As String = ObtenerNombrePrimeraHoja(rutaArchivo)
 
@@ -452,7 +456,7 @@ Public Class FrmImpDesdeExcel
                     row("OBS") = "NOVEDADES"
                 End If
 
-                row("OBS2") = ConsultaAsignacionSeprit(cp)
+                'row("OBS2") = ConsultaAsignacionSeprit(cp)
 
 
 
@@ -595,7 +599,7 @@ Public Class FrmImpDesdeExcel
 
                                     End If
 
-                                    End If
+                                End If
                             Else
                                 'fila("obs2") = "VACIO" ' Si es par
                             End If
