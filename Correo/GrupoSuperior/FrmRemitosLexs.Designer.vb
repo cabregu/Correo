@@ -30,6 +30,11 @@ Partial Class FrmRemitosLexs
         Me.BtnGuardar = New System.Windows.Forms.Button()
         Me.DgvRemitos = New System.Windows.Forms.DataGridView()
         Me.MarcarMenuItem = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.TxtRemitoDesde = New System.Windows.Forms.TextBox()
+        Me.TxtRemitoHasta = New System.Windows.Forms.TextBox()
+        Me.BtnRemitos = New System.Windows.Forms.Button()
+        Me.LblRemitodesde = New System.Windows.Forms.Label()
+        Me.LblRemitohasta = New System.Windows.Forms.Label()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         CType(Me.PbRemito, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -46,6 +51,11 @@ Partial Class FrmRemitosLexs
         '
         'Gb
         '
+        Me.Gb.Controls.Add(Me.LblRemitohasta)
+        Me.Gb.Controls.Add(Me.LblRemitodesde)
+        Me.Gb.Controls.Add(Me.BtnRemitos)
+        Me.Gb.Controls.Add(Me.TxtRemitoHasta)
+        Me.Gb.Controls.Add(Me.TxtRemitoDesde)
         Me.Gb.Controls.Add(Me.DgvRemitos)
         Me.Gb.Controls.Add(Me.BtnGuardar)
         Me.Gb.Controls.Add(Me.BtnPegar)
@@ -67,6 +77,11 @@ Partial Class FrmRemitosLexs
         Me.Gb.Controls.SetChildIndex(Me.BtnPegar, 0)
         Me.Gb.Controls.SetChildIndex(Me.BtnGuardar, 0)
         Me.Gb.Controls.SetChildIndex(Me.DgvRemitos, 0)
+        Me.Gb.Controls.SetChildIndex(Me.TxtRemitoDesde, 0)
+        Me.Gb.Controls.SetChildIndex(Me.TxtRemitoHasta, 0)
+        Me.Gb.Controls.SetChildIndex(Me.BtnRemitos, 0)
+        Me.Gb.Controls.SetChildIndex(Me.LblRemitodesde, 0)
+        Me.Gb.Controls.SetChildIndex(Me.LblRemitohasta, 0)
         '
         'BtnNuevo
         '
@@ -170,6 +185,52 @@ Partial Class FrmRemitosLexs
         Me.MarcarMenuItem.Name = "MarcarMenuItem"
         Me.MarcarMenuItem.Size = New System.Drawing.Size(61, 4)
         '
+        'TxtRemitoDesde
+        '
+        Me.TxtRemitoDesde.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtRemitoDesde.Location = New System.Drawing.Point(1055, 46)
+        Me.TxtRemitoDesde.Name = "TxtRemitoDesde"
+        Me.TxtRemitoDesde.Size = New System.Drawing.Size(114, 31)
+        Me.TxtRemitoDesde.TabIndex = 289
+        '
+        'TxtRemitoHasta
+        '
+        Me.TxtRemitoHasta.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtRemitoHasta.Location = New System.Drawing.Point(1187, 46)
+        Me.TxtRemitoHasta.Name = "TxtRemitoHasta"
+        Me.TxtRemitoHasta.Size = New System.Drawing.Size(114, 31)
+        Me.TxtRemitoHasta.TabIndex = 290
+        '
+        'BtnRemitos
+        '
+        Me.BtnRemitos.BackColor = System.Drawing.Color.Teal
+        Me.BtnRemitos.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BtnRemitos.Image = Global.Correo.My.Resources.Resources.Attachment_32x32
+        Me.BtnRemitos.Location = New System.Drawing.Point(1307, 39)
+        Me.BtnRemitos.Name = "BtnRemitos"
+        Me.BtnRemitos.Size = New System.Drawing.Size(49, 40)
+        Me.BtnRemitos.TabIndex = 291
+        Me.BtnRemitos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.BtnRemitos.UseVisualStyleBackColor = False
+        '
+        'LblRemitodesde
+        '
+        Me.LblRemitodesde.AutoSize = True
+        Me.LblRemitodesde.Location = New System.Drawing.Point(1052, 30)
+        Me.LblRemitodesde.Name = "LblRemitodesde"
+        Me.LblRemitodesde.Size = New System.Drawing.Size(74, 13)
+        Me.LblRemitodesde.TabIndex = 292
+        Me.LblRemitodesde.Text = "Remito Desde"
+        '
+        'LblRemitohasta
+        '
+        Me.LblRemitohasta.AutoSize = True
+        Me.LblRemitohasta.Location = New System.Drawing.Point(1184, 30)
+        Me.LblRemitohasta.Name = "LblRemitohasta"
+        Me.LblRemitohasta.Size = New System.Drawing.Size(71, 13)
+        Me.LblRemitohasta.TabIndex = 293
+        Me.LblRemitohasta.Text = "Remito Hasta"
+        '
         'FrmRemitosLexs
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -197,4 +258,9 @@ Partial Class FrmRemitosLexs
     Friend WithEvents BtnGuardar As Button
     Friend WithEvents DgvRemitos As DataGridView
     Friend WithEvents MarcarMenuItem As ContextMenuStrip
+    Friend WithEvents LblRemitohasta As Label
+    Friend WithEvents LblRemitodesde As Label
+    Friend WithEvents BtnRemitos As Button
+    Friend WithEvents TxtRemitoHasta As TextBox
+    Friend WithEvents TxtRemitoDesde As TextBox
 End Class

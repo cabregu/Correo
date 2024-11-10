@@ -264,17 +264,16 @@ Public Class FrmRemitosLexs
 
 
     Private Sub VerArchivo(ByVal numeroRemito As String)
-        ' Llamar a la función para obtener los archivos por número de remito
+
         Dim archivos As List(Of Byte()) = ConfigCorreo.CN_Correo.ObtenerArchivosPorNroRemito(numeroRemito)
 
         If archivos.Count > 0 Then
-            ' Crear una corriente de memoria a partir de los bytes del archivo
+
             Using memoryStream As New MemoryStream(archivos(0))
-                ' Guardar el archivo temporalmente en el disco
+
                 Dim tempFilePath As String = Path.ChangeExtension(Path.GetTempFileName(), ".pdf")
                 File.WriteAllBytes(tempFilePath, memoryStream.ToArray())
 
-                ' Abrir el archivo PDF con el visor de PDF predeterminado del sistema
                 Process.Start(New ProcessStartInfo With {
                 .FileName = tempFilePath,
                 .UseShellExecute = True
@@ -287,17 +286,66 @@ Public Class FrmRemitosLexs
 
     Private Sub DgvRemitos_DoubleClick(sender As Object, e As EventArgs) Handles DgvRemitos.DoubleClick
 
-
-
         Dim N As String = DgvRemitos.SelectedCells(0).RowIndex.ToString
         Dim Remito As String = DgvRemitos.Rows(N).Cells("Nroremito").Value
         VerArchivo(Remito)
 
-
-
     End Sub
 
-    Private Sub DtpDesde_ValueChanged(sender As Object, e As EventArgs) Handles DtpDesde.ValueChanged
 
+
+    Private Sub BtnGuardarArchivos_Click(sender As Object, e As EventArgs) Handles BtnRemitos.Click
+        ' Obtiene los valores de los TextBox
+        Dim remitoDesde As Integer
+        Dim remitoHasta As Integer
+
+        ' Validación de entrada para asegurarse de que los valores son números
+        If Not Integer.TryParse(TxtRemitoDesde.Text, remitoDesde) OrElse Not Integer.TryParse(TxtRemitoHasta.Text, remitoHasta) Then
+            MsgBox("Por favor, ingrese números válidos en los campos.")
+            Return
+        End If
+
+        ' Asegurarse de que el rango sea correcto
+        If remitoDesde > remitoHasta Then
+            MsgBox("El número de remito 'Desde' no puede ser mayor que 'Hasta'.")
+            Return
+        End If
+
+        ' Iterar desde el número de remito 'Desde' hasta 'Hasta'
+        For i As Integer = remitoDesde To remitoHasta
+            GuardarArchivoPorRemito(i.ToString())
+        Next
+
+        MsgBox("Archivos guardados correctamente en C:\temp.")
     End Sub
+
+    Private Sub GuardarArchivoPorRemito(ByVal numeroRemito As String)
+        ' Obtener los archivos para el número de remito proporcionado
+        Dim archivos As List(Of Byte()) = ConfigCorreo.CN_Correo.ObtenerArchivosPorNroRemito(numeroRemito)
+
+        If archivos.Count > 0 Then
+            ' Asegurar que la carpeta de destino siempre sea C:\temp
+            Dim carpetaDestino As String = "C:\temp"
+            If Not Directory.Exists(carpetaDestino) Then
+                Directory.CreateDirectory(carpetaDestino)
+            End If
+
+            For Each archivoBytes As Byte() In archivos
+                ' Crear un MemoryStream a partir del archivo
+                Using memoryStream As New MemoryStream(archivoBytes)
+                    ' Crear un nombre de archivo basado en el número de remito
+                    Dim nombreArchivo As String = Path.Combine(carpetaDestino, $"Remito_{numeroRemito}.pdf")
+
+                    ' Guardar el archivo en la carpeta especificada
+                    File.WriteAllBytes(nombreArchivo, memoryStream.ToArray())
+                End Using
+            Next
+        Else
+            MsgBox($"No se encontraron archivos para el número de remito: {numeroRemito}.")
+        End If
+    End Sub
+
+
+
+
 End Class
