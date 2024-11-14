@@ -509,7 +509,7 @@ Public Class FrmImpDesdeExcel
                     row("OBS2") = "ARM"
                 End If
 
-                If String.IsNullOrEmpty(row("OBS2").ToString().Trim()) AndAlso Not String.IsNullOrEmpty(empresa) AndAlso conteoEmpresas.ContainsKey(clave) AndAlso conteoEmpresas(clave) > 3 AndAlso IsNumeric(row("CP")) AndAlso CInt(row("CP")) >= 1000 AndAlso CInt(row("CP")) <= 1399 Then
+                If String.IsNullOrEmpty(row("OBS2").ToString().Trim()) AndAlso Not String.IsNullOrEmpty(empresa) AndAlso conteoEmpresas.ContainsKey(clave) AndAlso conteoEmpresas(clave) > 1 AndAlso IsNumeric(row("CP")) AndAlso CInt(row("CP")) >= 1000 AndAlso CInt(row("CP")) <= 1399 Then
 
                     row("OBS2") = "ARM"
 
@@ -599,19 +599,12 @@ Public Class FrmImpDesdeExcel
                                     End If
                                 Else
 
-                                    If lista.Contains(zonal) Then
 
-                                        If Not obs3.ToString.Contains("Q") Then
-                                            fila("obs2") = "MODO S"
-                                        End If
-
-
-
-                                    End If
 
                                 End If
                             Else
-                                'fila("obs2") = "VACIO" ' Si es par
+
+
                             End If
 
                             nroInicial += 1
@@ -630,6 +623,10 @@ Public Class FrmImpDesdeExcel
 
 
     End Function
+
+
+
+
 
     Private Function VerificarCampos(ByVal tabla As DataTable) As Boolean
         Dim camposRequeridos As String() = {"CONTRA", "APELLIDO_TITULAR", "NOMBRE_TITULAR", "DOMI_ENT", "LOCA_DENO_ENT", "PROV_DENO_ENT", "POST", "PLAN_CODI", "CREDEN", "INTEGRANTES", "CUENTA", "RAZON", "SUBC", "SUBCTA_DENO", "ARMADO", "PROV_DENO_PAR", "LOCA_DENO_PAR", "CARTI_DENO", "EMPRESA_ENTREGA", "C", "TELE", "PLANTILLA", "FILA", "FILAS", "CAN"}

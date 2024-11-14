@@ -42,6 +42,7 @@ Public Class FrmArm
         CmbRemitoPendiente.Enabled = True
 
     End Sub
+
     Private Sub CmbRemitoPendiente_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CmbRemitoPendiente.SelectedIndexChanged
         If Len(CmbRemitente.Text) > 0 Then
             CmbRemitoPendiente.Enabled = False
@@ -391,6 +392,5 @@ Public Class FrmArm
             Console.WriteLine("Error al abrir el archivo: " & ex.Message)
         End Try
     End Sub
-
 
 End Class

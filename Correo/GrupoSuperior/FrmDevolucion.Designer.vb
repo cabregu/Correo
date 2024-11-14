@@ -66,6 +66,7 @@ Partial Class FrmDevolucion
         Me.ChkFijarcarta = New System.Windows.Forms.CheckBox()
         Me.btnAgregarCarta = New System.Windows.Forms.Button()
         Me.BtnActualizar = New System.Windows.Forms.Button()
+        Me.BtnDevolucionNormal = New System.Windows.Forms.Button()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         CType(Me.DgvCartaDev, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -82,6 +83,7 @@ Partial Class FrmDevolucion
         '
         'Gb
         '
+        Me.Gb.Controls.Add(Me.BtnDevolucionNormal)
         Me.Gb.Controls.Add(Me.BtnActualizar)
         Me.Gb.Controls.Add(Me.btnAgregarCarta)
         Me.Gb.Controls.Add(Me.ChkFijarcarta)
@@ -148,6 +150,7 @@ Partial Class FrmDevolucion
         Me.Gb.Controls.SetChildIndex(Me.BtnSalir, 0)
         Me.Gb.Controls.SetChildIndex(Me.btnAgregarCarta, 0)
         Me.Gb.Controls.SetChildIndex(Me.BtnActualizar, 0)
+        Me.Gb.Controls.SetChildIndex(Me.BtnDevolucionNormal, 0)
         '
         'TxtPlanillaDevo
         '
@@ -427,19 +430,19 @@ Partial Class FrmDevolucion
         '
         'BtnGenerar
         '
-        Me.BtnGenerar.BackColor = System.Drawing.Color.LightGreen
+        Me.BtnGenerar.BackColor = System.Drawing.Color.LimeGreen
         Me.BtnGenerar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.BtnGenerar.Location = New System.Drawing.Point(544, 444)
+        Me.BtnGenerar.Location = New System.Drawing.Point(431, 483)
         Me.BtnGenerar.Name = "BtnGenerar"
         Me.BtnGenerar.Size = New System.Drawing.Size(120, 40)
         Me.BtnGenerar.TabIndex = 103
-        Me.BtnGenerar.Text = "GenerarArchivos"
+        Me.BtnGenerar.Text = "Devolucion Swiss"
         Me.BtnGenerar.UseVisualStyleBackColor = False
         '
         'CmbHasta
         '
         Me.CmbHasta.FormattingEnabled = True
-        Me.CmbHasta.Location = New System.Drawing.Point(417, 444)
+        Me.CmbHasta.Location = New System.Drawing.Point(290, 489)
         Me.CmbHasta.Name = "CmbHasta"
         Me.CmbHasta.Size = New System.Drawing.Size(121, 21)
         Me.CmbHasta.TabIndex = 104
@@ -464,7 +467,7 @@ Partial Class FrmDevolucion
         'Lblhasta
         '
         Me.Lblhasta.AutoSize = True
-        Me.Lblhasta.Location = New System.Drawing.Point(414, 428)
+        Me.Lblhasta.Location = New System.Drawing.Point(287, 473)
         Me.Lblhasta.Name = "Lblhasta"
         Me.Lblhasta.Size = New System.Drawing.Size(35, 13)
         Me.Lblhasta.TabIndex = 107
@@ -475,11 +478,12 @@ Partial Class FrmDevolucion
         Me.DgvExcel.AllowUserToAddRows = False
         Me.DgvExcel.AllowUserToDeleteRows = False
         Me.DgvExcel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DgvExcel.Location = New System.Drawing.Point(290, 471)
+        Me.DgvExcel.Location = New System.Drawing.Point(86, 529)
         Me.DgvExcel.Name = "DgvExcel"
         Me.DgvExcel.ReadOnly = True
         Me.DgvExcel.Size = New System.Drawing.Size(150, 50)
         Me.DgvExcel.TabIndex = 108
+        Me.DgvExcel.Visible = False
         '
         'LblVerPLanillaAnerior
         '
@@ -509,13 +513,13 @@ Partial Class FrmDevolucion
         '
         'BtnDevolucionSeprit
         '
-        Me.BtnDevolucionSeprit.BackColor = System.Drawing.Color.LightGreen
+        Me.BtnDevolucionSeprit.BackColor = System.Drawing.Color.GreenYellow
         Me.BtnDevolucionSeprit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.BtnDevolucionSeprit.Location = New System.Drawing.Point(544, 490)
+        Me.BtnDevolucionSeprit.Location = New System.Drawing.Point(431, 437)
         Me.BtnDevolucionSeprit.Name = "BtnDevolucionSeprit"
         Me.BtnDevolucionSeprit.Size = New System.Drawing.Size(120, 40)
         Me.BtnDevolucionSeprit.TabIndex = 112
-        Me.BtnDevolucionSeprit.Text = "Devolucion Seprit"
+        Me.BtnDevolucionSeprit.Text = "Devolucion Oca"
         Me.BtnDevolucionSeprit.UseVisualStyleBackColor = False
         '
         'ChkFijarBarraCliente
@@ -561,6 +565,17 @@ Partial Class FrmDevolucion
         Me.BtnActualizar.TabIndex = 116
         Me.BtnActualizar.Text = "Actualizar"
         Me.BtnActualizar.UseVisualStyleBackColor = False
+        '
+        'BtnDevolucionNormal
+        '
+        Me.BtnDevolucionNormal.BackColor = System.Drawing.Color.ForestGreen
+        Me.BtnDevolucionNormal.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BtnDevolucionNormal.Location = New System.Drawing.Point(622, 437)
+        Me.BtnDevolucionNormal.Name = "BtnDevolucionNormal"
+        Me.BtnDevolucionNormal.Size = New System.Drawing.Size(120, 40)
+        Me.BtnDevolucionNormal.TabIndex = 117
+        Me.BtnDevolucionNormal.Text = "Devolucion NORMAL"
+        Me.BtnDevolucionNormal.UseVisualStyleBackColor = False
         '
         'FrmDevolucion
         '
@@ -625,4 +640,5 @@ Partial Class FrmDevolucion
     Friend WithEvents ChkFijarBarraCliente As System.Windows.Forms.CheckBox
     Friend WithEvents btnAgregarCarta As Button
     Friend WithEvents BtnActualizar As Button
+    Friend WithEvents BtnDevolucionNormal As Button
 End Class
