@@ -27,10 +27,9 @@ Partial Class FrmImportarPpal
         Me.CargarRemitoToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImportarDesdeXlsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BusquedaExcelsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EtiquetasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem6 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EtiquetasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.EliminarRemitoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AplocativoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -43,7 +42,7 @@ Partial Class FrmImportarPpal
         '
         Me.Menu.BackColor = System.Drawing.Color.SteelBlue
         Me.Menu.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CargarRemitoToolStripMenuItem1, Me.ImportarDesdeXlsToolStripMenuItem, Me.BusquedaExcelsToolStripMenuItem, Me.ToolStripMenuItem4, Me.ToolStripMenuItem5, Me.ToolStripMenuItem6, Me.EtiquetasToolStripMenuItem, Me.ToolStripMenuItem2, Me.EliminarRemitoToolStripMenuItem, Me.AplocativoToolStripMenuItem, Me.ToolStripMenuItem3, Me.ToolStripMenuItem1})
+        Me.Menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CargarRemitoToolStripMenuItem1, Me.ImportarDesdeXlsToolStripMenuItem, Me.BusquedaExcelsToolStripMenuItem, Me.ToolStripMenuItem4, Me.ToolStripMenuItem6, Me.EtiquetasToolStripMenuItem, Me.ToolStripMenuItem2, Me.EliminarRemitoToolStripMenuItem, Me.AplocativoToolStripMenuItem, Me.ToolStripMenuItem3, Me.ToolStripMenuItem1})
         Me.Menu.Location = New System.Drawing.Point(0, 0)
         Me.Menu.Name = "Menu"
         Me.Menu.Size = New System.Drawing.Size(1370, 40)
@@ -80,16 +79,6 @@ Partial Class FrmImportarPpal
         Me.BusquedaExcelsToolStripMenuItem.Size = New System.Drawing.Size(116, 36)
         Me.BusquedaExcelsToolStripMenuItem.Text = "Busqueda Xls"
         '
-        'EtiquetasToolStripMenuItem
-        '
-        Me.EtiquetasToolStripMenuItem.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
-        Me.EtiquetasToolStripMenuItem.ForeColor = System.Drawing.Color.White
-        Me.EtiquetasToolStripMenuItem.Image = Global.Correo.My.Resources.Resources.Print
-        Me.EtiquetasToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.EtiquetasToolStripMenuItem.Name = "EtiquetasToolStripMenuItem"
-        Me.EtiquetasToolStripMenuItem.Size = New System.Drawing.Size(103, 36)
-        Me.EtiquetasToolStripMenuItem.Text = "ACUSES 4"
-        '
         'ToolStripMenuItem4
         '
         Me.ToolStripMenuItem4.Checked = True
@@ -102,18 +91,6 @@ Partial Class FrmImportarPpal
         Me.ToolStripMenuItem4.Size = New System.Drawing.Size(84, 36)
         Me.ToolStripMenuItem4.Text = "ARM 1"
         '
-        'ToolStripMenuItem5
-        '
-        Me.ToolStripMenuItem5.Checked = True
-        Me.ToolStripMenuItem5.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.ToolStripMenuItem5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
-        Me.ToolStripMenuItem5.ForeColor = System.Drawing.Color.White
-        Me.ToolStripMenuItem5.Image = Global.Correo.My.Resources.Resources.BOProduct_32x32
-        Me.ToolStripMenuItem5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(103, 36)
-        Me.ToolStripMenuItem5.Text = "MODO S 2"
-        '
         'ToolStripMenuItem6
         '
         Me.ToolStripMenuItem6.Checked = True
@@ -125,6 +102,16 @@ Partial Class FrmImportarPpal
         Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
         Me.ToolStripMenuItem6.Size = New System.Drawing.Size(144, 36)
         Me.ToolStripMenuItem6.Text = "REFERENCIADO 3"
+        '
+        'EtiquetasToolStripMenuItem
+        '
+        Me.EtiquetasToolStripMenuItem.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
+        Me.EtiquetasToolStripMenuItem.ForeColor = System.Drawing.Color.White
+        Me.EtiquetasToolStripMenuItem.Image = Global.Correo.My.Resources.Resources.Print
+        Me.EtiquetasToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.EtiquetasToolStripMenuItem.Name = "EtiquetasToolStripMenuItem"
+        Me.EtiquetasToolStripMenuItem.Size = New System.Drawing.Size(103, 36)
+        Me.EtiquetasToolStripMenuItem.Text = "ACUSES 4"
         '
         'ToolStripMenuItem2
         '
@@ -213,7 +200,6 @@ Partial Class FrmImportarPpal
     Friend WithEvents AplocativoToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BusquedaExcelsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem3 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem5 As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem4 As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem6 As ToolStripMenuItem
 End Class

@@ -99,7 +99,7 @@ Partial Class FrmPendientes
         '
         'BtnGeneraryenviar
         '
-        Me.BtnGeneraryenviar.Location = New System.Drawing.Point(312, 11)
+        Me.BtnGeneraryenviar.Location = New System.Drawing.Point(363, 11)
         Me.BtnGeneraryenviar.Name = "BtnGeneraryenviar"
         Me.BtnGeneraryenviar.Size = New System.Drawing.Size(117, 23)
         Me.BtnGeneraryenviar.TabIndex = 56

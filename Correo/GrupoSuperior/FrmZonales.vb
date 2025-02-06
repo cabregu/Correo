@@ -23,16 +23,18 @@ Public Class FrmZonales
         Dtn.Columns.Add("cartero")
 
     End Sub
-    Private Sub CmbZonales_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbZonales.TextChanged
-        If CmbZonales.Text <> "" Then
-            DgvDatos.DataSource = Nothing
-            If Len(CmbZonales.Text) > 0 Then
-                CargarPlanillaZonal(CmbZonales.Text)
-                TxtEnvio.Text = ConfigCorreo.CN_Correo.ObtenerMailCartero(CmbZonales.Text)
 
-            End If
-        End If
-    End Sub
+    'Private Sub CmbZonales_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbZonales.TextChanged
+    '    If CmbZonales.Text <> "" Then
+    '        DgvDatos.DataSource = Nothing
+    '        If Len(CmbZonales.Text) > 0 Then
+    '            CargarPlanillaZonal(CmbZonales.Text)
+    '            TxtEnvio.Text = ConfigCorreo.CN_Correo.ObtenerMailCartero(CmbZonales.Text)
+
+    '        End If
+    '    End If
+    'End Sub
+
     Public Function CargarZonales()
         Dim ListaItems As New List(Of String)
         Dim dt As New DataTable

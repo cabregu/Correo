@@ -68,6 +68,12 @@ Public Class FrmImprimirDesdeExcel
 
             Next
 
+
+            For Each fila As DataRow In DTFinal.Rows
+                fila("piso_depto") = ConfigCorreo.CN_Correo.ConsultaZonalesParaImportacionyAsignacion(fila("cp").ToString())
+            Next
+
+
             DgvImprimir.DataSource = DTFinal
 
 

@@ -731,10 +731,29 @@ Public Class CN_Correo
 
         Return Dt
     End Function
+
+    'Public Shared Function CargarPlanillasDev() As DataTable
+    '    Dim ArrMotivos As New ArrayList
+    '    Dim year As Integer = DateTime.Now.Year ' Obtener el año actual
+    '    Dim sql As String = "SELECT Plani_devo FROM devueltaspl WHERE YEAR(Fecha_plani) = " & year & " AND TRIM(Plani_devo) <> ''"
+    '    Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
+    '    Dim cm As New MySqlCommand(sql, cn)
+    '    Dim da As New MySqlDataAdapter(cm)
+    '    Dim ds As New DataSet
+    '    cn.Open()
+    '    da.Fill(ds, "devueltaspl")
+    '    cn.Close()
+    '    Dim dt As New DataTable
+    '    dt = ds.Tables("devueltaspl")
+
+    '    Return dt
+    'End Function
+
     Public Shared Function CargarPlanillasDev() As DataTable
-        Dim ArrMotivos As New ArrayList
-        Dim year As Integer = DateTime.Now.Year ' Obtener el año actual
-        Dim sql As String = "SELECT Plani_devo FROM devueltaspl WHERE YEAR(Fecha_plani) = " & year & " AND TRIM(Plani_devo) <> ''"
+        Dim sql As String = "SELECT Plani_devo " &
+                        "FROM devueltaspl " &
+                        "WHERE Fecha_plani >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) " &
+                        "AND TRIM(Plani_devo) <> ''"
         Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
         Dim cm As New MySqlCommand(sql, cn)
         Dim da As New MySqlDataAdapter(cm)
@@ -747,6 +766,8 @@ Public Class CN_Correo
 
         Return dt
     End Function
+
+
 
 
     Public Shared Function CargarCarterosMailParaZonales() As DataTable
@@ -4797,6 +4818,10 @@ Public Class CN_Correo
 
     End Function
 
+
+
+    '*****************Combinadas para actualizar ARM**********************
+
     Public Shared Function ObtenerNroPlanillaArm() As Integer
         'Cargar insert sql
         Dim sqlNumero As String = "Select Desde From configuracion Where Operacion='NUMEROARM'"
@@ -4898,9 +4923,6 @@ Public Class CN_Correo
         End Try
     End Function
 
-
-
-    '*****************Combinadas para actualizar ARM**********************
     Public Shared Function VerificarSiExisteArm(ByVal trabajo As String) As Boolean
         Dim existe As Boolean = False
 
@@ -5023,7 +5045,13 @@ Public Class CN_Correo
         Return rowsAffected > 0
     End Function
 
+
     '**********************************
+
+
+
+
+
     Public Shared Function ObtenerArchivoPdf() As Byte()
         Dim sqlSelect As String = "SELECT archivo FROM configuracion WHERE operacion = 'ARCHIVOARM'"
         Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)

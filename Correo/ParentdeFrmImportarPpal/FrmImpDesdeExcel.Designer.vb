@@ -41,6 +41,7 @@ Partial Class FrmImpDesdeExcel
         Me.LblCantidad = New System.Windows.Forms.Label()
         Me.BtnExcel = New System.Windows.Forms.Button()
         Me.BtnAchivoComun = New System.Windows.Forms.Button()
+        Me.ChkArm = New System.Windows.Forms.CheckBox()
         CType(Me.Dgvimportar, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -218,12 +219,25 @@ Partial Class FrmImpDesdeExcel
         Me.BtnAchivoComun.Text = "Archivo Comun"
         Me.BtnAchivoComun.UseVisualStyleBackColor = True
         '
+        'ChkArm
+        '
+        Me.ChkArm.AutoSize = True
+        Me.ChkArm.Checked = True
+        Me.ChkArm.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.ChkArm.Location = New System.Drawing.Point(597, 128)
+        Me.ChkArm.Name = "ChkArm"
+        Me.ChkArm.Size = New System.Drawing.Size(44, 17)
+        Me.ChkArm.TabIndex = 102
+        Me.ChkArm.Text = "Arm"
+        Me.ChkArm.UseVisualStyleBackColor = True
+        '
         'FrmImpDesdeExcel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.SteelBlue
         Me.ClientSize = New System.Drawing.Size(906, 514)
+        Me.Controls.Add(Me.ChkArm)
         Me.Controls.Add(Me.BtnAchivoComun)
         Me.Controls.Add(Me.BtnExcel)
         Me.Controls.Add(Me.LblCantidad)
@@ -265,4 +279,5 @@ Partial Class FrmImpDesdeExcel
     Friend WithEvents LblCantidad As Label
     Friend WithEvents BtnExcel As Button
     Friend WithEvents BtnAchivoComun As Button
+    Friend WithEvents ChkArm As CheckBox
 End Class

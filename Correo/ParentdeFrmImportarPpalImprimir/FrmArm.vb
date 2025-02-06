@@ -121,7 +121,13 @@ Public Class FrmArm
     End Sub
 
     Private Sub BtnPdf_Click(sender As Object, e As EventArgs) Handles BtnPdf.Click
+
+
+
         CrearArchivos()
+
+
+
         Combinar()
         AbrirArchivoFinal("C:\temp\archivo_final.pdf")
         BtnPdf.Enabled = False
@@ -279,6 +285,10 @@ Public Class FrmArm
         Return datosDerecha
     End Function
 
+
+
+
+
     Public Function CrearArchivos()
 
         ConfigCorreo.CN_Correo.InsertarEnArmPlanilla(DtppalDatos)
@@ -304,26 +314,6 @@ Public Class FrmArm
 
     End Function
 
-
-
-    'Public Function Combinar()
-    '    Dim rutaCarpeta As String = "C:\temp"
-    '    Dim archivoFinal As String = Path.Combine(rutaCarpeta, "archivo_final.pdf")
-
-    '    Dim listaRutasArchivos As New List(Of String)()
-    '    If File.Exists(archivoFinal) Then
-    '        Try
-    '            File.Delete(archivoFinal)
-    '        Catch ex As Exception
-    '        End Try
-    '    End If
-
-    '    CombinarPDFsEnCarpeta(rutaCarpeta, archivoFinal, listaRutasArchivos)
-    '    MsgBox("Ok. Archivos combinados en 'archivo_final.pdf'.")
-    '    EliminarArchivosEspecificos(listaRutasArchivos)
-
-    '    'OrdenDeRetiro
-    'End Function
 
 
     Public Function Combinar()

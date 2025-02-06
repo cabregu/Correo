@@ -26,6 +26,9 @@ Partial Class FrmZonales
         Me.LblCartero = New System.Windows.Forms.Label()
         Me.BtnTerminar = New System.Windows.Forms.Button()
         Me.BtnGenerar = New System.Windows.Forms.Button()
+        Me.DtpDesde = New System.Windows.Forms.DateTimePicker()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.BtnBuscar = New System.Windows.Forms.Button()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         CType(Me.DgvDatos, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -41,6 +44,9 @@ Partial Class FrmZonales
         '
         'Gb
         '
+        Me.Gb.Controls.Add(Me.BtnBuscar)
+        Me.Gb.Controls.Add(Me.Label1)
+        Me.Gb.Controls.Add(Me.DtpDesde)
         Me.Gb.Controls.Add(Me.BtnGenerar)
         Me.Gb.Controls.Add(Me.BtnTerminar)
         Me.Gb.Controls.Add(Me.LblCartero)
@@ -59,6 +65,9 @@ Partial Class FrmZonales
         Me.Gb.Controls.SetChildIndex(Me.BtnGenerar, 0)
         Me.Gb.Controls.SetChildIndex(Me.PBLogo, 0)
         Me.Gb.Controls.SetChildIndex(Me.BtnSalir, 0)
+        Me.Gb.Controls.SetChildIndex(Me.DtpDesde, 0)
+        Me.Gb.Controls.SetChildIndex(Me.Label1, 0)
+        Me.Gb.Controls.SetChildIndex(Me.BtnBuscar, 0)
         '
         'DgvDatos
         '
@@ -73,8 +82,9 @@ Partial Class FrmZonales
         '
         'CmbZonales
         '
+        Me.CmbZonales.FormatString = "DD/MM/YYY"
         Me.CmbZonales.FormattingEnabled = True
-        Me.CmbZonales.Location = New System.Drawing.Point(70, 383)
+        Me.CmbZonales.Location = New System.Drawing.Point(11, 411)
         Me.CmbZonales.Name = "CmbZonales"
         Me.CmbZonales.Size = New System.Drawing.Size(150, 21)
         Me.CmbZonales.TabIndex = 39
@@ -82,24 +92,26 @@ Partial Class FrmZonales
         'TxtEnvio
         '
         Me.TxtEnvio.Enabled = False
-        Me.TxtEnvio.Location = New System.Drawing.Point(295, 384)
+        Me.TxtEnvio.Location = New System.Drawing.Point(499, 555)
         Me.TxtEnvio.Name = "TxtEnvio"
         Me.TxtEnvio.Size = New System.Drawing.Size(400, 20)
         Me.TxtEnvio.TabIndex = 40
+        Me.TxtEnvio.Visible = False
         '
         'LblC
         '
         Me.LblC.AutoSize = True
-        Me.LblC.Location = New System.Drawing.Point(240, 387)
+        Me.LblC.Location = New System.Drawing.Point(444, 558)
         Me.LblC.Name = "LblC"
         Me.LblC.Size = New System.Drawing.Size(34, 13)
         Me.LblC.TabIndex = 42
         Me.LblC.Text = "Envio"
+        Me.LblC.Visible = False
         '
         'LblCartero
         '
         Me.LblCartero.AutoSize = True
-        Me.LblCartero.Location = New System.Drawing.Point(15, 391)
+        Me.LblCartero.Location = New System.Drawing.Point(11, 392)
         Me.LblCartero.Name = "LblCartero"
         Me.LblCartero.Size = New System.Drawing.Size(41, 13)
         Me.LblCartero.TabIndex = 44
@@ -108,21 +120,49 @@ Partial Class FrmZonales
         'BtnTerminar
         '
         Me.BtnTerminar.Enabled = False
-        Me.BtnTerminar.Location = New System.Drawing.Point(794, 384)
+        Me.BtnTerminar.Location = New System.Drawing.Point(1001, 554)
         Me.BtnTerminar.Name = "BtnTerminar"
         Me.BtnTerminar.Size = New System.Drawing.Size(75, 23)
         Me.BtnTerminar.TabIndex = 45
         Me.BtnTerminar.Text = "Terminar"
         Me.BtnTerminar.UseVisualStyleBackColor = True
+        Me.BtnTerminar.Visible = False
         '
         'BtnGenerar
         '
-        Me.BtnGenerar.Location = New System.Drawing.Point(713, 383)
+        Me.BtnGenerar.Location = New System.Drawing.Point(917, 554)
         Me.BtnGenerar.Name = "BtnGenerar"
         Me.BtnGenerar.Size = New System.Drawing.Size(75, 23)
         Me.BtnGenerar.TabIndex = 46
         Me.BtnGenerar.Text = "Generar"
         Me.BtnGenerar.UseVisualStyleBackColor = True
+        Me.BtnGenerar.Visible = False
+        '
+        'DtpDesde
+        '
+        Me.DtpDesde.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DtpDesde.Location = New System.Drawing.Point(184, 412)
+        Me.DtpDesde.Name = "DtpDesde"
+        Me.DtpDesde.Size = New System.Drawing.Size(200, 20)
+        Me.DtpDesde.TabIndex = 47
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(181, 395)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(119, 13)
+        Me.Label1.TabIndex = 48
+        Me.Label1.Text = "Fecha de planilla desde"
+        '
+        'BtnBuscar
+        '
+        Me.BtnBuscar.Location = New System.Drawing.Point(403, 409)
+        Me.BtnBuscar.Name = "BtnBuscar"
+        Me.BtnBuscar.Size = New System.Drawing.Size(75, 23)
+        Me.BtnBuscar.TabIndex = 49
+        Me.BtnBuscar.Text = "Buscar"
+        Me.BtnBuscar.UseVisualStyleBackColor = True
         '
         'FrmZonales
         '
@@ -146,5 +186,7 @@ Partial Class FrmZonales
     Friend WithEvents LblC As System.Windows.Forms.Label
     Friend WithEvents BtnGenerar As System.Windows.Forms.Button
     Friend WithEvents BtnTerminar As System.Windows.Forms.Button
-
+    Friend WithEvents Label1 As Label
+    Friend WithEvents DtpDesde As DateTimePicker
+    Friend WithEvents BtnBuscar As Button
 End Class

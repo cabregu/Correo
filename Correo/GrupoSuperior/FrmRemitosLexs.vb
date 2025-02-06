@@ -89,6 +89,25 @@ Public Class FrmRemitosLexs
             direccion = "SAN MARTIN 323"
             sector = "SECTOR FACTURACIÓN"
 
+
+        ElseIf CmbRemitente.Text.ToString = "SWEMPF" Then
+
+            empresa = "SWISS MEDICAL S.A."
+            direccion = "SAN MARTIN 323"
+            sector = "SECTOR FACTURACIÓN"
+
+        ElseIf CmbRemitente.Text.ToString = "SWMARK" Then
+
+            empresa = "SWISS MEDICAL S.A."
+            direccion = "AV PUEYRREDON 1461 2DO PISO CABA"
+            sector = "SECTOR NEONATOLOGIA Y PEDIATRIA"
+
+        ElseIf CmbRemitente.Text.ToString = "SWMARA" Then
+
+            empresa = "SWISS MEDICAL S.A."
+            direccion = "JUAN B JUSTO 909 10MO PISO CABA"
+            sector = "SECTOR SANATORIO LOS ARCOS"
+
         End If
         DibujarEnImagen(empresa, direccion, sector)
         BtnPegar.Enabled = True

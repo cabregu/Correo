@@ -59,7 +59,7 @@
         FrmArm.Show()
     End Sub
 
-    Private Sub ToolStripMenuItem5_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem5.Click
+    Private Sub ToolStripMenuItem5_Click(sender As Object, e As EventArgs) 
         FrmModoS.MdiParent = Me
         FrmModoS.Show()
     End Sub

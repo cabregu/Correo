@@ -151,11 +151,10 @@ Public Class FrmImpDesdeExcel
         End If
 
         If ConfigCorreo.CN_Correo.InstertarCARTAS(Archtxt3) = True Then
-            ActualizarNroCarta(NroCart + 1)
 
+            ActualizarNroCarta(NroCart + 1)
             CambiarEstadoRemitosLexs(CmbRemito.Text, "Importado")
 
-            'ActualizarRemito(CmbRemito.Text, CmbCodigo.Text, "PEND_IMPR", LblCant.Text)
             If MessageBox.Show(LblCantidad.Text & " Registros Cargados", LblCantidad.Text & " Registros Cargados", MessageBoxButtons.OK, MessageBoxIcon.Information) = Windows.Forms.DialogResult.OK Then
                 Me.Close()
             End If
@@ -208,8 +207,6 @@ Public Class FrmImpDesdeExcel
         Return Dato
     End Function
 
-
-
     Private Sub DataGridView1_ColumnAdded(
       ByVal sender As Object, ByVal e As DataGridViewColumnEventArgs) _
       Handles Dgvimportar.ColumnAdded
@@ -222,7 +219,6 @@ Public Class FrmImpDesdeExcel
         e.Column.SortMode = DataGridViewColumnSortMode.NotSortable
 
     End Sub
-
     Private Sub BtnLista_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         'Try
         Dim exApp As New Microsoft.Office.Interop.Excel.Application
@@ -258,8 +254,6 @@ Public Class FrmImpDesdeExcel
         ' ''exLibro = Nothing
         ' ''exApp = Nothing
     End Sub
-
-
 
     'Private Sub BtnNormalizar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
     '    SeleccionarNormalizar()
@@ -349,10 +343,6 @@ Public Class FrmImpDesdeExcel
         End With
 
     End Function
-
-
-
-
 
     Public Function LeerExcelComoDataTable(ByVal rutaArchivo As String) As DataTable
         Dim NombreHoja As String = ObtenerNombrePrimeraHoja(rutaArchivo)
@@ -456,7 +446,7 @@ Public Class FrmImpDesdeExcel
                     row("OBS") = "NOVEDADES"
                 End If
 
-                'row("OBS2") = ConsultaAsignacionSeprit(cp)
+
 
 
 
@@ -540,81 +530,43 @@ Public Class FrmImpDesdeExcel
 
 
 
-            '*****************************modo simple*************************************
+            '*****************************REEFEREN*************************************
+
             Dim contador As New Dictionary(Of String, Integer)
 
+            ' Contar cuántas veces aparece cada piso_depto con "COOR"
             For Each fila As DataRow In dt2.Rows
                 Dim piso_depto As String = fila("piso_depto").ToString()
 
-                If piso_depto <> "" Then
-
+                If piso_depto <> "" AndAlso piso_depto.ToUpper().Contains("COOR") Then
                     If Not contador.ContainsKey(piso_depto) Then
                         contador(piso_depto) = 1
                     Else
                         contador(piso_depto) += 1
                     End If
-
                 End If
             Next
 
-            Dim lista As New List(Of String) From {
-             "TB ROSARIO",
-             "TB SF RESTO",
-             "SDI CORDOBA",
-             "TB PERGAMINO",
-             "TB MISIONES",
-             "LV TUCUMAN",
-             "LV SALTA",
-             "LV JUJUY",
-             "MEX SJ",
-             "MEX M",
-             "MEX SL",
-             "TB NEUQUEN"}
-
-
-
+            ' Asignar "REFEREN" a la mitad de los registros, excepto si obs3 contiene "Q"
             For Each kvp As KeyValuePair(Of String, Integer) In contador
-                Dim nroFinal As Integer = kvp.Value
-                Dim nroInicial As Integer = 1
+                Dim nroTotal As Integer = kvp.Value
+                Dim mitad As Integer = Math.Ceiling(nroTotal / 2.0) ' Se toma la mitad redondeando hacia arriba
+                Dim nroAsignados As Integer = 0
 
                 For Each fila As DataRow In dt2.Rows
+                    If nroAsignados >= mitad Then Exit For ' Si ya asignamos la mitad, salimos del bucle
 
-                    Dim obs2 As String = fila("obs2").ToString()
+                    Dim piso_depto As String = fila("piso_depto").ToString()
                     Dim obs3 As String = fila("obs3").ToString()
 
-                    If String.IsNullOrEmpty(obs2) Then 'Elcampo OBS2 esta vacio arranca
-
-                        Dim zonal As String = fila("piso_depto").ToString()
-                        If kvp.Key = zonal AndAlso nroInicial <= nroFinal Then
-
-                            If nroInicial Mod 2 <> 0 Then
-
-                                If zonal.ToString.Contains("COOR") Then
-                                    If Convert.ToInt32(fila("cp")) > 1400 Then
-
-                                        If Not obs3.ToString.Contains("Q") Then
-                                            fila("obs2") = "REFEREN"
-                                        End If
-
-                                    End If
-                                Else
-
-
-
-                                End If
-                            Else
-
-
-                            End If
-
-                            nroInicial += 1
-                        End If
-
-
+                    If piso_depto = kvp.Key AndAlso Not obs3.Contains("Q") Then
+                        fila("obs2") = "REFEREN"
+                        nroAsignados += 1
                     End If
-
                 Next
             Next
+
+
 
 
             Return dt2
@@ -623,10 +575,6 @@ Public Class FrmImpDesdeExcel
 
 
     End Function
-
-
-
-
 
     Private Function VerificarCampos(ByVal tabla As DataTable) As Boolean
         Dim camposRequeridos As String() = {"CONTRA", "APELLIDO_TITULAR", "NOMBRE_TITULAR", "DOMI_ENT", "LOCA_DENO_ENT", "PROV_DENO_ENT", "POST", "PLAN_CODI", "CREDEN", "INTEGRANTES", "CUENTA", "RAZON", "SUBC", "SUBCTA_DENO", "ARMADO", "PROV_DENO_PAR", "LOCA_DENO_PAR", "CARTI_DENO", "EMPRESA_ENTREGA", "C", "TELE", "PLANTILLA", "FILA", "FILAS", "CAN"}
@@ -743,29 +691,27 @@ Public Class FrmImpDesdeExcel
 
     End Sub
 
-
     Private Sub ExportarDataGridViewAExcel(ByVal dgv As DataGridView)
         Try
-            ' Crear una nueva instancia de Excel
+
             Dim exApp As Object = CreateObject("Excel.Application")
 
 
-            ' Crear un nuevo libro y una nueva hoja
+
             Dim exLibro As Object = exApp.Workbooks.Add()
             Dim exHoja As Object = exLibro.Worksheets.Add()
 
-            ' Establecer el formato de todas las celdas como texto
             exHoja.Cells.NumberFormat = "@"
 
-            ' Obtener el número de filas y columnas
+
             Dim NCol As Integer = dgv.ColumnCount
             Dim NRow As Integer = dgv.RowCount
 
-            ' Copiar los nombres de las columnas al libro
+
             Dim rg As Object = exHoja.Range(exHoja.Cells(1, 1), exHoja.Cells(1, NCol))
             rg.Value = dgv.Columns.Cast(Of DataGridViewColumn).Select(Function(c) c.HeaderText).ToArray()
 
-            ' Copiar los datos del DataGridView al libro
+
             Dim data(NRow - 1, NCol - 1) As Object
             For i As Integer = 0 To NRow - 1
                 For j As Integer = 0 To NCol - 1
@@ -775,14 +721,10 @@ Public Class FrmImpDesdeExcel
             rg = exHoja.Range(exHoja.Cells(2, 1), exHoja.Cells(NRow + 1, NCol))
             rg.Value = data
 
-            ' Ajustar el ancho de las columnas para que se ajusten al contenido
             rg = exHoja.Range(exHoja.Cells(1, 1), exHoja.Cells(NRow + 1, NCol))
             rg.EntireColumn.AutoFit()
 
-            ' Guardar el archivo de Excel y cerrar la aplicación de Excel
-            'exLibro.SaveAs("C:\temp\Transito.xls")
-            'exLibro.Close(True)
-            'exApp.Quit()
+
 
             exApp.Visible = True
 
@@ -802,8 +744,6 @@ Public Class FrmImpDesdeExcel
         BtnImportar.Enabled = True
 
     End Sub
-
-
 
     Private Sub Seleccionar()
 
@@ -879,6 +819,54 @@ Public Class FrmImpDesdeExcel
                         fila(columna) = fila(columna).ToString().TrimStart()
                     End If
                 Next
+            Next
+
+
+
+            '++++++++++++++++++++Arm+++++++++++++++++++++++++++
+            Dim conteoEmpresas As New Dictionary(Of String, Integer)
+
+            For Each row As DataRow In dt.Rows
+                Dim domicilio As String = row("CALLE").ToString().TrimEnd()
+                Dim empresa As String = row("EMPRESA").ToString().TrimEnd()
+
+                If Not String.IsNullOrEmpty(empresa) Then
+                    Dim clave As String = domicilio & "-" & empresa
+                    If conteoEmpresas.ContainsKey(clave) Then
+                        conteoEmpresas(clave) += 1
+                    Else
+                        conteoEmpresas.Add(clave, 1)
+                    End If
+                End If
+            Next
+
+            For Each row As DataRow In dt.Rows
+                Dim domicilio As String = row("CALLE").ToString().TrimEnd()
+                Dim empresa As String = row("EMPRESA").ToString().TrimEnd()
+                Dim clave As String = domicilio & "-" & empresa
+
+
+                If String.IsNullOrEmpty(row("OBS2").ToString().Trim()) AndAlso Not String.IsNullOrEmpty(empresa) AndAlso conteoEmpresas.ContainsKey(clave) AndAlso conteoEmpresas(clave) > 1 AndAlso IsNumeric(row("CP")) AndAlso CInt(row("CP")) >= 1400 AndAlso CInt(row("CP")) <= 9999 Then
+                    row("OBS2") = "ARM"
+                End If
+
+                If String.IsNullOrEmpty(row("OBS2").ToString().Trim()) AndAlso Not String.IsNullOrEmpty(empresa) AndAlso conteoEmpresas.ContainsKey(clave) AndAlso conteoEmpresas(clave) > 1 AndAlso IsNumeric(row("CP")) AndAlso CInt(row("CP")) >= 1000 AndAlso CInt(row("CP")) <= 1399 Then
+
+                    row("OBS2") = "ARM"
+
+                End If
+
+
+
+            Next
+
+
+
+
+            For Each fila As DataRow In dt.Rows
+                If IsDBNull(fila("obs2")) OrElse fila("obs2").ToString = "" OrElse fila("obs2").ToString = "ARM" Then
+                    fila("piso_depto") = ConsultaZonalesParaImportacionyAsignacion(fila("cp").ToString())
+                End If
             Next
 
 

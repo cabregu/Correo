@@ -57,12 +57,12 @@ Public Class FrmDevolucion
         CargarPlanillaParaVolver()
         btnAgregarCarta.Visible = False
         BtnActualizar.Visible = False
-
-
-
+        TxtCantidad.Text = 0
 
 
     End Sub
+
+
     Private Sub Gb_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Gb.Enter
 
     End Sub

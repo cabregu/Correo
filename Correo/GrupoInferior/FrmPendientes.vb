@@ -112,6 +112,64 @@ Public Class FrmPendientes
 
 
     End Sub
+    'Private Function ExcelPendientes(ByVal Cartero As String, ByVal Nro As Integer) As String
+    '    'Agregar referencia Microsoft.Office.Interop.Excel()
+    '    'Creamos las variables
+
+    '    Dim exApp As New Microsoft.Office.Interop.Excel.Application
+    '    Dim exLibro As Microsoft.Office.Interop.Excel.Workbook
+    '    Dim exHoja As Microsoft.Office.Interop.Excel.Worksheet
+
+    '    'Añadimos el Libro al programa, y la hoja al libro
+    '    exLibro = exApp.Workbooks.Add
+    '    exHoja = exLibro.Worksheets.Add()
+    '    exHoja.Cells.NumberFormat = "@"
+    '    ' ¿Cuantas columnas y cuantas filas?
+    '    Dim NCol As Integer = DgvDatos.ColumnCount
+    '    Dim NRow As Integer = DgvDatos.RowCount
+
+
+    '    'Aqui recorremos todas las filas, y por cada fila todas las columnas y vamos escribiendo.
+    '    For i As Integer = 1 To NCol
+    '        exHoja.Cells.Item(1, i) = DgvDatos.Columns(i - 1).Name.ToString
+    '        'exHoja.Cells.Item(1, i).HorizontalAlignment = 3
+    '    Next
+
+    '    For Fila As Integer = 0 To NRow - 1
+    '        For Col As Integer = 0 To NCol - 1
+    '            exHoja.Cells.Item(Fila + 2, Col + 1) = DgvDatos.Rows(Fila).Cells(Col).Value
+    '        Next
+    '    Next
+    '    'Titulo en negrita, Alineado al centro y que el tamaño de la columna se
+    '    'ajuste al texto
+
+
+    '    'exHoja.Rows.Item(5).Font.Bold = 1
+    '    'exHoja.Rows.Item(5).HorizontalAlignment = 3
+    '    exHoja.Columns.AutoFit()
+
+
+    '    'Aplicación visible
+    '    exApp.Application.Visible = False
+
+
+
+
+    '    'Obj.Application.ActiveWorkbook.SaveAs(App.Path & "\nombre.xls")
+    '    'Obj.Application.Quit()
+
+    '    exLibro.SaveAs("C:\Temp\Archivo " & Trim(Cartero) & " (" & Nro & ").xls")
+    '    exLibro.Close()
+
+    '    Return "C:\Temp\Archivo " & Trim(Cartero) & " (" & Nro & ").xls"
+
+    '    exHoja = Nothing
+    '    exLibro = Nothing
+    '    exApp = Nothing
+
+
+    'End Function
+
     Private Function ExcelPendientes(ByVal Cartero As String, ByVal Nro As Integer) As String
         'Agregar referencia Microsoft.Office.Interop.Excel()
         'Creamos las variables
@@ -124,12 +182,12 @@ Public Class FrmPendientes
         exLibro = exApp.Workbooks.Add
         exHoja = exLibro.Worksheets.Add()
         exHoja.Cells.NumberFormat = "@"
+
         ' ¿Cuantas columnas y cuantas filas?
         Dim NCol As Integer = DgvDatos.ColumnCount
         Dim NRow As Integer = DgvDatos.RowCount
 
-
-        'Aqui recorremos todas las filas, y por cada fila todas las columnas y vamos escribiendo.
+        'Aquí recorremos todas las filas, y por cada fila todas las columnas y vamos escribiendo.
         For i As Integer = 1 To NCol
             exHoja.Cells.Item(1, i) = DgvDatos.Columns(i - 1).Name.ToString
             'exHoja.Cells.Item(1, i).HorizontalAlignment = 3
@@ -137,38 +195,35 @@ Public Class FrmPendientes
 
         For Fila As Integer = 0 To NRow - 1
             For Col As Integer = 0 To NCol - 1
-                exHoja.Cells.Item(Fila + 2, Col + 1) = DgvDatos.Rows(Fila).Cells(Col).Value
+                Dim valorCelda = DgvDatos.Rows(Fila).Cells(Col).Value
+                exHoja.Cells.Item(Fila + 2, Col + 1) = valorCelda
+
+                ' Verificar si el valor es una fecha y aplicar formato DD/MM/YYYY
+                If TypeOf valorCelda Is Date Then
+                    exHoja.Cells.Item(Fila + 2, Col + 1).NumberFormat = "DD/MM/YYYY"
+                End If
             Next
         Next
-        'Titulo en negrita, Alineado al centro y que el tamaño de la columna se
-        'ajuste al texto
 
-
-        'exHoja.Rows.Item(5).Font.Bold = 1
-        'exHoja.Rows.Item(5).HorizontalAlignment = 3
+        'Título en negrita, alineado al centro y que el tamaño de la columna se ajuste al texto
         exHoja.Columns.AutoFit()
-
 
         'Aplicación visible
         exApp.Application.Visible = False
 
-
-
-
-        'Obj.Application.ActiveWorkbook.SaveAs(App.Path & "\nombre.xls")
-        'Obj.Application.Quit()
-
+        'Guardar el archivo
         exLibro.SaveAs("C:\Temp\Archivo " & Trim(Cartero) & " (" & Nro & ").xls")
         exLibro.Close()
 
-        Return "C:\Temp\Archivo " & Trim(Cartero) & " (" & Nro & ").xls"
-
+        'Liberar recursos
         exHoja = Nothing
         exLibro = Nothing
         exApp = Nothing
 
-
+        Return "C:\Temp\Archivo " & Trim(Cartero) & " (" & Nro & ").xls"
     End Function
+
+
     Public Function EnviarCorreoSinOutlook(ByVal cartero As String, ByVal Archiv As String) As Boolean
         Try
             Dim archivo As New System.Net.Mail.Attachment(Archiv)
