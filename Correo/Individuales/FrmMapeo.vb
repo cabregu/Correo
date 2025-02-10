@@ -160,6 +160,10 @@ Public Class FrmMapeo
     Private Sub FrmMapeo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         DgvDatos.DataSource = dt2
     End Sub
+
+
+
+
     Function GeocodeAddress(address As String) As (Double, Double)
         Dim apiKey As String = "5b3ce3597851110001cf624826ff71dbb3bd48e6bae1e785f1b5ce93"
         Dim url As String = $"https://api.openrouteservice.org/geocode/search?api_key={apiKey}&text={Uri.EscapeDataString(address)}"
@@ -201,111 +205,62 @@ Public Class FrmMapeo
         Return responseFromServer
     End Function
 
-    Public Class FrmMapeo
-        ' Función para obtener las coordenadas (latitud y longitud) de una dirección
-        Function GeocodeAddress(address As String) As (Double, Double)
-            Dim apiKey As String = "5b3ce3597851110001cf624826ff71dbb3bd48e6bae1e785f1b5ce93"
-            Dim url As String = $"https://api.openrouteservice.org/geocode/search?api_key={apiKey}&text={Uri.EscapeDataString(address)}"
-
-            Dim request As WebRequest = WebRequest.Create(url)
-            Dim response As WebResponse = request.GetResponse()
-            Dim dataStream As Stream = response.GetResponseStream()
-            Dim reader As New StreamReader(dataStream)
-            Dim responseFromServer As String = reader.ReadToEnd()
-
-            Dim json As JObject = JObject.Parse(responseFromServer)
-            Dim lat As Double = json("features")(0)("geometry")("coordinates")(1)
-            Dim lon As Double = json("features")(0)("geometry")("coordinates")(0)
-
-            Return (lat, lon)
-        End Function
-
-        ' Función para obtener la ruta entre dos puntos
-        Function GetRoute(startLat As Double, startLon As Double, endLat As Double, endLon As Double) As String
-            Dim apiKey As String = "5b3ce3597851110001cf624826ff71dbb3bd48e6bae1e785f1b5ce93"
-            Dim url As String = $"https://api.openrouteservice.org/v2/directions/driving-car?api_key={apiKey}"
-
-            Dim postData As String = $"{{""coordinates"":[[{startLon},{startLat}],[{endLon},{endLat}]]}}"
-            Dim data As Byte() = System.Text.Encoding.UTF8.GetBytes(postData)
-
-            Dim request As WebRequest = WebRequest.Create(url)
-            request.Method = "POST"
-            request.ContentType = "application/json"
-            request.ContentLength = data.Length
-
-            Using stream As Stream = request.GetRequestStream()
-                stream.Write(data, 0, data.Length)
-            End Using
-
-            Dim response As WebResponse = request.GetResponse()
-            Dim dataStream As Stream = response.GetResponseStream()
-            Dim reader As New StreamReader(dataStream)
-            Dim responseFromServer As String = reader.ReadToEnd()
-
-            Return responseFromServer
-        End Function
-
-
-    End Class
 
     Private Sub Btnmapeo_Click(sender As Object, e As EventArgs) Handles Btnmapeo.Click
         Try
+            ' Crear el contenido HTML para el mapa
+            Dim htmlContent As String = "
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Mapa de Ruta</title>
+            <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
+            <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css' />
+        </head>
+        <body>
+            <div id='map' style='width: 100%; height: 100%;'></div>
+            <script>
+                var map = L.map('map').setView([0, 0], 13); // Centrar el mapa inicialmente en (0, 0)
 
-            Dim startAddress As String = "Calle Falsa 123, Ciudad A"
-            Dim endAddress As String = "Avenida Siempre Viva 742, Ciudad B"
+                L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+                    maxZoom: 19
+                }}).addTo(map);"
 
+            ' Recorrer las filas del DataTable
+            For Each row As DataRow In dt2.Rows
+                ' Construir la dirección a partir de las columnas del DataTable
+                Dim startAddress As String = $"{row("callemodificada").ToString()}, {row("altura").ToString()}, {row("localidad").ToString()}, {row("cp").ToString()}"
 
-            Dim startCoordinates = GeocodeAddress(startAddress)
-            Dim endCoordinates = GeocodeAddress(endAddress)
+                ' Obtener las coordenadas para la dirección de inicio
+                Dim startCoordinates = GeocodeAddress(startAddress)
 
-            Dim startLat As Double = startCoordinates.Item1
-            Dim startLon As Double = startCoordinates.Item2
-            Dim endLat As Double = endCoordinates.Item1
-            Dim endLon As Double = endCoordinates.Item2
+                ' Asignar las coordenadas de inicio
+                Dim startLat As Double = startCoordinates.Item1
+                Dim startLon As Double = startCoordinates.Item2
 
+                ' Agregar un marcador para cada dirección en el mapa
+                htmlContent &= $"L.marker([{startLat}, {startLon}]).addTo(map).bindPopup('Dirección: {startAddress}').openPopup();"
+            Next
 
-            Dim routeJson As String = GetRoute(startLat, startLon, endLat, endLon)
+            ' Cerrar la etiqueta script y html
+            htmlContent &= "
+            </script>
+        </body>
+        </html>"
 
-
-            Dim htmlContent As String = $"
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Mapa de Ruta</title>
-                <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
-                <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css' />
-            </head>
-            <body>
-                <div id='map' style='width: 100%; height: 100%;'></div>
-                <script>
-                    var map = L.map('map').setView([{startLat}, {startLon}], 13);
-                    L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-                        maxZoom: 19
-                    }}).addTo(map);
-
-                    var route = {routeJson};
-                    var coordinates = route.features[0].geometry.coordinates.map(function(coord) {{
-                        return [coord[1], coord[0]];
-                    }});
-
-                    L.polyline(coordinates, {{color: 'blue'}}).addTo(map);
-                    L.marker([{startLat}, {startLon}]).addTo(map).bindPopup('Inicio').openPopup();
-                    L.marker([{endLat}, {endLon}]).addTo(map).bindPopup('Destino').openPopup();
-                </script>
-            </body>
-            </html>"
-
-
+            ' Guardar el contenido HTML en un archivo temporal
             Dim tempFilePath As String = IO.Path.Combine(IO.Path.GetTempPath(), "map.html")
             IO.File.WriteAllText(tempFilePath, htmlContent)
 
-
+            ' Navegar al archivo temporal con el WebBrowser
             WebBrowser1.Navigate(tempFilePath)
 
         Catch ex As Exception
             MessageBox.Show("Ocurrió un error: " & ex.Message)
         End Try
     End Sub
+
+
 
 
 End Class
