@@ -52,6 +52,7 @@ Partial Class FrmImprimirPlanificacion
         Me.DgvContenido = New System.Windows.Forms.DataGridView()
         Me.DtpFecha = New System.Windows.Forms.DateTimePicker()
         Me.BtnImprimirPlanillasFecha = New System.Windows.Forms.Button()
+        Me.BtnMapeo = New System.Windows.Forms.Button()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         Me.GpbRecorridos.SuspendLayout()
@@ -66,7 +67,7 @@ Partial Class FrmImprimirPlanificacion
         '
         'BtnSalir
         '
-        Me.BtnSalir.Location = New System.Drawing.Point(1246, 661)
+        Me.BtnSalir.Location = New System.Drawing.Point(1322, 661)
         '
         'Gb
         '
@@ -75,7 +76,7 @@ Partial Class FrmImprimirPlanificacion
         Me.Gb.Controls.Add(Me.DtpFecha)
         Me.Gb.Controls.Add(Me.BtnImprimirPlanillasFecha)
         Me.Gb.Location = New System.Drawing.Point(0, 0)
-        Me.Gb.Size = New System.Drawing.Size(1293, 712)
+        Me.Gb.Size = New System.Drawing.Size(1369, 712)
         Me.Gb.Controls.SetChildIndex(Me.BtnImprimirPlanillasFecha, 0)
         Me.Gb.Controls.SetChildIndex(Me.DtpFecha, 0)
         Me.Gb.Controls.SetChildIndex(Me.GpbRecorridos, 0)
@@ -149,6 +150,7 @@ Partial Class FrmImprimirPlanificacion
         '
         'GpbCartas
         '
+        Me.GpbCartas.Controls.Add(Me.BtnMapeo)
         Me.GpbCartas.Controls.Add(Me.BtnSubirRecorrido)
         Me.GpbCartas.Controls.Add(Me.BtnAgregar)
         Me.GpbCartas.Controls.Add(Me.TxtNuevaCarta)
@@ -404,10 +406,19 @@ Partial Class FrmImprimirPlanificacion
         Me.BtnImprimirPlanillasFecha.Text = "Imprimir Planillas"
         Me.BtnImprimirPlanillasFecha.UseVisualStyleBackColor = True
         '
+        'BtnMapeo
+        '
+        Me.BtnMapeo.Location = New System.Drawing.Point(678, 158)
+        Me.BtnMapeo.Name = "BtnMapeo"
+        Me.BtnMapeo.Size = New System.Drawing.Size(110, 30)
+        Me.BtnMapeo.TabIndex = 67
+        Me.BtnMapeo.Text = "Mapeo"
+        Me.BtnMapeo.UseVisualStyleBackColor = True
+        '
         'FrmImprimirPlanificacion
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.ClientSize = New System.Drawing.Size(1294, 712)
+        Me.ClientSize = New System.Drawing.Size(1370, 712)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Location = New System.Drawing.Point(0, 0)
         Me.Name = "FrmImprimirPlanificacion"
@@ -455,5 +466,5 @@ Partial Class FrmImprimirPlanificacion
     Friend WithEvents BtnAgregar As System.Windows.Forms.Button
     Friend WithEvents TxtNuevaCarta As System.Windows.Forms.TextBox
     Friend WithEvents BtnSubirRecorrido As System.Windows.Forms.Button
-
+    Friend WithEvents BtnMapeo As Button
 End Class

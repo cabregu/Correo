@@ -464,6 +464,9 @@ Public Class FrmImprimirPlanificacion
 
     End Sub
 
+    Private Sub BtnMapeo_Click(sender As Object, e As EventArgs) Handles BtnMapeo.Click
+        FrmMapeo.dt2 = dtn
+        FrmMapeo.Show()
 
-
+    End Sub
 End Class

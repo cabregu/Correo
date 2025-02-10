@@ -1409,9 +1409,6 @@ Public Class FrmTransito
 
         Return callepattern & ";" & calleCompleta
     End Function
-
-
-
     Private Sub BtnEstadistica_Click(sender As Object, e As EventArgs) Handles BtnEstadistica.Click
 
         dt2.Columns.Add("callemodificada")
@@ -1471,9 +1468,6 @@ Public Class FrmTransito
         Next
 
     End Sub
-
-
-
     Private Function AñadirCamposSeparandoCallededireccion(ByVal dtEstadistica As DataTable) As List(Of List(Of String))
         Dim palabras As Dictionary(Of String, String) = ConfigCorreo.CN_Correo.ReemplazarPalabras()
         Dim direccionesModificadas As New List(Of List(Of String))()
