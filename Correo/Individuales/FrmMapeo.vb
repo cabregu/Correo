@@ -3,6 +3,7 @@ Imports System.Net
 Imports System.IO
 Imports Newtonsoft.Json.Linq
 Imports Org.BouncyCastle.Math.EC
+Imports Newtonsoft.Json
 
 
 Public Class FrmMapeo
@@ -12,60 +13,106 @@ Public Class FrmMapeo
     Public dt2 As New DataTable
 
     Private Sub BtnConsultar_Click(sender As Object, e As EventArgs) Handles BtnConsultar.Click
-
-        dt2.Columns.Add("callemodificada")
-        dt2.Columns.Add("altura")
-
         Dim palabras As Dictionary(Of String, String) = ConfigCorreo.CN_Correo.ReemplazarPalabras()
+        Dim ultimaLatitud As Double = 0
+        Dim ultimaLongitud As Double = 0
+
+        ' Asegurar que la carpeta existe
+        If Not Directory.Exists("C:\temp") Then
+            Directory.CreateDirectory("C:\temp")
+        End If
+
         For Each fila As DataGridViewRow In DgvDatos.Rows
             If Not fila.IsNewRow Then
                 Dim calle As String = fila.Cells("calle").Value.ToString()
                 Dim modificada As String = calle
-
                 For Each kvp As KeyValuePair(Of String, String) In palabras
                     modificada = modificada.Replace(kvp.Key, kvp.Value)
                 Next
-
                 modificada = Regex.Replace(modificada, "[^a-zA-Z0-9\s]", "")
-
                 Dim resultado As String = ExtractStreetAndNumber(calle)
                 Dim valores As String() = resultado.Split(";"c)
 
                 If valores.Length >= 1 Then
                     fila.Cells("callemodificada").Value = valores(0)
                 End If
-
                 If valores.Length >= 2 Then
                     fila.Cells("altura").Value = valores(1)
                 End If
+
+                Dim calleFinal As String = fila.Cells("callemodificada").Value.ToString()
+                Dim alturaFinal As String = fila.Cells("altura").Value.ToString()
+                Dim direccionCompleta As String = $"{calleFinal} {alturaFinal}, Ciudad Autonoma de Buenos Aires, {fila.Cells("cp").Value.ToString()}"
+
+                Dim coordenadas As (lat As Double, lon As Double, jsonResponse As String) = (0, 0, "")
+                Dim intentos As Integer = 0
+
+                ' Intentar hasta 2 veces si la latitud y longitud son iguales a la fila anterior
+                Do
+                    coordenadas = GeocodeAddress(direccionCompleta)
+                    intentos += 1
+                Loop While intentos < 2 AndAlso coordenadas.lat = ultimaLatitud AndAlso coordenadas.lon = ultimaLongitud
+
+                ' Si después de los intentos sigue devolviendo lo mismo, dejarlo en 0
+                If coordenadas.lat = ultimaLatitud AndAlso coordenadas.lon = ultimaLongitud Then
+                    coordenadas = (0, 0, "")
+                End If
+
+                fila.Cells("latitud").Value = coordenadas.lat
+                fila.Cells("longitud").Value = coordenadas.lon
+
+                ultimaLatitud = coordenadas.lat
+                ultimaLongitud = coordenadas.lon
+
+                DgvDatos.Refresh()
             End If
-        Next
-
-
-        Dim direccionesModificadas As List(Of List(Of String)) = AñadirCamposSeparandoCallededireccion(ConfigCorreo.CN_Correo.ObtenerEntregadasTodo)
-
-        For Each fila As DataGridViewRow In DgvDatos.Rows
-            If Not fila.IsNewRow Then ' Omitir la fila de nueva entrada, si existe
-                Dim callemodificada As String = fila.Cells("callemodificada").Value.ToString()
-                Dim altura As String = fila.Cells("altura").Value
-
-                ' Verificar si existe el dato en la lista utilizando un bucle For Each
-                Dim encontrado As Boolean = False
-                For Each direccionModificada As List(Of String) In direccionesModificadas
-                    Dim calleModificadaDt As String = direccionModificada(0)
-                    Dim alturaDt As String = If(direccionModificada.Count > 1, direccionModificada(1), "")
-
-                    If String.Equals(callemodificada, calleModificadaDt, StringComparison.OrdinalIgnoreCase) AndAlso altura = alturaDt Then
-                        encontrado = True
-                        Exit For ' Salir del bucle si encontramos una coincidencia
-                    End If
-                Next
-
-
-            End If
-
         Next
     End Sub
+
+    Function GeocodeAddress(address As String) As (lat As Double, lon As Double, jsonResponse As String)
+        Dim apiKey As String = "5b3ce3597851110001cf624826ff71dbb3bd48e6bae1e785f1b5ce93"
+        Dim url As String = $"https://api.openrouteservice.org/geocode/search?api_key={apiKey}&text={Uri.EscapeDataString(address)}"
+
+        Dim request As WebRequest = WebRequest.Create(url)
+        Dim response As WebResponse = request.GetResponse()
+        Dim dataStream As Stream = response.GetResponseStream()
+        Dim reader As New StreamReader(dataStream)
+        Dim responseFromServer As String = reader.ReadToEnd()
+
+        Console.WriteLine("Response: " & responseFromServer)
+
+        ' Guardar la respuesta en un archivo JSON
+        GuardarJsonConsulta(responseFromServer)
+
+        Dim json As JObject = JObject.Parse(responseFromServer)
+
+        If json("features") IsNot Nothing AndAlso json("features").Count > 0 Then
+            Dim lat As Double = json("features")(0)("geometry")("coordinates")(1)
+            Dim lon As Double = json("features")(0)("geometry")("coordinates")(0)
+
+            Console.WriteLine("Latitud: " & lat)
+            Console.WriteLine("Longitud: " & lon)
+
+            Return (lat, lon, responseFromServer)
+        Else
+            Console.WriteLine("No coordinates found for: " & address)
+            Return (0, 0, responseFromServer)
+        End If
+    End Function
+
+
+    Sub GuardarJsonConsulta(jsonResponse As String)
+        Try
+            Dim timestamp As String = DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss-fff")
+            Dim fileName As String = $"C:\temp\consulta_{timestamp}.json"
+
+            File.WriteAllText(fileName, jsonResponse)
+        Catch ex As Exception
+            Console.WriteLine("Error al guardar el JSON: " & ex.Message)
+        End Try
+    End Sub
+
+
 
 
 
@@ -160,84 +207,83 @@ Public Class FrmMapeo
     End Function
     Private Sub FrmMapeo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         DgvDatos.DataSource = dt2
+
+        dt2.Columns.Add("callemodificada")
+        dt2.Columns.Add("altura")
+        dt2.Columns.Add("latitud")
+        dt2.Columns.Add("longitud")
+
     End Sub
 
 
-
-
-    Function GeocodeAddress(address As String) As (Double, Double)
-        Dim apiKey As String = "5b3ce3597851110001cf624826ff71dbb3bd48e6bae1e785f1b5ce93"
-        Dim url As String = $"https://api.openrouteservice.org/geocode/search?api_key={apiKey}&text={Uri.EscapeDataString(address)}"
-
-        Dim request As WebRequest = WebRequest.Create(url)
-        Dim response As WebResponse = request.GetResponse()
-        Dim dataStream As Stream = response.GetResponseStream()
-        Dim reader As New StreamReader(dataStream)
-        Dim responseFromServer As String = reader.ReadToEnd()
-
-        Dim json As JObject = JObject.Parse(responseFromServer)
-        Dim lat As Double = json("features")(0)("geometry")("coordinates")(1)
-        Dim lon As Double = json("features")(0)("geometry")("coordinates")(0)
-
-        Return (lat, lon)
-    End Function
-
-    Function GetRoute(startLat As Double, startLon As Double, endLat As Double, endLon As Double) As String
-        Dim apiKey As String = "TU_API_KEY"
-        Dim url As String = $"https://api.openrouteservice.org/v2/directions/driving-car?api_key={apiKey}"
-
-        Dim postData As String = $"{{""coordinates"":[[{startLon},{startLat}],[{endLon},{endLat}]]}}"
-        Dim data As Byte() = System.Text.Encoding.UTF8.GetBytes(postData)
-
-        Dim request As WebRequest = WebRequest.Create(url)
-        request.Method = "POST"
-        request.ContentType = "application/json"
-        request.ContentLength = data.Length
-
-        Using stream As Stream = request.GetRequestStream()
-            stream.Write(data, 0, data.Length)
-        End Using
-
-        Dim response As WebResponse = request.GetResponse()
-        Dim dataStream As Stream = response.GetResponseStream()
-        Dim reader As New StreamReader(dataStream)
-        Dim responseFromServer As String = reader.ReadToEnd()
-
-        Return responseFromServer
-    End Function
 
 
     Private Sub Btnmapeo_Click(sender As Object, e As EventArgs) Handles Btnmapeo.Click
         Try
-            ' URL del archivo HTML alojado en tu servidor
-            Dim htmlUrl As String = "https://www.lexs.com.ar/map.html"
+            ' Crear lista para almacenar los puntos
+            Dim puntos As New List(Of Dictionary(Of String, String))()
 
-            ' Navegar al archivo HTML
-            WebBrowser1.Navigate(htmlUrl)
+            ' Recorrer los datos de la tabla
+            For Each row As DataRow In dt2.Rows
+                ' Asegurarse de que latitud y longitud tengan valor
+                Dim latitud As String = If(row("latitud") IsNot DBNull.Value, row("latitud").ToString(), "")
+                Dim longitud As String = If(row("longitud") IsNot DBNull.Value, row("longitud").ToString(), "")
+                Dim nro_carta As String = row("nro_carta").ToString()
+                Dim calle As String = row("callemodificada").ToString()
 
-            ' Esperar a que el navegador cargue el contenido
-            AddHandler WebBrowser1.DocumentCompleted, Sub()
-                                                          ' Verificar que el documento esté completamente cargado
-                                                          If WebBrowser1.ReadyState = WebBrowserReadyState.Complete Then
-                                                              ' Inyectar los marcadores dinámicamente
-                                                              For Each row As DataRow In dt2.Rows
-                                                                  ' Construir la dirección
-                                                                  Dim startAddress As String = $"{row("callemodificada").ToString()}, {row("altura").ToString()}, {row("localidad").ToString()}, {row("cp").ToString()}"
+                ' Solo agregar el punto si tiene latitud y longitud
+                If Not String.IsNullOrEmpty(latitud) AndAlso Not String.IsNullOrEmpty(longitud) Then
+                    Dim punto As New Dictionary(Of String, String) From {
+                        {"calle", calle},
+                        {"altura", row("altura").ToString()},
+                        {"localidad", row("localidad").ToString()},
+                        {"cp", row("cp").ToString()},
+                        {"latitud", latitud},
+                        {"longitud", longitud},
+                        {"nro_carta", nro_carta},
+                        {"callemodificada", calle}
+                    }
+                    puntos.Add(punto)
+                End If
+            Next
 
-                                                                  ' Obtener las coordenadas (asegúrate de implementar GeocodeAddress)
-                                                                  Dim startCoordinates = GeocodeAddress(startAddress)
-                                                                  Dim startLat As Double = startCoordinates.Item1
-                                                                  Dim startLon As Double = startCoordinates.Item2
+            ' Serializar a JSON
+            Dim json As String = JsonConvert.SerializeObject(puntos)
 
-                                                                  ' Inyectar JavaScript para agregar el marcador
-                                                                  Dim script As String = $"var marker = L.marker([{startLat}, {startLon}]).addTo(map).bindPopup('Dirección: {startAddress}').openPopup();"
-                                                                  WebBrowser1.Document.InvokeScript("eval", New Object() {script})
-                                                              Next
-                                                          End If
-                                                      End Sub
+            ' Enviar JSON al PHP
+            Dim url As String = "https://www.lexs.com.ar/map_data.php"
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "POST"
+            request.ContentType = "application/json"
+
+            Using streamWriter As New StreamWriter(request.GetRequestStream())
+                streamWriter.Write(json)
+                streamWriter.Flush()
+                streamWriter.Close()
+            End Using
+
+            ' Recibir respuesta del servidor
+            Dim response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+            Using streamReader As New StreamReader(response.GetResponseStream())
+                Dim result As String = streamReader.ReadToEnd()
+                MessageBox.Show("Datos enviados correctamente")
+            End Using
+
+            ' Esperar 1 segundo para asegurar que los datos se guardaron antes de abrir el mapa
+            System.Threading.Thread.Sleep(1000)
+
+            ' Abrir el mapa en el navegador predeterminado
+            Process.Start(New ProcessStartInfo With {
+                .FileName = "https://www.lexs.com.ar/map_data.php",
+                .UseShellExecute = True
+            })
+
         Catch ex As Exception
             MessageBox.Show("Ocurrió un error: " & ex.Message)
         End Try
     End Sub
+
+
+
 
 End Class

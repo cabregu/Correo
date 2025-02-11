@@ -21,7 +21,6 @@ Partial Class FrmMapeo
     Private Sub InitializeComponent()
         Me.DgvDatos = New System.Windows.Forms.DataGridView()
         Me.BtnConsultar = New System.Windows.Forms.Button()
-        Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
         Me.Btnmapeo = New System.Windows.Forms.Button()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
@@ -39,7 +38,6 @@ Partial Class FrmMapeo
         'Gb
         '
         Me.Gb.Controls.Add(Me.Btnmapeo)
-        Me.Gb.Controls.Add(Me.WebBrowser1)
         Me.Gb.Controls.Add(Me.BtnConsultar)
         Me.Gb.Controls.Add(Me.DgvDatos)
         Me.Gb.Size = New System.Drawing.Size(1263, 750)
@@ -47,7 +45,6 @@ Partial Class FrmMapeo
         Me.Gb.Controls.SetChildIndex(Me.BtnSalir, 0)
         Me.Gb.Controls.SetChildIndex(Me.DgvDatos, 0)
         Me.Gb.Controls.SetChildIndex(Me.BtnConsultar, 0)
-        Me.Gb.Controls.SetChildIndex(Me.WebBrowser1, 0)
         Me.Gb.Controls.SetChildIndex(Me.Btnmapeo, 0)
         '
         'DgvDatos
@@ -58,7 +55,7 @@ Partial Class FrmMapeo
         Me.DgvDatos.Location = New System.Drawing.Point(32, 43)
         Me.DgvDatos.Name = "DgvDatos"
         Me.DgvDatos.ReadOnly = True
-        Me.DgvDatos.Size = New System.Drawing.Size(900, 200)
+        Me.DgvDatos.Size = New System.Drawing.Size(900, 600)
         Me.DgvDatos.TabIndex = 29
         '
         'BtnConsultar
@@ -69,14 +66,6 @@ Partial Class FrmMapeo
         Me.BtnConsultar.TabIndex = 30
         Me.BtnConsultar.Text = "Consultar"
         Me.BtnConsultar.UseVisualStyleBackColor = True
-        '
-        'WebBrowser1
-        '
-        Me.WebBrowser1.Location = New System.Drawing.Point(32, 250)
-        Me.WebBrowser1.MinimumSize = New System.Drawing.Size(20, 20)
-        Me.WebBrowser1.Name = "WebBrowser1"
-        Me.WebBrowser1.Size = New System.Drawing.Size(900, 450)
-        Me.WebBrowser1.TabIndex = 31
         '
         'Btnmapeo
         '
@@ -103,6 +92,5 @@ Partial Class FrmMapeo
 
     Friend WithEvents DgvDatos As DataGridView
     Friend WithEvents BtnConsultar As Button
-    Friend WithEvents WebBrowser1 As WebBrowser
     Friend WithEvents Btnmapeo As Button
 End Class

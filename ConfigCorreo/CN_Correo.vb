@@ -4809,6 +4809,8 @@ Public Class CN_Correo
         palabras.Add("R ESCALADA DE SAN MARTN", "R E SAN MARTIN")
         palabras.Add("R ESCALADA SAN MARTIN", "R E SAN MARTIN")
         palabras.Add("ENIDA ", "")
+        palabras.Add("ING ", "")
+
         '
 
 
