@@ -8,6 +8,7 @@ Imports Org.BouncyCastle.Math.EC
 Public Class FrmMapeo
 
 
+
     Public dt2 As New DataTable
 
     Private Sub BtnConsultar_Click(sender As Object, e As EventArgs) Handles BtnConsultar.Click
@@ -208,59 +209,35 @@ Public Class FrmMapeo
 
     Private Sub Btnmapeo_Click(sender As Object, e As EventArgs) Handles Btnmapeo.Click
         Try
-            ' Crear el contenido HTML para el mapa
-            Dim htmlContent As String = "
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Mapa de Ruta</title>
-            <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
-            <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css' />
-        </head>
-        <body>
-            <div id='map' style='width: 100%; height: 100%;'></div>
-            <script>
-                var map = L.map('map').setView([0, 0], 13); // Centrar el mapa inicialmente en (0, 0)
+            ' URL del archivo HTML alojado en tu servidor
+            Dim htmlUrl As String = "https://www.lexs.com.ar/map.html"
 
-                L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-                    maxZoom: 19
-                }}).addTo(map);"
+            ' Navegar al archivo HTML
+            WebBrowser1.Navigate(htmlUrl)
 
-            ' Recorrer las filas del DataTable
-            For Each row As DataRow In dt2.Rows
-                ' Construir la dirección a partir de las columnas del DataTable
-                Dim startAddress As String = $"{row("callemodificada").ToString()}, {row("altura").ToString()}, {row("localidad").ToString()}, {row("cp").ToString()}"
+            ' Esperar a que el navegador cargue el contenido
+            AddHandler WebBrowser1.DocumentCompleted, Sub()
+                                                          ' Verificar que el documento esté completamente cargado
+                                                          If WebBrowser1.ReadyState = WebBrowserReadyState.Complete Then
+                                                              ' Inyectar los marcadores dinámicamente
+                                                              For Each row As DataRow In dt2.Rows
+                                                                  ' Construir la dirección
+                                                                  Dim startAddress As String = $"{row("callemodificada").ToString()}, {row("altura").ToString()}, {row("localidad").ToString()}, {row("cp").ToString()}"
 
-                ' Obtener las coordenadas para la dirección de inicio
-                Dim startCoordinates = GeocodeAddress(startAddress)
+                                                                  ' Obtener las coordenadas (asegúrate de implementar GeocodeAddress)
+                                                                  Dim startCoordinates = GeocodeAddress(startAddress)
+                                                                  Dim startLat As Double = startCoordinates.Item1
+                                                                  Dim startLon As Double = startCoordinates.Item2
 
-                ' Asignar las coordenadas de inicio
-                Dim startLat As Double = startCoordinates.Item1
-                Dim startLon As Double = startCoordinates.Item2
-
-                ' Agregar un marcador para cada dirección en el mapa
-                htmlContent &= $"L.marker([{startLat}, {startLon}]).addTo(map).bindPopup('Dirección: {startAddress}').openPopup();"
-            Next
-
-            ' Cerrar la etiqueta script y html
-            htmlContent &= "
-            </script>
-        </body>
-        </html>"
-
-            ' Guardar el contenido HTML en un archivo temporal
-            Dim tempFilePath As String = IO.Path.Combine(IO.Path.GetTempPath(), "map.html")
-            IO.File.WriteAllText(tempFilePath, htmlContent)
-
-            ' Navegar al archivo temporal con el WebBrowser
-            WebBrowser1.Navigate(tempFilePath)
-
+                                                                  ' Inyectar JavaScript para agregar el marcador
+                                                                  Dim script As String = $"var marker = L.marker([{startLat}, {startLon}]).addTo(map).bindPopup('Dirección: {startAddress}').openPopup();"
+                                                                  WebBrowser1.Document.InvokeScript("eval", New Object() {script})
+                                                              Next
+                                                          End If
+                                                      End Sub
         Catch ex As Exception
             MessageBox.Show("Ocurrió un error: " & ex.Message)
         End Try
     End Sub
-
-
-
 
 End Class
