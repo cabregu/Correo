@@ -4637,29 +4637,34 @@ Public Class CN_Correo
     End Function
 
     Public Shared Function ObtenerPrecioPorCartero(ByVal Cartero As String, ByVal Servicio As String) As Decimal
+        Try
 
-        Dim sql As String = "Select simple, conacuse from carteros Where idCarteros='" & Cartero & "'"
-        Dim cn As New MySqlConnection(CadenaDeConeccionProduccion & ";Convert Zero Datetime=true")
-        Dim cm As New MySqlCommand(sql, cn)
-        Dim da As New MySqlDataAdapter(cm)
-        Dim ds As New DataSet
-        cn.Open()
-        da.Fill(ds, "carteros")
-        cn.Close()
-        Dim Dt As New DataTable
-        Dt = ds.Tables("carteros")
 
-        If Servicio = "SIMPLE" Then
+            Dim sql As String = "Select simple, conacuse from carteros Where idCarteros='" & Cartero & "'"
+            Dim cn As New MySqlConnection(CadenaDeConeccionProduccion & ";Convert Zero Datetime=true")
+            Dim cm As New MySqlCommand(sql, cn)
+            Dim da As New MySqlDataAdapter(cm)
+            Dim ds As New DataSet
+            cn.Open()
+            da.Fill(ds, "carteros")
+            cn.Close()
+            Dim Dt As New DataTable
+            Dt = ds.Tables("carteros")
 
-            Return Dt.Rows(0)("simple").ToString
+            If Servicio = "SIMPLE" Then
 
-        ElseIf Servicio = "CON ACUSE" Then
+                Return Dt.Rows(0)("simple").ToString
 
-            Return Dt.Rows(0)("conacuse").ToString
-        Else
-            Return "0.00"
-        End If
+            ElseIf Servicio = "CON ACUSE" Then
 
+                Return Dt.Rows(0)("conacuse").ToString
+            Else
+                Return "0.00"
+            End If
+
+        Catch ex As Exception
+
+        End Try
 
     End Function
 
