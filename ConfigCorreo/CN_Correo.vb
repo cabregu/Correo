@@ -7,11 +7,42 @@ Imports System.Globalization
 Imports System.Text.RegularExpressions
 Imports iTextSharp.text.pdf
 Imports iTextSharp.text
+Imports System.Net
+Imports Newtonsoft.Json.Linq
 
 Public Class CN_Correo
     Public Shared CadenaDeConeccionProduccion As String = ""
     Public Shared CadenaDeConeccionAnterior As String = ""
 
+
+    Public Shared Function InstertarRecorridosWeb(ByVal sqlQuery As String) As Boolean
+        Try
+            Dim request As Net.HttpWebRequest = CType(WebRequest.Create("https://lexs.com.ar/insertardatos.php"), HttpWebRequest)
+            request.Method = "POST"
+            request.ContentType = "application/x-www-form-urlencoded"
+
+            ' Escribir la consulta SQL en el cuerpo de la solicitud
+            Using streamWriter As New StreamWriter(request.GetRequestStream())
+                streamWriter.Write(sqlQuery)
+                streamWriter.Flush()
+                streamWriter.Close()
+            End Using
+
+            ' Obtener la respuesta
+            Dim response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+            Using streamReader As New StreamReader(response.GetResponseStream())
+                Dim result As String = streamReader.ReadToEnd()
+                ' Aquí puedes procesar la respuesta JSON si es necesario
+                Dim jsonResponse As JObject = JObject.Parse(result)
+                Return jsonResponse("status").ToString() = "success"
+            End Using
+
+        Catch ex As Exception
+        ' Manejo de errores
+        MsgBox("Error: " & ex.Message)
+        Return False
+        End Try
+    End Function
 
     Public Shared Function ConsultarRecorridosParaEnviarWeb(ByVal Planilla As String) As DataTable
         Dim sql As String = "Select * from recorridos where PLANILLA_RECORRIDO='" & Planilla & "'"
@@ -4388,36 +4419,36 @@ Public Class CN_Correo
 
         'Try
         Dim Recorrido As Integer = ContarCantRecorridos(NroCarta) + 1
-            Dim InsSq As String
-            InsSq = "INSERT INTO recorridos (NRO_CARTA, PLANILLA_RECORRIDO, FECHA_RECORRIDO, CARTERO, ZONA, REMITENTE, TRABAJO, FECHA_TRABAJO, NOMBRE_APELLIDO, CP, CALLE, LOCALIDAD, PROVINCIA, EMPRESA, NRO_CARTA2, ORDEN_LECT, ESTADO, IDENTIFICADOR, RECORRIDO) VALUES (" &
-          "'" & NroCarta & "'" & ", " &
-          "'" & PlanillaRecorrido & "'" & ", " &
-          "'" & Converfecha(Fecha_recorrido) & "'" & ", " &
-          "'" & cartero & "'" & ", " &
-          "'" & Zona & "'" & ", " &
-          "'" & REMITENTE & "'" & ", " &
-          "'" & TRABAJO & "'" & ", " &
-          "'" & Converfecha(FECH_TRAB) & "'" & ", " &
-          "'" & APELLIDO & "'" & ", " &
-          "'" & CP & "'" & ", " &
-          "'" & CALLE & "'" & ", " &
-          "'" & LOCALIDAD & "'" & ", " &
-          "'" & PROVINCIA & "'" & ", " &
-          "'" & EMPRESA & "'" & ", " &
-          "'" & NRO_CARTA2 & "'" & ", " &
-          "'" & Orden & "', " &
-          "'EN_DISTRIBUCION', " &
-          "" & id & ", " &
-          "" & Recorrido & ")"
+        Dim InsSq As String
+        InsSq = "INSERT INTO recorridos (NRO_CARTA, PLANILLA_RECORRIDO, FECHA_RECORRIDO, CARTERO, ZONA, REMITENTE, TRABAJO, FECHA_TRABAJO, NOMBRE_APELLIDO, CP, CALLE, LOCALIDAD, PROVINCIA, EMPRESA, NRO_CARTA2, ORDEN_LECT, ESTADO, IDENTIFICADOR, RECORRIDO) VALUES (" &
+      "'" & NroCarta & "'" & ", " &
+      "'" & PlanillaRecorrido & "'" & ", " &
+      "'" & Converfecha(Fecha_recorrido) & "'" & ", " &
+      "'" & cartero & "'" & ", " &
+      "'" & Zona & "'" & ", " &
+      "'" & REMITENTE & "'" & ", " &
+      "'" & TRABAJO & "'" & ", " &
+      "'" & Converfecha(FECH_TRAB) & "'" & ", " &
+      "'" & APELLIDO & "'" & ", " &
+      "'" & CP & "'" & ", " &
+      "'" & CALLE & "'" & ", " &
+      "'" & LOCALIDAD & "'" & ", " &
+      "'" & PROVINCIA & "'" & ", " &
+      "'" & EMPRESA & "'" & ", " &
+      "'" & NRO_CARTA2 & "'" & ", " &
+      "'" & Orden & "', " &
+      "'EN_DISTRIBUCION', " &
+      "" & id & ", " &
+      "" & Recorrido & ")"
 
-            Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
-            Dim cm As New MySqlCommand(InsSq, cn)
+        Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
+        Dim cm As New MySqlCommand(InsSq, cn)
 
-            cn.Open()
-            cm.ExecuteNonQuery()
-            cn.Close()
+        cn.Open()
+        cm.ExecuteNonQuery()
+        cn.Close()
 
-            Return True
+        Return True
         'Catch ex As Exception
         '    Return False
 
@@ -4755,10 +4786,8 @@ Public Class CN_Correo
     Public Shared Function ReemplazarPalabras() As Dictionary(Of String, String)
         Dim palabras As New Dictionary(Of String, String)()
 
-        palabras.Add("AV", "")
         palabras.Add("N°", "")
-        palabras.Add("AV.", "")
-        palabras.Add("AVDA", "")
+        palabras.Add("ESPAÑA", "ESPANA")
         palabras.Add("CMTE", "")
         palabras.Add("CORONEL", "CNEL")
         palabras.Add("GENERAL", "GRAL")
@@ -4767,8 +4796,6 @@ Public Class CN_Correo
         palabras.Add("MARIANO BOEDO", "BOEDO")
         palabras.Add("REGIMIENTO DE", "")
         palabras.Add("PRES HIPOLITO YRIGOYEN", "HIPOLITO YRIGOYEN")
-        palabras.Add("AVENI", "")
-        palabras.Add("AVENIDA", "")
         palabras.Add("°", "")
         palabras.Add("CALLE", "")
         palabras.Add("CARLOS", "C")
@@ -4813,13 +4840,13 @@ Public Class CN_Correo
         palabras.Add("R ESCALADA DE SAN MARTIN", "R E SAN MARTIN")
         palabras.Add("R ESCALADA DE SAN MARTN", "R E SAN MARTIN")
         palabras.Add("R ESCALADA SAN MARTIN", "R E SAN MARTIN")
-        palabras.Add("ENIDA ", "")
         palabras.Add("ING ", "")
-
-        '
-
-
-
+        palabras.Add("GRAL MIGUEL ESTANISLAO ", "")
+        palabras.Add("GRAL ", "")
+        palabras.Add("AVDA ", "AV ")
+        palabras.Add("AVENIDA ", "AV ")
+        palabras.Add("AV AV ", "AV ")
+        palabras.Add("ESPANA", "ESPAÑA")
 
         Return palabras
 

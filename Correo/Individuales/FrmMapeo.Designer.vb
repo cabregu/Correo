@@ -22,6 +22,8 @@ Partial Class FrmMapeo
         Me.DgvDatos = New System.Windows.Forms.DataGridView()
         Me.BtnConsultar = New System.Windows.Forms.Button()
         Me.Btnmapeo = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.BtnOpen = New System.Windows.Forms.Button()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         CType(Me.DgvDatos, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -37,6 +39,8 @@ Partial Class FrmMapeo
         '
         'Gb
         '
+        Me.Gb.Controls.Add(Me.BtnOpen)
+        Me.Gb.Controls.Add(Me.Button1)
         Me.Gb.Controls.Add(Me.Btnmapeo)
         Me.Gb.Controls.Add(Me.BtnConsultar)
         Me.Gb.Controls.Add(Me.DgvDatos)
@@ -46,6 +50,8 @@ Partial Class FrmMapeo
         Me.Gb.Controls.SetChildIndex(Me.DgvDatos, 0)
         Me.Gb.Controls.SetChildIndex(Me.BtnConsultar, 0)
         Me.Gb.Controls.SetChildIndex(Me.Btnmapeo, 0)
+        Me.Gb.Controls.SetChildIndex(Me.Button1, 0)
+        Me.Gb.Controls.SetChildIndex(Me.BtnOpen, 0)
         '
         'DgvDatos
         '
@@ -76,6 +82,24 @@ Partial Class FrmMapeo
         Me.Btnmapeo.Text = "Consultar"
         Me.Btnmapeo.UseVisualStyleBackColor = True
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(950, 584)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(150, 23)
+        Me.Button1.TabIndex = 33
+        Me.Button1.Text = "obtener coordenadas"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'BtnOpen
+        '
+        Me.BtnOpen.Location = New System.Drawing.Point(857, 649)
+        Me.BtnOpen.Name = "BtnOpen"
+        Me.BtnOpen.Size = New System.Drawing.Size(75, 23)
+        Me.BtnOpen.TabIndex = 34
+        Me.BtnOpen.Text = "Consultar"
+        Me.BtnOpen.UseVisualStyleBackColor = True
+        '
         'FrmMapeo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -93,4 +117,6 @@ Partial Class FrmMapeo
     Friend WithEvents DgvDatos As DataGridView
     Friend WithEvents BtnConsultar As Button
     Friend WithEvents Btnmapeo As Button
+    Friend WithEvents Button1 As Button
+    Friend WithEvents BtnOpen As Button
 End Class

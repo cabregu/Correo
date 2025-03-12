@@ -413,7 +413,7 @@ Public Class FrmImprimirPlanificacion
 
     End Sub
 
-  
+
 
     Private Sub BtnSubirRecorrido_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSubirRecorrido.Click
 
@@ -422,47 +422,49 @@ Public Class FrmImprimirPlanificacion
         Dim Dtenviar As New DataTable
 
         Dtenviar = ConsultarRecorridosParaEnviarWeb(txtrecorrido.Text)
+
+        ' Comienza la consulta SQL
+        cadena.Append("INSERT INTO recorridos (NRO_CARTA, PLANILLA_RECORRIDO, FECHA_RECORRIDO, CARTERO, ZONA, REMITENTE, TRABAJO, FECHA_TRABAJO, NOMBRE_APELLIDO, CP, CALLE, LOCALIDAD, PROVINCIA, EMPRESA, NRO_CARTA2, FECHAF, ESTADO, MOTIVO) VALUES ")
+
         For Each drw As DataRow In Dtenviar.Rows
-
-
-            txtsql = "(" & "'" & drw("NRO_CARTA") & "' , " _
-            & "'" & drw("PLANILLA_RECORRIDO") & "'" & ", " _
-            & "'" & Converfecha(drw("FECHA_RECORRIDO")) & "'" & ", " _
-            & "'" & drw("CARTERO") & "'" & ", " _
-            & "'" & drw("ZONA") & "'" & ", " _
-            & "'" & drw("REMITENTE") & "'" & ", " _
-            & "'" & drw("TRABAJO") & "'" & ", " _
-            & "'" & drw("FECHA_TRABAJO") & "'" & ", " _
-            & "'" & drw("NOMBRE_APELLIDO") & "'" & ", " _
-            & "'" & drw("CALLE") & "'" & ", " _
-            & "'" & drw("LOCALIDAD") & "'" & ", " _
-            & "'" & drw("PROVINCIA") & "'" & ", " _
-            & "'" & drw("EMPRESA") & "'" & ", " _
-            & "'" & drw("NRO_CARTA2") & "'" & ", " _
-            & "'" & drw("ORDEN_LECT") & "'" & ", " _
-            & "'" & drw("NOMBRE_APELLIDO") & "'" & ", " _
-            & "'" & drw("ESTADO") & "'" & ", " _
-            & "'" & drw("IDENTIFICADOR") & "'" & ", " _
-            & "'" & drw("RECORRIDO") & "'" & ")" & ", "
+            txtsql = "(" & "'" & If(IsDBNull(drw("NRO_CARTA")), "", drw("NRO_CARTA")) & "' , " _
+        & "'" & If(IsDBNull(drw("PLANILLA_RECORRIDO")), "", drw("PLANILLA_RECORRIDO")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("FECHA_RECORRIDO")), "", Converfecha(drw("FECHA_RECORRIDO"))) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("CARTERO")), "", drw("CARTERO")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("ZONA")), "", drw("ZONA")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("REMITENTE")), "", drw("REMITENTE")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("TRABAJO")), "", drw("TRABAJO")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("FECHA_TRABAJO")), "", Converfecha(drw("FECHA_TRABAJO"))) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("NOMBRE_APELLIDO")), "", drw("NOMBRE_APELLIDO")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("CP")), "", drw("CP")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("CALLE")), "", drw("CALLE")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("LOCALIDAD")), "", drw("LOCALIDAD")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("PROVINCIA")), "", drw("PROVINCIA")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("EMPRESA")), "", drw("EMPRESA")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("NRO_CARTA2")), "", drw("NRO_CARTA2")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("FECHAF")), "", Converfecha(drw("FECHAF"))) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("ESTADO")), "", drw("ESTADO")) & "'" & ", " _
+        & "'" & If(IsDBNull(drw("MOTIVO")), "", drw("MOTIVO")) & "'" & ")" & ", "
 
             cadena.Append(txtsql)
         Next
 
-        Dim Archtxt3 As String
-
-        Archtxt3 = cadena.ToString
+        Dim Archtxt3 As String = cadena.ToString()
         If Len(Archtxt3) > 0 Then
             Archtxt3 = Mid(Archtxt3, 1, Len(Archtxt3) - 2)
         End If
 
-        'If ConfigCorreo.CN_Correo.InstertarRecorridosWeb(Archtxt3) = True Then
-        '    MsgBox("OK")
-        'Else
-        '    MsgBox("Error")
-        'End If
 
+        ' Enviar la consulta al endpoint
+        If ConfigCorreo.CN_Correo.InstertarRecorridosWeb(Archtxt3) = True Then
+            MsgBox("OK")
+        Else
+            MsgBox("Error")
+        End If
 
     End Sub
+
+
 
     Private Sub BtnMapeo_Click(sender As Object, e As EventArgs) Handles BtnMapeo.Click
         FrmMapeo.dt2 = dtn
