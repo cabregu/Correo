@@ -735,8 +735,7 @@ Public Class FrmDevolucion
         Dim destinatarios As New ArrayList()
         destinatarios.Add("AlejandroAdrian.Mangione@swissmedical.com.ar")
         destinatarios.Add("guillermo.a@lexs.com.ar")
-        destinatarios.Add("planificacion@lexs.com.ar")
-        destinatarios.Add("operacioneslexs@lexs.com.ar")
+        destinatarios.Add("operaciones@lexs.com.ar")
 
         Dim cc As New ArrayList()
         cc.Add("hiro.okamura@swissmedical.com.ar")
@@ -897,6 +896,8 @@ Public Class FrmDevolucion
         destinatarios.Add("pgimenez@oca.com.ar")
         destinatarios.Add("WBlanco@oca.com.ar")
         destinatarios.Add("oramos@oca.com.ar")
+        destinatarios.Add("escalante.francisco@oca.com.ar")
+
 
         Dim cc As New ArrayList()
         cc.Add("hiro.okamura@swissmedical.com.ar")

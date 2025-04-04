@@ -223,7 +223,7 @@ Public Class FrmVisitadas
                 End If
 
 
-            Catch ex As Exception
+            Catch ex As System.Exception
                 MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
             End Try
 

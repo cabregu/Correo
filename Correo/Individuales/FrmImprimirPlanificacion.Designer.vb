@@ -27,6 +27,7 @@ Partial Class FrmImprimirPlanificacion
         Me.Zona_r = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Cantidad_r = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.GpbCartas = New System.Windows.Forms.GroupBox()
+        Me.BtnMapeo = New System.Windows.Forms.Button()
         Me.BtnSubirRecorrido = New System.Windows.Forms.Button()
         Me.BtnAgregar = New System.Windows.Forms.Button()
         Me.TxtNuevaCarta = New System.Windows.Forms.TextBox()
@@ -52,7 +53,6 @@ Partial Class FrmImprimirPlanificacion
         Me.DgvContenido = New System.Windows.Forms.DataGridView()
         Me.DtpFecha = New System.Windows.Forms.DateTimePicker()
         Me.BtnImprimirPlanillasFecha = New System.Windows.Forms.Button()
-        Me.BtnMapeo = New System.Windows.Forms.Button()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         Me.GpbRecorridos.SuspendLayout()
@@ -182,6 +182,15 @@ Partial Class FrmImprimirPlanificacion
         Me.GpbCartas.TabIndex = 56
         Me.GpbCartas.TabStop = False
         Me.GpbCartas.Text = "Recorridos"
+        '
+        'BtnMapeo
+        '
+        Me.BtnMapeo.Location = New System.Drawing.Point(678, 158)
+        Me.BtnMapeo.Name = "BtnMapeo"
+        Me.BtnMapeo.Size = New System.Drawing.Size(110, 30)
+        Me.BtnMapeo.TabIndex = 67
+        Me.BtnMapeo.Text = "Mapeo"
+        Me.BtnMapeo.UseVisualStyleBackColor = True
         '
         'BtnSubirRecorrido
         '
@@ -405,15 +414,6 @@ Partial Class FrmImprimirPlanificacion
         Me.BtnImprimirPlanillasFecha.TabIndex = 59
         Me.BtnImprimirPlanillasFecha.Text = "Imprimir Planillas"
         Me.BtnImprimirPlanillasFecha.UseVisualStyleBackColor = True
-        '
-        'BtnMapeo
-        '
-        Me.BtnMapeo.Location = New System.Drawing.Point(678, 158)
-        Me.BtnMapeo.Name = "BtnMapeo"
-        Me.BtnMapeo.Size = New System.Drawing.Size(110, 30)
-        Me.BtnMapeo.TabIndex = 67
-        Me.BtnMapeo.Text = "Mapeo"
-        Me.BtnMapeo.UseVisualStyleBackColor = True
         '
         'FrmImprimirPlanificacion
         '

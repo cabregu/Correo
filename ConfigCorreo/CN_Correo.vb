@@ -44,6 +44,42 @@ Public Class CN_Correo
         End Try
     End Function
 
+    Public Shared Function ObtenerPlanillasRecorrido() As List(Of String)
+        Try
+            Dim request As Net.HttpWebRequest = CType(WebRequest.Create("https://lexs.com.ar/planillasderecorrido.php"), HttpWebRequest)
+            request.Method = "POST"
+            request.ContentType = "application/x-www-form-urlencoded"
+
+            ' En este caso no necesitamos enviar una query SQL, así que dejamos el cuerpo vacío
+            Using streamWriter As New StreamWriter(request.GetRequestStream())
+                streamWriter.Flush()
+                streamWriter.Close()
+            End Using
+
+            ' Obtener la respuesta
+            Dim response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+            Using streamReader As New StreamReader(response.GetResponseStream())
+                Dim result As String = streamReader.ReadToEnd()
+                Dim jsonResponse As JObject = JObject.Parse(result)
+
+                ' Verificar el status
+                If jsonResponse("status").ToString() = "success" Then
+                    ' Convertir el array JSON "data" en una lista de strings
+                    Dim planillas As List(Of String) = jsonResponse("data").ToObject(Of List(Of String))()
+                    Return planillas
+                Else
+                    MsgBox("No se encontraron planillas: " & jsonResponse("message").ToString())
+                    Return New List(Of String)()
+                End If
+            End Using
+
+        Catch ex As Exception
+            MsgBox("Error al obtener planillas: " & ex.Message)
+            Return New List(Of String)()
+        End Try
+    End Function
+
+
     Public Shared Function ConsultarRecorridosParaEnviarWeb(ByVal Planilla As String) As DataTable
         Dim sql As String = "Select * from recorridos where PLANILLA_RECORRIDO='" & Planilla & "'"
 

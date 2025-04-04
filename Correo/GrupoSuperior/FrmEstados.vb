@@ -196,77 +196,77 @@ Public Class FrmEstados
 
             If DgvDatos.Rows.Count > 1 Then
 
-                Try
-                    Dim exApp As New Microsoft.Office.Interop.Excel.Application
-                    Dim exLibro As Microsoft.Office.Interop.Excel.Workbook
-                    Dim exHoja As Microsoft.Office.Interop.Excel.Worksheet
+            Try
+                Dim exApp As New Microsoft.Office.Interop.Excel.Application
+                Dim exLibro As Microsoft.Office.Interop.Excel.Workbook
+                Dim exHoja As Microsoft.Office.Interop.Excel.Worksheet
 
 
-                    'Añadimos el Libro al programa, y la hoja al libro
-                    exLibro = exApp.Workbooks.Add
-                    exHoja = exLibro.Worksheets.Add()
-                    exHoja.Cells.NumberFormat = "@"
-                    ' ¿Cuantas columnas y cuantas filas?
-                    Dim NCol As Integer = DgvDatos.ColumnCount
-                    Dim NRow As Integer = DgvDatos.RowCount
+                'Añadimos el Libro al programa, y la hoja al libro
+                exLibro = exApp.Workbooks.Add
+                exHoja = exLibro.Worksheets.Add()
+                exHoja.Cells.NumberFormat = "@"
+                ' ¿Cuantas columnas y cuantas filas?
+                Dim NCol As Integer = DgvDatos.ColumnCount
+                Dim NRow As Integer = DgvDatos.RowCount
 
 
-                    'Aqui recorremos todas las filas, y por cada fila todas las columnas y vamos escribiendo.
-                    For i As Integer = 1 To NCol
-                        exHoja.Cells.Item(1, i) = DgvDatos.Columns(i - 1).Name.ToString
+                'Aqui recorremos todas las filas, y por cada fila todas las columnas y vamos escribiendo.
+                For i As Integer = 1 To NCol
+                    exHoja.Cells.Item(1, i) = DgvDatos.Columns(i - 1).Name.ToString
+                Next
+
+                For Fila As Integer = 0 To NRow - 1
+                    For Col As Integer = 0 To NCol - 1
+                        exHoja.Cells.Item(Fila + 2, Col + 1) = DgvDatos.Rows(Fila).Cells(Col).Value
                     Next
+                Next
 
-                    For Fila As Integer = 0 To NRow - 1
-                        For Col As Integer = 0 To NCol - 1
-                            exHoja.Cells.Item(Fila + 2, Col + 1) = DgvDatos.Rows(Fila).Cells(Col).Value
-                        Next
-                    Next
-
-                    exHoja.Columns.AutoFit()
-                    exApp.Application.Visible = False
-                    Dim NroEntreg As Integer
+                exHoja.Columns.AutoFit()
+                exApp.Application.Visible = False
+                Dim NroEntreg As Integer
 
 
-                    NroEntreg = ObtenerNroVisitada()
+                NroEntreg = ObtenerNroVisitada()
 
 
-                    Dim FechaTx As String = Now.ToShortDateString
-                    FechaTx = FechaTx.Replace("/", "-")
+                Dim FechaTx As String = Now.ToShortDateString
+                FechaTx = FechaTx.Replace("/", "-")
 
-                    exLibro.SaveAs("C:\temp\Entregadas_" & NroEntreg & "_" & FechaTx & ".xls")
+                exLibro.SaveAs("C:\temp\Entregadas_" & NroEntreg & "_" & FechaTx & ".xls")
 
-                    exLibro.Close()
-                    exHoja = Nothing
-                    exLibro = Nothing
-                    exApp = Nothing
+                exLibro.Close()
+                exHoja = Nothing
+                exLibro = Nothing
+                exApp = Nothing
 
 
-                    Dim cadena As New System.Text.StringBuilder
-                    For Each dgw As DataGridViewRow In DgvDatos.Rows
-                        cadena.AppendLine(dgw.Cells("socio").Value & ";" & dgw.Cells("integrante").Value & ";" & dgw.Cells("lote").Value.Substring(3, 4) & ";3;" & dgw.Cells("fecha_entr").Value)
-                    Next
-                    Dim texto As String
-                    texto = cadena.ToString
-                    Dim objEscritor As IO.StreamWriter
-                    objEscritor = IO.File.AppendText("C:\temp\Entregadas_" & NroEntreg & "_" & FechaTx & ".txt")
-                    objEscritor.Write(texto)
-                    objEscritor.Close()
-                    ActualizarNroVisitada(NroEntreg + 1)
+                Dim cadena As New System.Text.StringBuilder
+                For Each dgw As DataGridViewRow In DgvDatos.Rows
+                    cadena.AppendLine(dgw.Cells("socio").Value & ";" & dgw.Cells("integrante").Value & ";" & dgw.Cells("lote").Value.Substring(3, 4) & ";3;" & dgw.Cells("fecha_entr").Value)
+                Next
+                Dim texto As String
+                texto = cadena.ToString
+                Dim objEscritor As IO.StreamWriter
+                objEscritor = IO.File.AppendText("C:\temp\Entregadas_" & NroEntreg & "_" & FechaTx & ".txt")
+                objEscritor.Write(texto)
+                objEscritor.Close()
+                ActualizarNroVisitada(NroEntreg + 1)
 
 
 
 
-                    If MessageBox.Show("Enviar mail", "Enviar", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                If MessageBox.Show("Enviar mail", "Enviar", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
 
 
-                        If enviaCorreo("C:\temp\Entregadas_" & NroEntreg & "_" & FechaTx & ".xls", "C:\temp\Entregadas_" & NroEntreg & "_" & FechaTx & ".txt", "Archivo Entregadas_Nro_" & NroEntreg) = True Then
+                    If enviaCorreo("C:\temp\Entregadas_" & NroEntreg & "_" & FechaTx & ".xls", "C:\temp\Entregadas_" & NroEntreg & "_" & FechaTx & ".txt", "Archivo Entregadas_Nro_" & NroEntreg) = True Then
 
 
-                            Dim cadenavisitadas As New System.Text.StringBuilder
-                            For Each drw As DataGridViewRow In DgvDatos.Rows
-                                Dim txtsql As String = ""
+                        Dim cadenavisitadas As New System.Text.StringBuilder
+                        For Each drw As DataGridViewRow In DgvDatos.Rows
+                            Dim txtsql As String = ""
 
-                                txtsql = "(" & "'" & drw.Cells("socio").Value & "' , " _
+                            txtsql = "(" & "'" & drw.Cells("socio").Value & "' , " _
                                     & "'" & drw.Cells("lote").Value & "'" & ", " _
                                     & "'" & drw.Cells("integrante").Value & "'" & ", " _
                                     & "'" & Converfecha(drw.Cells("fech_trab").Value) & "'" & ", " _
@@ -284,28 +284,28 @@ Public Class FrmEstados
                                     & "'" & NroEntreg & "'" & ", " _
                                     & "'" & FechaTx & "'" & ")" & ", "
 
-                                cadenavisitadas.Append(txtsql)
-                            Next
-                            Dim Archtxt3 As String
+                            cadenavisitadas.Append(txtsql)
+                        Next
+                        Dim Archtxt3 As String
 
-                            Archtxt3 = cadenavisitadas.ToString
-                            If Len(Archtxt3) > 0 Then
-                                Archtxt3 = Mid(Archtxt3, 1, Len(Archtxt3) - 2)
-                            End If
-
-                            ConfigCorreo.CN_Correo.InstertarEntregada(Archtxt3)
-
-                        Else
-
-                            MsgBox("No se envio mail")
-
+                        Archtxt3 = cadenavisitadas.ToString
+                        If Len(Archtxt3) > 0 Then
+                            Archtxt3 = Mid(Archtxt3, 1, Len(Archtxt3) - 2)
                         End If
+
+                        ConfigCorreo.CN_Correo.InstertarEntregada(Archtxt3)
+
+                    Else
+
+                        MsgBox("No se envio mail")
 
                     End If
 
+                End If
 
-                Catch ex As Exception
-                    MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
+
+            Catch ex As System.Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
                 End Try
 
             Else
@@ -347,7 +347,7 @@ Public Class FrmEstados
             Return True
 
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             Return False
 
             'MsgBox(ex.ToString)

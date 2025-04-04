@@ -187,7 +187,7 @@ Public Class FrmPlanificacion
     Sub PlayBackgroundSoundFile()
         Try
             My.Computer.Audio.Play("C:\errorpp.wav", AudioPlayMode.WaitToComplete)
-        Catch ex As Exception
+        Catch ex As System.Exception
 
         End Try
 
@@ -246,6 +246,5 @@ Public Class FrmPlanificacion
             End If
         End If
     End Sub
-
 
 End Class

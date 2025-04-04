@@ -11,9 +11,9 @@ Public Class FrmCambiarEstado
 
         Try
             Using tx As New TransactionScope
-           
+
             End Using
-        Catch ex As Exception
+        Catch ex As System.Exception
             MessageBox.Show(ex.ToString)
         End Try
 

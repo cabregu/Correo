@@ -318,7 +318,7 @@ Public Class FrmEscaneo
             LblBusqueda.Text = "En Pausa"
             LblBusqueda.Refresh()
 
-        Catch oe As Exception
+        Catch oe As System.Exception
             MsgBox(oe.Message, MsgBoxStyle.Critical)
         End Try
 
@@ -367,7 +367,7 @@ Public Class FrmEscaneo
             Return TxBarcode.ToString
             'MsgBox(TxBarcode)
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             Return "0000"
         End Try
 
@@ -463,7 +463,7 @@ Public Class FrmEscaneo
             LblCantidadNro.Text = "0"
             ActualizarNroPlaniEscaner(NroPlanilla)
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message.ToString, MsgBoxStyle.Critical)
         End Try
 
@@ -483,15 +483,15 @@ Public Class FrmEscaneo
         Try
 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''  
-            For Each Archivo As String In My.Computer.FileSystem.GetFiles( _
-                                    "D:\ESCANEO\31_10_2016", _
-                                    FileIO.SearchOption.SearchAllSubDirectories, _
+            For Each Archivo As String In My.Computer.FileSystem.GetFiles(
+                                    "D:\ESCANEO\31_10_2016",
+                                    FileIO.SearchOption.SearchAllSubDirectories,
                                     "*.jpg")
                 MsgBox(Archivo)
 
             Next
             ' errores  
-        Catch oe As Exception
+        Catch oe As System.Exception
             MsgBox(oe.Message, MsgBoxStyle.Critical)
         End Try
 

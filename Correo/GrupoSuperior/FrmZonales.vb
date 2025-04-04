@@ -143,7 +143,7 @@ Public Class FrmZonales
 
 
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MessageBox.Show("there was an issue Exporting to Excel" & ex.ToString)
         End Try
 

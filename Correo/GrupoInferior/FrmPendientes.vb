@@ -251,7 +251,7 @@ Public Class FrmPendientes
             Servidor.EnableSsl = False
             Servidor.Send(correo)
             MsgBox("Mensaje enviado a " & cartero)
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox("Error compruebe su conexion a internet y reintente.    -  " & ex.ToString)
         End Try
 

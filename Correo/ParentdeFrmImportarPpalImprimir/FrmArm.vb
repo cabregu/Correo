@@ -20,7 +20,7 @@ Public Class FrmArm
                     CmbRemitente.Items.Add(ArrayRemitentes.Item(i).ToString())
                 Next
             End If
-        Catch ex As Exception
+        Catch ex As System.Exception
             ' Manejar la excepción aquí
         End Try
 
@@ -112,7 +112,7 @@ Public Class FrmArm
 
             MsgBox("Datos exportados exitosamente a Excel.", MsgBoxStyle.Information, "Exportar a Excel")
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
         End Try
     End Sub
@@ -324,7 +324,7 @@ Public Class FrmArm
             Try
                 File.Delete(archivoFinal)
 
-            Catch ex As Exception
+            Catch ex As System.Exception
                 MsgBox("Error al eliminar el archivo existente 'archivo_final.pdf': " & ex.Message)
 
             End Try
@@ -359,7 +359,7 @@ Public Class FrmArm
             Next
 
             documento.Close()
-        Catch ex As Exception
+        Catch ex As System.Exception
 
         End Try
     End Sub
@@ -370,7 +370,7 @@ Public Class FrmArm
                 File.Delete(rutaArchivo)
 
             Next
-        Catch ex As Exception
+        Catch ex As System.Exception
 
         End Try
     End Sub
@@ -378,7 +378,7 @@ Public Class FrmArm
     Sub AbrirArchivoFinal(archivoFinal As String)
         Try
             Process.Start(archivoFinal)
-        Catch ex As Exception
+        Catch ex As System.Exception
             Console.WriteLine("Error al abrir el archivo: " & ex.Message)
         End Try
     End Sub

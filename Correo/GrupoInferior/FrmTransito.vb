@@ -115,7 +115,7 @@ Public Class FrmTransito
             End If
             Return True
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox("Archivo incompatible detalle de error : " & ex.ToString)
         End Try
 
@@ -258,7 +258,7 @@ Public Class FrmTransito
             Dim dia As String = valor.Substring(0, 2)
             Dim fecha As String = año & "-" & mes & "-" & dia
             Return fecha
-        Catch ex As Exception
+        Catch ex As System.Exception
             Return "0000-00-00"
         End Try
 
@@ -509,7 +509,7 @@ Public Class FrmTransito
 
             MsgBox("Datos exportados exitosamente a Excel.", MsgBoxStyle.Information, "Exportar a Excel")
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
         End Try
     End Sub
@@ -596,7 +596,7 @@ Public Class FrmTransito
             rg.EntireColumn.AutoFit()
 
             MsgBox("Datos exportados exitosamente a Excel.", MsgBoxStyle.Information, "Exportar a Excel")
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
         End Try
     End Sub
@@ -756,7 +756,7 @@ Public Class FrmTransito
 
 
 
-        Catch ex As Exception
+        Catch ex As System.Exception
 
         End Try
 
@@ -784,7 +784,7 @@ Public Class FrmTransito
                 If Not IsDBNull(DRG.Cells("fech1").Value) AndAlso DRG.Cells("fech1").Value <> "" Then
                     Try
                         FECH1 = DRG.Cells("fech1").Value
-                    Catch ex As Exception
+                    Catch ex As System.Exception
                         ' Manejar la excepción si es necesario
                     End Try
                 End If
@@ -881,7 +881,7 @@ Public Class FrmTransito
             Try
                 drw.Cells("INFORMADO").Value = ObtenerEstadoenTransito(drw.Cells("Nro_Carta").Value)
 
-            Catch ex As Exception
+            Catch ex As System.Exception
 
             End Try
 
@@ -896,7 +896,7 @@ Public Class FrmTransito
                     ConfigCorreo.CN_Correo.VerificarEstadoAlerta(drw.Cells("nro_carta").Value, drw.Cells("estadof").Value)
                 End If
 
-            Catch ex As Exception
+            Catch ex As System.Exception
 
             End Try
 

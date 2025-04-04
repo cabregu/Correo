@@ -16,7 +16,7 @@ Public Class FrmReportEtiquetasExcel
             cryRpt.SetDataSource(DTRegImprimir)
             crv.ReportSource = cryRpt
             crv.Refresh()
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.ToString)
         End Try
 

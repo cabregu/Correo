@@ -30,7 +30,7 @@ Public Class FrmInforme
     End Sub
 
     Private Function XLS()
- 
+
         Try
             Dim exApp As New Microsoft.Office.Interop.Excel.Application
             Dim exLibro As Microsoft.Office.Interop.Excel.Workbook
@@ -77,7 +77,7 @@ Public Class FrmInforme
             exLibro = Nothing
             exApp = Nothing
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
         End Try
 

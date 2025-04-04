@@ -102,7 +102,7 @@ Public Class FrmSeguimiento
 
                 TxtTotal.Text = DgvRecorrido.RowCount
             End If
-        Catch ex As Exception
+        Catch ex As System.Exception
 
         End Try
 

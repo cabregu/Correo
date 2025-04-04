@@ -47,6 +47,10 @@ Public Class FrmImprimirPlanificacion
 
     End Sub
     Private Sub FrmImprimirPlanificacion_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        CargarDatosPlanillas()
+    End Sub
+
+    Private Function CargarDatosPlanillas()
         cargarrecorridos("")
         Dim ArrayCarteros As New ArrayList
         ArrayCarteros = ConfigCorreo.CN_Correo.CargarCarteros
@@ -55,7 +59,10 @@ Public Class FrmImprimirPlanificacion
         For i As Integer = 0 To ArrayCarteros.Count - 1
             Cmbcambiar.Items.Add(ArrayCarteros.Item(i).ToString)
         Next
-    End Sub
+    End Function
+
+
+
     Private Sub BtnImpresion_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnImpresion.Click
 
         If DgvContenido.RowCount > 0 Then
@@ -70,39 +77,71 @@ Public Class FrmImprimirPlanificacion
         crearexcelplanillasdiarias(DtpFecha.Value.ToShortDateString)
     End Sub
     Private Function cargarrecorridos(ByVal Fechastr As String) As Boolean
-
-        If Fechastr = "" Then
-
-            DgvRecorridos.Rows.Clear()
-            Dim dtrecorridos As New DataTable
-            dtrecorridos = ConfigCorreo.CN_Correo.CargarRecorridospl()
-            For Each drw As DataRow In dtrecorridos.Rows
-                Dim fech As Date = drw("fecharecorrido").ToString
-                DgvRecorridos.Rows.Add(drw("nroplanilla").ToString, drw("cartero").ToString, fech.ToShortDateString, drw("zona").ToString, drw("cantidad").ToString)
-            Next
-        Else
+        Try
+            ' Obtener las planillas desde la base de datos online
+            Dim planillasOnline As List(Of String) = ObtenerPlanillasRecorrido()
 
             DgvRecorridos.Rows.Clear()
             Dim dtrecorridos As New DataTable
-            dtrecorridos = ConfigCorreo.CN_Correo.CargarRecorridosplFecha(Fechastr)
+
+            ' Cargar los recorridos según si hay fecha o no
+            If Fechastr = "" Then
+                dtrecorridos = ConfigCorreo.CN_Correo.CargarRecorridospl()
+            Else
+                dtrecorridos = ConfigCorreo.CN_Correo.CargarRecorridosplFecha(Fechastr)
+            End If
+
+            ' Llenar el DataGridView
             For Each drw As DataRow In dtrecorridos.Rows
                 Dim fech As Date = drw("fecharecorrido").ToString
-                If Fechastr = fech Then
-                    DgvRecorridos.Rows.Add(drw("nroplanilla").ToString, drw("cartero").ToString, fech.ToShortDateString, drw("zona").ToString, drw("cantidad").ToString)
-                End If
+                Dim nroPlanilla As String = drw("nroplanilla").ToString
+
+                ' Agregar la fila
+                Dim rowIndex As Integer = DgvRecorridos.Rows.Add(
+                nroPlanilla,
+                drw("cartero").ToString,
+                fech.ToShortDateString,
+                drw("zona").ToString,
+                drw("cantidad").ToString
+            )
             Next
-        End If
 
-        DgvContenido.DataSource = Nothing
-        txcaminante.Text = ""
-        txcantidad.Text = ""
-        txtcliente.Text = ""
-        txtfecha.Text = ""
-        txtrecorrido.Text = ""
-        txtzona.Text = ""
+            ' Aplicar formato a las filas
+            PintarFilas(Fechastr, planillasOnline)
 
+            ' Limpiar los controles
+            DgvContenido.DataSource = Nothing
+            txcaminante.Text = ""
+            txcantidad.Text = ""
+            txtcliente.Text = ""
+            txtfecha.Text = ""
+            txtrecorrido.Text = ""
+            txtzona.Text = ""
 
+            Return True
+        Catch ex As System.Exception
+            MsgBox("Error al cargar recorridos: " & ex.Message)
+            Return False
+        End Try
     End Function
+
+    Private Sub PintarFilas(ByVal Fechastr As String, ByVal planillasOnline As List(Of String))
+        For Each row As DataGridViewRow In DgvRecorridos.Rows
+            Dim nroPlanilla As String = row.Cells(0).Value.ToString()
+            Dim fech As String = row.Cells(2).Value.ToString()
+
+            ' Si no hay filtro de fecha o la fecha coincide
+            If Fechastr = "" OrElse Fechastr = fech Then
+                ' Verificar si la planilla está en la base online
+                If planillasOnline.Contains(nroPlanilla) Then
+                    ' Marcar la fila en verde
+                    row.DefaultCellStyle.BackColor = Color.LightGreen
+                End If
+            End If
+        Next
+    End Sub
+
+
     Private Sub crearexcel(ByVal NroRecorrido As String, ByVal caminante As String, ByVal zona As String, ByVal cliente As String, ByVal Cantidad As String, ByVal fecharecorrido As String, ByVal dtn As DataTable)
 
         Dim exApp As New Microsoft.Office.Interop.Excel.Application
@@ -164,7 +203,7 @@ Public Class FrmImprimirPlanificacion
 
 
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
 
         End Try
@@ -232,7 +271,7 @@ Public Class FrmImprimirPlanificacion
 
 
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
 
         End Try
@@ -338,7 +377,7 @@ Public Class FrmImprimirPlanificacion
             wBook = Nothing
             wSheet = Nothing
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MessageBox.Show("there was an issue Exporting to Excel" & ex.ToString)
         End Try
 
@@ -457,10 +496,12 @@ Public Class FrmImprimirPlanificacion
 
         ' Enviar la consulta al endpoint
         If ConfigCorreo.CN_Correo.InstertarRecorridosWeb(Archtxt3) = True Then
-            MsgBox("OK")
+            'MsgBox("OK")
         Else
             MsgBox("Error")
         End If
+
+        CargarDatosPlanillas()
 
     End Sub
 
@@ -469,6 +510,10 @@ Public Class FrmImprimirPlanificacion
     Private Sub BtnMapeo_Click(sender As Object, e As EventArgs) Handles BtnMapeo.Click
         FrmMapeo.dt2 = dtn
         FrmMapeo.Show()
+
+    End Sub
+
+    Private Sub GpbCartas_Enter(sender As Object, e As EventArgs) Handles GpbCartas.Enter
 
     End Sub
 End Class

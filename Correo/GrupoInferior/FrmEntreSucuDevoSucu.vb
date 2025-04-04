@@ -107,16 +107,16 @@ Public Class FrmEntreSucuDevoSucu
 
                 dr("EstadoEnSistema") = ConfigCorreo.CN_Correo.BuscarPorNroCartaParaConfEntre(dr("Nro_carta").ToString)
 
-       
+
             Next
-         
+
             DgvControl.DataSource = dt2
 
             ChkDevoSucu.Enabled = False
             ChkEntreSucu.Enabled = False
 
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MsgBox("Archivo incompatible detalle de error : " & ex.ToString)
         End Try
 
@@ -147,7 +147,7 @@ Public Class FrmEntreSucuDevoSucu
                 ConfigCorreo.CN_Correo.ActualizarPorCartaEstadoEnCartasActualizadoConfEntreDeoSucu(drwg.Cells("Nro_carta").Value, drwg.Cells("Estado").Value, drwg.Cells("Fecha").Value)
                 Try
                     ConfigCorreo.CN_Correo.VerificarEstadoAlerta(drwg.Cells("Nro_carta").Value, drwg.Cells("Estado").Value)
-                Catch ex As Exception
+                Catch ex As System.Exception
 
                 End Try
 
@@ -253,7 +253,7 @@ Public Class FrmEntreSucuDevoSucu
             DgvControl.Invoke(Sub() DgvControl.DataSource = Nothing)
             txtPath.Invoke(Sub() txtPath.Text = "")
 
-        Catch ex As Exception
+        Catch ex As System.Exception
 
         End Try
 

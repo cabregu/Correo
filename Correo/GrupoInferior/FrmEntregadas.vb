@@ -1,7 +1,5 @@
-﻿Imports System.Data.OleDb
-Imports ConfigCorreo.CN_Correo
-Imports ConfigCorreo.zipcomp
-Imports Microsoft.Office.Interop
+﻿Imports ConfigCorreo.CN_Correo
+
 Public Class FrmEntregadas
     Public dtnew As New DataTable
 
@@ -173,7 +171,7 @@ Public Class FrmEntregadas
             If Not IsNumeric(drdgw2.Cells("CP").Value) Then
                 Try
                     FechaCP = FechaCP.AddDays(ObtenerCantDiasCP(drdgw2.Cells("CP").Value))
-                Catch ex As Exception
+                Catch ex As System.Exception
                 End Try
             Else
                 FechaCP = FechaCP.AddDays(2)

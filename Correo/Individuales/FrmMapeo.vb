@@ -186,7 +186,7 @@ Public Class FrmMapeo
             Dim fileName As String = $"C:\temp\consulta_{timestamp}.json"
 
             File.WriteAllText(fileName, jsonResponse)
-        Catch ex As Exception
+        Catch ex As System.Exception
             Console.WriteLine("Error al guardar el JSON: " & ex.Message)
         End Try
     End Sub
@@ -264,7 +264,7 @@ Public Class FrmMapeo
                 .UseShellExecute = True
             })
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MessageBox.Show("Ocurrió un error: " & ex.Message)
         End Try
     End Sub
@@ -313,7 +313,7 @@ Public Class FrmMapeo
                 ' Para archivos Excel 2007 o superior
                 strConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & ruta & ";Extended Properties=""Excel 12.0 Xml;HDR=Yes;IMEX=1"""
             Else
-                Throw New Exception("Formato de archivo no soportado.")
+                Throw New System.Exception("Formato de archivo no soportado.")
             End If
 
             ' Conexión y consulta
@@ -324,7 +324,7 @@ Public Class FrmMapeo
                 adapter.Fill(dt)
             End Using
 
-        Catch ex As Exception
+        Catch ex As System.Exception
             MessageBox.Show("Error al cargar los datos desde Excel: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
