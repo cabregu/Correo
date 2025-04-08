@@ -3360,6 +3360,91 @@ Public Class CN_Correo
     End Function
 
 
+    Public Shared Function ObtenerTodosLosDatosUltimos800Dias() As Dictionary(Of String, String)
+        Dim resultados As New Dictionary(Of String, String)()
+
+        Try
+            Dim fechaDesde As Date = Date.Now.AddDays(-800)
+            Dim fechaHasta As Date = Date.Now
+            Dim fechaDesdetxt As String = fechaDesde.ToString("yyyy-MM-dd")
+            Dim fechaHastatxt As String = fechaHasta.ToString("yyyy-MM-dd")
+
+            ' Cambiamos NRO_CART2 por Nro_Carta como clave y excluimos Nro_Carta del CONCAT
+            Dim sql As String = "SELECT Nro_Carta, CONCAT(REMITENTE, ';', FECH_TRAB, ';', APELLIDO, ';', CALLE, ';', CP, ';', PISO_DEPTO, ';', LOCALIDAD, ';', PROVINCIA, ';', ESTADO, ';', OBS2, ';', NRO_CART2) FROM cartas WHERE FECH_TRAB BETWEEN @FechaDesde AND @FechaHasta"
+
+            Using cn As New MySqlConnection(CadenaDeConeccionProduccion)
+                cn.Open()
+                Using cm As New MySqlCommand(sql, cn)
+                    cm.Parameters.AddWithValue("@FechaDesde", fechaDesdetxt)
+                    cm.Parameters.AddWithValue("@FechaHasta", fechaHastatxt)
+                    Using reader As MySqlDataReader = cm.ExecuteReader()
+                        While reader.Read()
+                            Dim nroCarta As String = reader.GetString(0) ' Nro_Carta como clave
+                            Dim concatenatedData As String = reader.GetString(1) ' Resto de datos
+
+                            If resultados.ContainsKey(nroCarta) Then
+                                ' La clave ya existe, actualizar los datos
+                                resultados(nroCarta) = concatenatedData
+                            Else
+                                ' La clave no existe, agregar una nueva entrada
+                                resultados.Add(nroCarta, concatenatedData)
+                            End If
+                        End While
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            ' Manejar la excepción aquí o imprimir un mensaje de error
+            MsgBox("Error en ObtenerTodosLosDatosUltimos800Dias: " & ex.Message, MsgBoxStyle.Critical)
+        End Try
+
+        Return resultados
+    End Function
+
+
+    Public Shared Function ObtenerEstadoRecorridoDeCorreoProduccion(ByVal Carta As String) As String
+        Dim Sql As String = "SELECT Estado FROM recorridos WHERE nro_carta = @Carta ORDER BY fechaf DESC LIMIT 1"
+        Using cn As New MySqlConnection(CadenaDeConeccionProduccion)
+            Using cmconsult As New MySqlCommand(Sql, cn)
+                cmconsult.Parameters.AddWithValue("@Carta", Carta)
+                cn.Open()
+                Dim resultado As Object = cmconsult.ExecuteScalar()
+                cn.Close()
+                Return If(resultado IsNot Nothing, resultado.ToString(), "")
+            End Using
+        End Using
+    End Function
+
+    Public Shared Function ObtenerMotivoRecorridoDeCorreoProduccion(ByVal Carta As String) As String
+        Dim Sql As String = "SELECT motivo FROM recorridos WHERE nro_carta = @Carta ORDER BY fechaf DESC LIMIT 1"
+        Using cn As New MySqlConnection(CadenaDeConeccionProduccion)
+            Using cmconsult As New MySqlCommand(Sql, cn)
+                cmconsult.Parameters.AddWithValue("@Carta", Carta)
+                cn.Open()
+                Dim resultado As Object = cmconsult.ExecuteScalar()
+                cn.Close()
+                Return If(resultado IsNot Nothing, resultado.ToString(), "")
+            End Using
+        End Using
+    End Function
+
+    Public Shared Function ObtenerFechaRecorridoDeCorreoProduccion(ByVal Carta As String) As String
+        Dim Sql As String = "SELECT fechaf FROM recorridos WHERE nro_carta = @Carta ORDER BY fechaf DESC LIMIT 1"
+        Using cn As New MySqlConnection(CadenaDeConeccionProduccion)
+            Using cmconsult As New MySqlCommand(Sql, cn)
+                cmconsult.Parameters.AddWithValue("@Carta", Carta)
+                cn.Open()
+                Dim resultado As Object = cmconsult.ExecuteScalar()
+                cn.Close()
+                Return If(resultado IsNot Nothing, resultado.ToString(), "")
+            End Using
+        End Using
+    End Function
+
+
+
+
+
 
     Public Shared Function ObtenerMotivoDevoDeCorreoProduccion(ByVal Carta As String) As String
         Dim Sql As String = "Select Motivo_devo from devueltas Where nro_carta='" & Carta & "'"
@@ -3457,6 +3542,31 @@ Public Class CN_Correo
         Return resultado
 
 
+    End Function
+    Public Shared Function ObtenerEstadoArmDetalle(ByVal Carta As String) As String
+        Dim Sql As String = "SELECT estado FROM armdetalle WHERE nro_carta = @Carta"
+        Using cn As New MySqlConnection(CadenaDeConeccionProduccion)
+            Using cmconsult As New MySqlCommand(Sql, cn)
+                cmconsult.Parameters.AddWithValue("@Carta", Carta)
+                cn.Open()
+                Dim resultado As Object = cmconsult.ExecuteScalar()
+                cn.Close()
+                Return If(resultado IsNot Nothing, resultado.ToString(), "")
+            End Using
+        End Using
+    End Function
+
+    Public Shared Function ObtenerArmDeArmDetalle(ByVal Carta As String) As String
+        Dim Sql As String = "SELECT arm FROM armdetalle WHERE nro_carta = @Carta"
+        Using cn As New MySqlConnection(CadenaDeConeccionProduccion)
+            Using cmconsult As New MySqlCommand(Sql, cn)
+                cmconsult.Parameters.AddWithValue("@Carta", Carta)
+                cn.Open()
+                Dim resultado As Object = cmconsult.ExecuteScalar()
+                cn.Close()
+                Return If(resultado IsNot Nothing, resultado.ToString(), "")
+            End Using
+        End Using
     End Function
 
     Public Shared Function ObtenerCRITERIOS(ByVal Estado As String) As DataTable

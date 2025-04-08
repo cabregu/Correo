@@ -1498,5 +1498,160 @@ Public Class FrmTransito
         Return direccionesModificadas
     End Function
 
+    Private Sub BtnPorCarta_Click(sender As Object, e As EventArgs) Handles BtnPorCarta.Click
+        SeleccionarUnArchivo()
+
+        ProcesarDatosPorCarta()
+    End Sub
+
+    Public Sub SeleccionarUnArchivo()
+        Dim openFD As New OpenFileDialog()
+        With openFD
+            .Title = "Seleccionar archivos"
+            .Filter = "Archivos Excel (*.xls)|*.xls|Todos los archivos (*.*)|*.*"
+            .Multiselect = False
+            .InitialDirectory = My.Computer.FileSystem.SpecialDirectories.Desktop
+
+            ' Verificar si el usuario seleccionó un archivo
+            If .ShowDialog() = DialogResult.OK Then
+                If Not LeerExcel(.FileName) Then
+                    MsgBox("No se pudieron cargar los datos.", MsgBoxStyle.Exclamation)
+                End If
+            End If
+        End With
+    End Sub
+
+    Private Function LeerExcel(ByVal Archivo As String) As Boolean
+        Dim strconn As String
+        Dim mconn As OleDbConnection = Nothing
+        Dim dt2 As New DataTable
+
+        Try
+            ' Conexión para archivos .xls (Excel 2003)
+            strconn = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Archivo & ";Extended Properties='Excel 8.0;HDR=Yes;IMEX=1'"
+
+            mconn = New OleDbConnection(strconn)
+            mconn.Open()
+
+            ' Obtener el nombre de la primera hoja
+            Dim schemaTable As DataTable = mconn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, Nothing)
+            If schemaTable.Rows.Count = 0 Then
+                MsgBox("No se encontraron hojas en el archivo Excel.", MsgBoxStyle.Exclamation)
+                Return False
+            End If
+
+            Dim nombreHoja As String = schemaTable.Rows(0)("TABLE_NAME").ToString()
+
+            ' Cargar solo la columna Nro_Carta desde la hoja
+            Dim ad As New OleDbDataAdapter("SELECT [Nro_Carta] FROM [" & nombreHoja & "]", mconn)
+            ad.Fill(dt2)
+
+            ' Configurar el DataGridView para mostrar solo Nro_Carta
+            DgvDatos.Columns.Clear() ' Limpiar columnas existentes
+            DgvDatos.AutoGenerateColumns = False ' Desactivar generación automática
+            DgvDatos.Columns.Add("Nro_Carta", "Nro_Carta") ' Añadir solo la columna deseada
+            DgvDatos.Columns("Nro_Carta").DataPropertyName = "Nro_Carta" ' Vincularla al DataTable
+
+            ' Asignar los datos al DataGridView
+            DgvDatos.DataSource = dt2
+            DgvDatos.Refresh() ' Actualizar el grid
+            ConfigurarColumnasDataGridView()
+
+            Return True
+
+
+        Catch ex As System.Exception
+            MsgBox("Error al importar: " & ex.Message, MsgBoxStyle.Critical)
+            Return False
+        Finally
+            If mconn IsNot Nothing AndAlso mconn.State = ConnectionState.Open Then
+                mconn.Close()
+                mconn.Dispose() ' Liberar recursos
+            End If
+        End Try
+    End Function
+
+    Private Sub ConfigurarColumnasDataGridView()
+        With DgvDatos.Columns
+            .Add("REMITENTE", "Remitente")             ' Columna para REMITENTE
+            .Add("FECH_TRAB", "Fecha Trabajo")         ' Columna para FECH_TRAB
+            .Add("APELLIDO", "Apellido")               ' Columna para APELLIDO
+            .Add("CALLE", "Calle")                     ' Columna para CALLE
+            .Add("CP", "Código Postal")                ' Columna para CP
+            .Add("PISO_DEPTO", "Piso/Depto")           ' Columna para PISO_DEPTO
+            .Add("LOCALIDAD", "Localidad")             ' Columna para LOCALIDAD
+            .Add("PROVINCIA", "Provincia")             ' Columna para PROVINCIA
+            .Add("ESTADO", "Estado")                   ' Columna para ESTADO
+            .Add("OBS2", "Observaciones 2")            ' Columna para OBS2
+            .Add("CARTERO", "Cartero")                 ' Columna para CARTERO
+            .Add("NRO_CART2", "Número Carta 2")        ' Columna para NRO_CART2
+            .Add("TEMA4", "Motivo Devolución")         ' Columna para TEMA4
+            .Add("FECH4", "Fecha Devolución")          ' Columna para FECH4
+            .Add("EstadoTransito", "EstadoTransito")
+            .Add("arm", "arm")
+            .Add("estadoarm", "esatdoarm")
+
+
+        End With
+    End Sub
+
+
+    Private Sub AsignarValoresPorCarta(DRW As DataGridViewRow, datos As KeyValuePair(Of String, String))
+        Dim values() As String = datos.Value.Split(";"c)
+
+        ' datos.Key ahora es Nro_Carta
+        DRW.Cells("Nro_Carta").Value = datos.Key
+        DRW.Cells("REMITENTE").Value = values(0) ' Índices ajustados: REMITENTE es 0
+        DRW.Cells("FECH_TRAB").Value = values(1)
+        DRW.Cells("APELLIDO").Value = values(2)
+        DRW.Cells("CALLE").Value = values(3)
+        DRW.Cells("CP").Value = values(4)
+        DRW.Cells("PISO_DEPTO").Value = values(5)
+        DRW.Cells("LOCALIDAD").Value = values(6)
+        DRW.Cells("PROVINCIA").Value = values(7)
+        DRW.Cells("ESTADO").Value = ObtenerEstadoRecorridoDeCorreoProduccion(datos.Key)
+        DRW.Cells("OBS2").Value = values(9) ' OBS2 ahora es 9 (antes era 10)
+        DRW.Cells("CARTERO").Value = ObtenerCarteroDeCorreoProduccion(datos.Key)
+        DRW.Cells("NRO_CART2").Value = values(10) ' NRO_CART2 ahora es 10 (antes estaba en datos.Key)
+        DRW.Cells("TEMA4").Value = ObtenerMotivoRecorridoDeCorreoProduccion(datos.Key)
+        DRW.Cells("FECH4").Value = ObtenerFechaRecorridoDeCorreoProduccion(datos.Key)
+        DRW.Cells("EstadoTransito").Value = ObtenerEstadoenTransito(datos.Key)
+        DRW.Cells("arm").Value = ObtenerArmDeArmDetalle(datos.Key)
+        DRW.Cells("estadoarm").Value = ObtenerEstadoArmDetalle(datos.Key)
+    End Sub
+
+    Private Sub ProcesarDatosPorCarta()
+        Dim Numero As Integer = 0
+        Me.Invoke(Sub()
+                      PgbAnalisis.Minimum = 0
+                      PgbAnalisis.Maximum = DgvDatos.Rows.Count
+                  End Sub)
+
+        ' Obtenemos los datos del método original
+        Dim resultados = ConfigCorreo.CN_Correo.ObtenerTodosLosDatosUltimos800Dias()
+        Dim listaResultados = resultados.ToList()
+
+        For Each DRW As DataGridViewRow In DgvDatos.Rows
+            Dim nroCarta As String = DRW.Cells("Nro_Carta").Value?.ToString()
+
+            If Not String.IsNullOrEmpty(nroCarta) Then
+                ' Ahora buscamos directamente por la clave (Nro_Carta)
+                Dim resultado = listaResultados.Find(Function(x) x.Key = nroCarta)
+
+                If Not resultado.Equals(New KeyValuePair(Of String, String)) Then
+                    AsignarValoresPorCarta(DRW, resultado)
+                    Numero += 1
+                    Me.Invoke(Sub()
+                                  PgbAnalisis.Value = Numero
+                              End Sub)
+                End If
+            End If
+        Next
+
+        Me.Invoke(Sub()
+                      PgbAnalisis.Value = 0
+                      BNBUSCAR.Enabled = True
+                  End Sub)
+    End Sub
 
 End Class

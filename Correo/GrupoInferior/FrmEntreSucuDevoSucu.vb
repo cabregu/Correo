@@ -37,24 +37,42 @@ Public Class FrmEntreSucuDevoSucu
 
     End Sub
     Private Function impExcelOtro(ByVal Archivo As String) As Boolean
-
-
         Dim strconn As String
-        strconn = "Provider=Microsoft.Jet.Oledb.4.0; data source= " + Archivo + ";Extended properties=""Excel 8.0;hdr=yes;imex=1"""
-        Dim mconn As New OleDbConnection(strconn)
-        Dim ad As New OleDbDataAdapter("Select * from [" & "Lexs" & "$]", mconn)
+        Dim mconn As OleDbConnection = Nothing
         Dim dt2 As New DataTable
 
-        mconn.Open()
-        ad.Fill(dt2)
-        mconn.Close()
-        DgvControl.DataSource = dt2
+        Try
+            ' Conexión para archivos .xls (Excel 2003)
+            strconn = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Archivo & ";Extended Properties='Excel 8.0;HDR=Yes;IMEX=1'"
 
+            mconn = New OleDbConnection(strconn)
+            mconn.Open()
 
- 
+            ' Obtener el nombre de la primera hoja (activa o la primera disponible)
+            Dim schemaTable As DataTable = mconn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, Nothing)
+            If schemaTable.Rows.Count = 0 Then
+                MsgBox("No se encontraron hojas en el archivo Excel.", MsgBoxStyle.Exclamation)
+                Return False
+            End If
 
+            Dim nombreHoja As String = schemaTable.Rows(0)("TABLE_NAME").ToString()
 
+            ' Cargar datos de la hoja
+            Dim ad As New OleDbDataAdapter("SELECT * FROM [" & nombreHoja & "]", mconn)
+            ad.Fill(dt2)
+            DgvControl.DataSource = dt2
 
+            Return True
+
+        Catch ex As System.Exception
+            MsgBox("Error al importar: " & ex.Message, MsgBoxStyle.Critical)
+            Return False
+        Finally
+            If mconn IsNot Nothing AndAlso mconn.State = ConnectionState.Open Then
+                mconn.Close()
+                mconn.Dispose() ' Liberar recursos
+            End If
+        End Try
     End Function
 
 

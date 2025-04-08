@@ -66,7 +66,7 @@ Public Class FrmImprimirPlanificacion
     Private Sub BtnImpresion_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnImpresion.Click
 
         If DgvContenido.RowCount > 0 Then
-            crearexcel(txtrecorrido.Text, txcaminante.Text, txtzona.Text, txtcliente.Text, txcantidad.Text, txtfecha.Text, dtn)
+            crearexcel(txtrecorrido.Text, txcaminante.Text, txtzona.Text, "SWISS", txcantidad.Text, txtfecha.Text, dtn)
         End If
 
     End Sub

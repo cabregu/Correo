@@ -33,6 +33,7 @@ Partial Class FrmTransito
         Me.BtnAnalisisEstados = New System.Windows.Forms.Button()
         Me.Btncsv = New System.Windows.Forms.Button()
         Me.Btntxt = New System.Windows.Forms.Button()
+        Me.BtnPorCarta = New System.Windows.Forms.Button()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         CType(Me.DgvDatos, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -49,6 +50,7 @@ Partial Class FrmTransito
         '
         'Gb
         '
+        Me.Gb.Controls.Add(Me.BtnPorCarta)
         Me.Gb.Controls.Add(Me.Btncsv)
         Me.Gb.Controls.Add(Me.Btntxt)
         Me.Gb.Controls.Add(Me.GrpTransito)
@@ -62,6 +64,7 @@ Partial Class FrmTransito
         Me.Gb.Controls.SetChildIndex(Me.Btntxt, 0)
         Me.Gb.Controls.SetChildIndex(Me.BtnSalir, 0)
         Me.Gb.Controls.SetChildIndex(Me.Btncsv, 0)
+        Me.Gb.Controls.SetChildIndex(Me.BtnPorCarta, 0)
         '
         'DgvDatos
         '
@@ -199,6 +202,15 @@ Partial Class FrmTransito
         Me.Btntxt.Text = "txt"
         Me.Btntxt.UseVisualStyleBackColor = True
         '
+        'BtnPorCarta
+        '
+        Me.BtnPorCarta.Location = New System.Drawing.Point(671, 19)
+        Me.BtnPorCarta.Name = "BtnPorCarta"
+        Me.BtnPorCarta.Size = New System.Drawing.Size(150, 23)
+        Me.BtnPorCarta.TabIndex = 56
+        Me.BtnPorCarta.Text = "Busqueda Por Carta"
+        Me.BtnPorCarta.UseVisualStyleBackColor = True
+        '
         'FrmTransito
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -229,4 +241,5 @@ Partial Class FrmTransito
     Friend WithEvents Btntxt As System.Windows.Forms.Button
     Friend WithEvents Btncsv As System.Windows.Forms.Button
     Friend WithEvents BtnEstadistica As Button
+    Friend WithEvents BtnPorCarta As Button
 End Class

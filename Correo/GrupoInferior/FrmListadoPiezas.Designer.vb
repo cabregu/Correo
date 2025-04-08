@@ -31,15 +31,15 @@ Partial Class FrmListadoPiezas
         Me.TxtPlanillaDevo = New System.Windows.Forms.TextBox()
         Me.CmbMotivos = New System.Windows.Forms.ComboBox()
         Me.DgvListado = New System.Windows.Forms.DataGridView()
-        Me.TxtCartas = New System.Windows.Forms.TextBox()
-        Me.LblCartas = New System.Windows.Forms.Label()
-        Me.Btnxls = New System.Windows.Forms.Button()
         Me.Nro_carta = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fech_trab = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Apellido = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Calle = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Cp = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Localidad = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.TxtCartas = New System.Windows.Forms.TextBox()
+        Me.LblCartas = New System.Windows.Forms.Label()
+        Me.Btnxls = New System.Windows.Forms.Button()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         CType(Me.DgvListado, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -199,7 +199,7 @@ Partial Class FrmListadoPiezas
         Me.DgvListado.AllowUserToAddRows = False
         Me.DgvListado.AllowUserToDeleteRows = False
         Me.DgvListado.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DgvListado.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.DgvListado.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DgvListado.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Nro_carta, Me.Fech_trab, Me.Apellido, Me.Calle, Me.Cp, Me.Localidad})
@@ -211,40 +211,6 @@ Partial Class FrmListadoPiezas
         Me.DgvListado.RowHeadersVisible = False
         Me.DgvListado.Size = New System.Drawing.Size(979, 300)
         Me.DgvListado.TabIndex = 107
-        '
-        'TxtCartas
-        '
-        Me.TxtCartas.Enabled = False
-        Me.TxtCartas.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtCartas.Location = New System.Drawing.Point(291, 33)
-        Me.TxtCartas.Name = "TxtCartas"
-        Me.TxtCartas.Size = New System.Drawing.Size(100, 20)
-        Me.TxtCartas.TabIndex = 106
-        '
-        'LblCartas
-        '
-        Me.LblCartas.AutoSize = True
-        Me.LblCartas.Location = New System.Drawing.Point(288, 17)
-        Me.LblCartas.Name = "LblCartas"
-        Me.LblCartas.Size = New System.Drawing.Size(37, 13)
-        Me.LblCartas.TabIndex = 105
-        Me.LblCartas.Text = "Cartas"
-        '
-        'Btnxls
-        '
-        Me.Btnxls.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Btnxls.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Btnxls.Enabled = False
-        Me.Btnxls.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.Btnxls.Image = Global.Correo.My.Resources.Resources.table_excel
-        Me.Btnxls.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Btnxls.Location = New System.Drawing.Point(897, 369)
-        Me.Btnxls.Name = "Btnxls"
-        Me.Btnxls.Size = New System.Drawing.Size(94, 36)
-        Me.Btnxls.TabIndex = 117
-        Me.Btnxls.Text = "Excel"
-        Me.Btnxls.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Btnxls.UseVisualStyleBackColor = True
         '
         'Nro_carta
         '
@@ -285,6 +251,40 @@ Partial Class FrmListadoPiezas
         Me.Localidad.HeaderText = "Localidad"
         Me.Localidad.Name = "Localidad"
         Me.Localidad.ReadOnly = True
+        '
+        'TxtCartas
+        '
+        Me.TxtCartas.Enabled = False
+        Me.TxtCartas.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtCartas.Location = New System.Drawing.Point(291, 33)
+        Me.TxtCartas.Name = "TxtCartas"
+        Me.TxtCartas.Size = New System.Drawing.Size(100, 20)
+        Me.TxtCartas.TabIndex = 106
+        '
+        'LblCartas
+        '
+        Me.LblCartas.AutoSize = True
+        Me.LblCartas.Location = New System.Drawing.Point(288, 17)
+        Me.LblCartas.Name = "LblCartas"
+        Me.LblCartas.Size = New System.Drawing.Size(37, 13)
+        Me.LblCartas.TabIndex = 105
+        Me.LblCartas.Text = "Cartas"
+        '
+        'Btnxls
+        '
+        Me.Btnxls.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Btnxls.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.Btnxls.Enabled = False
+        Me.Btnxls.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.Btnxls.Image = Global.Correo.My.Resources.Resources.table_excel
+        Me.Btnxls.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Btnxls.Location = New System.Drawing.Point(897, 369)
+        Me.Btnxls.Name = "Btnxls"
+        Me.Btnxls.Size = New System.Drawing.Size(94, 36)
+        Me.Btnxls.TabIndex = 117
+        Me.Btnxls.Text = "Excel"
+        Me.Btnxls.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Btnxls.UseVisualStyleBackColor = True
         '
         'FrmListadoPiezas
         '
