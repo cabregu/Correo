@@ -70,6 +70,7 @@ Public Class FrmArm
             LblCant.Text = DgvSeleccion.RowCount
         End If
     End Sub
+
     Private Sub ExportarDataGridViewAExcel(ByVal dgv As DataGridView)
         Try
             ' Crear una nueva instancia de Excel
@@ -115,9 +116,6 @@ Public Class FrmArm
         Catch ex As System.Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
         End Try
-    End Sub
-    Private Sub BtnXls_Click(sender As Object, e As EventArgs)
-        ExportarDataGridViewAExcel(DgvSeleccion)
     End Sub
 
     Private Sub BtnPdf_Click(sender As Object, e As EventArgs) Handles BtnPdf.Click
@@ -285,10 +283,6 @@ Public Class FrmArm
         Return datosDerecha
     End Function
 
-
-
-
-
     Public Function CrearArchivos()
 
         ConfigCorreo.CN_Correo.InsertarEnArmPlanilla(DtppalDatos)
@@ -314,8 +308,6 @@ Public Class FrmArm
 
     End Function
 
-
-
     Public Function Combinar()
         Dim rutaCarpeta As String = "C:\temp"
         Dim archivoFinal As String = Path.Combine(rutaCarpeta, "archivo_final.pdf")
@@ -339,8 +331,6 @@ Public Class FrmArm
 
 
     End Function
-
-
 
     Sub CombinarPDFsEnCarpeta(rutaCarpeta As String, archivoFinal As String, ByRef listaRutasArchivos As List(Of String))
         Dim archivosPDF As String() = Directory.GetFiles(rutaCarpeta, "*.pdf")
@@ -374,7 +364,6 @@ Public Class FrmArm
 
         End Try
     End Sub
-
     Sub AbrirArchivoFinal(archivoFinal As String)
         Try
             Process.Start(archivoFinal)

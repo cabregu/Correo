@@ -5007,11 +5007,11 @@ Public Class CN_Correo
         Dim sqlNumero As String = "Select Desde From configuracion Where Operacion='NUMEROARM'"
         Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
         Dim cm As New MySqlCommand(sqlNumero, cn)
-        Dim NumeroCarta As Integer
+        Dim NumeroArm As Integer
         cn.Open()
-        NumeroCarta = cm.ExecuteScalar
+        NumeroArm = cm.ExecuteScalar
         cn.Close()
-        Return NumeroCarta
+        Return NumeroArm
 
     End Function
 
