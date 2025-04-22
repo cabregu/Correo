@@ -1,4 +1,5 @@
 ﻿Imports ConfigCorreo.CN_Correo
+Imports Microsoft.Office.Interop
 Public Class FrmImprimirPlanificacion
     Dim dtn As New DataTable
     Dim ArrayRemitentes As New ArrayList
@@ -142,74 +143,284 @@ Public Class FrmImprimirPlanificacion
     End Sub
 
 
-    Private Sub crearexcel(ByVal NroRecorrido As String, ByVal caminante As String, ByVal zona As String, ByVal cliente As String, ByVal Cantidad As String, ByVal fecharecorrido As String, ByVal dtn As DataTable)
+    Private Sub crearexcel(ByVal NroRecorrido As String, ByVal caminante As String, ByVal zona As String,
+                      ByVal cliente As String, ByVal Cantidad As String, ByVal fecharecorrido As String,
+                      ByVal dtn As DataTable)
 
         Dim exApp As New Microsoft.Office.Interop.Excel.Application
         Dim exLibro As Microsoft.Office.Interop.Excel.Workbook
         Dim exHoja As Microsoft.Office.Interop.Excel.Worksheet
 
         Try
-
             exLibro = exApp.Workbooks.Add
             exHoja = exLibro.Worksheets.Add()
             exHoja.Cells.NumberFormat = "@"
-
             exApp.ActiveWindow.DisplayGridlines = False
 
+            '--- Configuración de página ---
+            exHoja.PageSetup.Orientation = Microsoft.Office.Interop.Excel.XlPageOrientation.xlPortrait
+            exHoja.PageSetup.Zoom = False
+            exHoja.PageSetup.FitToPagesWide = 1
+            exHoja.PageSetup.FitToPagesTall = False
 
-            exHoja.Cells.Item(1, 1) = "Recorrido:"
-            exHoja.Cells.Item(1, 2) = NroRecorrido
-            exHoja.Cells.Item(2, 2) = NroRecorrido
-            exHoja.Cells.Item(1, 4) = "Caminante:"
-            exHoja.Cells.Item(1, 5) = caminante
-            exHoja.Cells.Item(1, 7) = "Zona"
-            exHoja.Cells.Item(1, 8) = zona
+            '--- Encabezado centrado ---
+            exHoja.Range("B1:G3").Merge()
+            exHoja.Cells.Item(1, 2) = "PLANILLA DE RECORRIDO"
+            exHoja.Cells.Item(1, 2).Font.Bold = True
+            exHoja.Cells.Item(1, 2).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            exHoja.Cells.Item(1, 2).Font.Size = 14
 
-            '**********************************
-            exHoja.Cells.Item(3, 1) = "Cliente:"
-            exHoja.Cells.Item(3, 2) = cliente
-            exHoja.Range("A3:J3").BorderAround()
-            exHoja.Range("A1:J19").BorderAround()
-            '**************************************
+            '--- Datos principales centrados ---
+            exHoja.Cells.Item(5, 2) = "Recorrido:"
+            exHoja.Cells.Item(5, 3) = NroRecorrido
+            exHoja.Cells.Item(5, 5) = "Caminante:"
+            exHoja.Cells.Item(5, 6) = caminante
+            exHoja.Cells.Item(6, 5) = "Zona:"
+            exHoja.Cells.Item(6, 6) = zona
+            exHoja.Cells.Item(7, 2) = "Cliente:"
+            exHoja.Cells.Item(7, 3) = cliente
+            exHoja.Range("B7:D7").BorderAround()
 
-            Dim fila As Integer = 5
-            Dim colum As Integer = 2
-            For Each dr As DataRow In dtn.Rows
-                exHoja.Cells.Item(fila, colum) = dr("nro_carta").ToString
-                If fila = 14 Then
-                    colum = colum + 1
-                    fila = 4
+            '--- Ajuste de tamaños de columnas ---
+            exHoja.Columns("A:A").ColumnWidth = 1  'Columna margen izquierdo
+            exHoja.Columns("B:B").ColumnWidth = 5  'Columna para números correlativos (3 dígitos)
+            exHoja.Columns("C:C").ColumnWidth = 10 'Columna para números de carta (6 dígitos)
+            exHoja.Columns("D:D").ColumnWidth = 3  'Espacio entre columnas
+            exHoja.Columns("E:E").ColumnWidth = 10 'Columna para números correlativos (3 dígitos)
+            exHoja.Columns("F:F").ColumnWidth = 10 'Columna para números de carta (6 dígitos)
+            exHoja.Columns("G:G").ColumnWidth = 3  'Espacio entre columnas
+            exHoja.Columns("H:H").ColumnWidth = 5  'Columna para números correlativos (3 dígitos)
+            exHoja.Columns("I:I").ColumnWidth = 10 'Columna para números de carta (6 dígitos)
+
+            '--- Organización de piezas en columnas ---
+            Dim itemsPorColumna As Integer = 40
+            Dim startRow As Integer = 9
+            Dim currentCol As Integer = 2 'Empieza en columna B
+
+            For i As Integer = 0 To dtn.Rows.Count - 1
+                Dim currentRow As Integer = startRow + (i Mod itemsPorColumna)
+
+                'Nueva columna cada 40 items
+                If i > 0 AndAlso i Mod itemsPorColumna = 0 Then
+                    currentCol += 3 'Espacio entre columnas
                 End If
-                fila = fila + 1
+
+                'Número correlativo (3 dígitos)
+                exHoja.Cells.Item(currentRow, currentCol) = (i + 1).ToString().PadLeft(3, "0"c)
+                exHoja.Cells.Item(currentRow, currentCol).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight
+
+                'Número de carta (6 dígitos)
+                exHoja.Cells.Item(currentRow, currentCol + 1) = dtn.Rows(i)("nro_carta").ToString()
+                exHoja.Cells.Item(currentRow, currentCol + 1).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft
+
+                'Bordes para mejor legibilidad
+                exHoja.Range(exHoja.Cells.Item(currentRow, currentCol), exHoja.Cells.Item(currentRow, currentCol + 1)).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
             Next
 
+            '--- Pie de página ---
+            Dim lastRow As Integer = startRow + Math.Min(itemsPorColumna, dtn.Rows.Count) + 2
+            exHoja.Cells.Item(lastRow, 2) = "Total Piezas:"
+            exHoja.Cells.Item(lastRow, 3) = Cantidad
+            exHoja.Cells.Item(lastRow + 2, 2) = "Firma y Aclaración:"
+            exHoja.Cells.Item(lastRow + 2, 3) = "_________________________"
+            exHoja.Cells.Item(lastRow + 3, 2) = "Fecha: " & fecharecorrido
 
-            '***************************************
-            exHoja.Cells.Item(21, 7) = "Cantidad Piezas:"
-            exHoja.Cells.Item(21, 8) = Cantidad
+            '--- Ajustes finales ---
+            exHoja.Rows("1:100").RowHeight = 15 'Ajuste uniforme
+            exApp.Visible = True
 
-            exHoja.Cells.Item(24, 2) = "Firma Aclaracion:"
-            exHoja.Cells.Item(24, 3) = "-----------------"
-            exHoja.Cells.Item(25, 2) = fecharecorrido
-
-            exHoja.PageSetup.Orientation = Microsoft.Office.Interop.Excel.XlPageOrientation.xlLandscape
-
-            exHoja.Columns.AutoFit()
-            exApp.Application.Visible = True
-
-            exHoja = Nothing
-            exLibro = Nothing
-            exApp = Nothing
-
-
+            'Liberar recursos
+            ReleaseObject(exHoja)
+            ReleaseObject(exLibro)
+            ReleaseObject(exApp)
 
         Catch ex As System.Exception
-            MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
-
+            MsgBox("Error al generar Excel: " & ex.Message, MsgBoxStyle.Critical)
+            If exApp IsNot Nothing Then exApp.Quit()
+            ReleaseObject(exHoja)
+            ReleaseObject(exLibro)
+            ReleaseObject(exApp)
         End Try
-
-
     End Sub
+
+
+    'Private Sub crearexcel(ByVal NroRecorrido As String, ByVal caminante As String, ByVal zona As String,
+    '                  ByVal cliente As String, ByVal Cantidad As String, ByVal fecharecorrido As String,
+    '                  ByVal dtn As DataTable)
+
+    '    Dim exApp As New Microsoft.Office.Interop.Excel.Application
+    '    Dim exLibro As Microsoft.Office.Interop.Excel.Workbook
+    '    Dim exHoja As Microsoft.Office.Interop.Excel.Worksheet
+
+    '    Try
+    '        exLibro = exApp.Workbooks.Add
+    '        exHoja = exLibro.Worksheets.Add()
+    '        exHoja.Cells.NumberFormat = "@"
+    '        exApp.ActiveWindow.DisplayGridlines = False
+
+    '        '--- Configuración de página ---
+    '        exHoja.PageSetup.Orientation = Microsoft.Office.Interop.Excel.XlPageOrientation.xlPortrait 'Vertical
+    '        exHoja.PageSetup.Zoom = False
+    '        exHoja.PageSetup.FitToPagesWide = 1
+    '        exHoja.PageSetup.FitToPagesTall = False 'Permite múltiples páginas si es necesario
+
+    '        '--- Encabezado ---
+    '        exHoja.Range("A1:D3").Merge()
+    '        exHoja.Cells.Item(1, 1) = "PLANILLA DE RECORRIDO"
+    '        exHoja.Cells.Item(1, 1).Font.Bold = True
+    '        exHoja.Cells.Item(1, 1).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+
+    '        '--- Datos principales ---
+    '        exHoja.Cells.Item(5, 1) = "Recorrido:"
+    '        exHoja.Cells.Item(5, 2) = NroRecorrido
+    '        exHoja.Cells.Item(5, 4) = "Caminante:"
+    '        exHoja.Cells.Item(5, 5) = caminante
+    '        exHoja.Cells.Item(6, 4) = "Zona:"
+    '        exHoja.Cells.Item(6, 5) = zona
+    '        exHoja.Cells.Item(7, 1) = "Cliente:"
+    '        exHoja.Cells.Item(7, 2) = cliente
+    '        exHoja.Range("A7:D7").BorderAround()
+
+    '        '--- Organización de piezas en columnas ---
+    '        Dim itemsPorColumna As Integer = 40 'Ajusta según fuente/tamaño
+    '        Dim startRow As Integer = 9
+    '        Dim currentCol As Integer = 1 'Columna A
+
+    '        For i As Integer = 0 To dtn.Rows.Count - 1
+    '            Dim currentRow As Integer = startRow + (i Mod itemsPorColumna)
+
+    '            'Nueva columna cada 40 items
+    '            If i > 0 AndAlso i Mod itemsPorColumna = 0 Then
+    '                currentCol += 3 'Espacio entre columnas
+    '            End If
+
+    '            exHoja.Cells.Item(currentRow, currentCol) = (i + 1).ToString() 'Número de orden
+    '            exHoja.Cells.Item(currentRow, currentCol + 1) = dtn.Rows(i)("nro_carta").ToString()
+
+    '            'Bordes para mejor legibilidad
+    '            exHoja.Range(exHoja.Cells.Item(currentRow, currentCol), exHoja.Cells.Item(currentRow, currentCol + 1)).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+    '        Next
+
+    '        '--- Pie de página ---
+    '        Dim lastRow As Integer = startRow + Math.Min(itemsPorColumna, dtn.Rows.Count) + 2
+    '        exHoja.Cells.Item(lastRow, 1) = "Total Piezas:"
+    '        exHoja.Cells.Item(lastRow, 2) = Cantidad
+    '        exHoja.Cells.Item(lastRow + 2, 1) = "Firma y Aclaración:"
+    '        exHoja.Cells.Item(lastRow + 2, 2) = "_________________________"
+    '        exHoja.Cells.Item(lastRow + 3, 1) = "Fecha: " & fecharecorrido
+
+    '        '--- Ajustes finales ---
+    '        exHoja.Columns("A:Z").AutoFit()
+    '        exHoja.Rows("1:100").RowHeight = 15 'Ajuste uniforme
+
+    '        'Mostrar Excel
+    '        exApp.Visible = True
+
+    '        'Liberar recursos
+    '        ReleaseObject(exHoja)
+    '        ReleaseObject(exLibro)
+    '        ReleaseObject(exApp)
+
+    '    Catch ex As System.Exception
+    '        MsgBox("Error al generar Excel: " & ex.Message, MsgBoxStyle.Critical)
+    '        If exApp IsNot Nothing Then exApp.Quit()
+    '        ReleaseObject(exHoja)
+    '        ReleaseObject(exLibro)
+    '        ReleaseObject(exApp)
+    '    End Try
+    'End Sub
+
+    'Liberar objetos COM
+    Private Sub ReleaseObject(ByVal obj As Object)
+        Try
+            If obj IsNot Nothing Then
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+                obj = Nothing
+            End If
+        Catch ex As System.Exception
+            obj = Nothing
+        Finally
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+        End Try
+    End Sub
+
+
+
+
+
+
+    'Private Sub crearexcel(ByVal NroRecorrido As String, ByVal caminante As String, ByVal zona As String, ByVal cliente As String, ByVal Cantidad As String, ByVal fecharecorrido As String, ByVal dtn As DataTable)
+
+    '    Dim exApp As New Microsoft.Office.Interop.Excel.Application
+    '    Dim exLibro As Microsoft.Office.Interop.Excel.Workbook
+    '    Dim exHoja As Microsoft.Office.Interop.Excel.Worksheet
+
+    '    Try
+
+    '        exLibro = exApp.Workbooks.Add
+    '        exHoja = exLibro.Worksheets.Add()
+    '        exHoja.Cells.NumberFormat = "@"
+
+    '        exApp.ActiveWindow.DisplayGridlines = False
+
+
+    '        exHoja.Cells.Item(1, 1) = "Recorrido:"
+    '        exHoja.Cells.Item(1, 2) = NroRecorrido
+    '        exHoja.Cells.Item(2, 2) = NroRecorrido
+    '        exHoja.Cells.Item(1, 4) = "Caminante:"
+    '        exHoja.Cells.Item(1, 5) = caminante
+    '        exHoja.Cells.Item(1, 7) = "Zona"
+    '        exHoja.Cells.Item(1, 8) = zona
+
+    '        '**********************************
+    '        exHoja.Cells.Item(3, 1) = "Cliente:"
+    '        exHoja.Cells.Item(3, 2) = cliente
+    '        exHoja.Range("A3:J3").BorderAround()
+    '        exHoja.Range("A1:J19").BorderAround()
+    '        '**************************************
+
+    '        Dim fila As Integer = 5
+    '        Dim colum As Integer = 2
+    '        For Each dr As DataRow In dtn.Rows
+    '            exHoja.Cells.Item(fila, colum) = dr("nro_carta").ToString
+    '            If fila = 14 Then
+    '                colum = colum + 1
+    '                fila = 4
+    '            End If
+    '            fila = fila + 1
+    '        Next
+
+
+    '        '***************************************
+    '        exHoja.Cells.Item(21, 7) = "Cantidad Piezas:"
+    '        exHoja.Cells.Item(21, 8) = Cantidad
+
+    '        exHoja.Cells.Item(24, 2) = "Firma Aclaracion:"
+    '        exHoja.Cells.Item(24, 3) = "-----------------"
+    '        exHoja.Cells.Item(25, 2) = fecharecorrido
+
+    '        exHoja.PageSetup.Orientation = Microsoft.Office.Interop.Excel.XlPageOrientation.xlLandscape
+
+    '        exHoja.Columns.AutoFit()
+    '        exApp.Application.Visible = True
+
+    '        exHoja = Nothing
+    '        exLibro = Nothing
+    '        exApp = Nothing
+
+
+
+    '    Catch ex As System.Exception
+    '        MsgBox(ex.Message, MsgBoxStyle.Critical, "Error al exportar a Excel")
+
+    '    End Try
+
+
+    'End Sub
+
+
+
     Private Sub crearexcelplanillasdiarias(ByVal fecha As String)
         Dim dtnpls As New DataTable
         dtnpls.Columns.Add("nro_planilla")
