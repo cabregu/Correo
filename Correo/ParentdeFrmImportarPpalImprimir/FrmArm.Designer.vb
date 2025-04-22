@@ -19,13 +19,12 @@ Partial Class FrmArm
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.LblRemitente = New System.Windows.Forms.Label()
-        Me.CmbRemitente = New System.Windows.Forms.ComboBox()
-        Me.LblRemitoPendiente = New System.Windows.Forms.Label()
-        Me.CmbRemitoPendiente = New System.Windows.Forms.ComboBox()
         Me.DgvSeleccion = New System.Windows.Forms.DataGridView()
         Me.LblCant = New System.Windows.Forms.Label()
         Me.BtnPdf = New System.Windows.Forms.Button()
+        Me.BtnNuevo = New System.Windows.Forms.Button()
+        Me.TxtNroArm = New System.Windows.Forms.TextBox()
+        Me.TxtNroCarta = New System.Windows.Forms.TextBox()
         CType(Me.PBLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Gb.SuspendLayout()
         CType(Me.DgvSeleccion, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -41,57 +40,21 @@ Partial Class FrmArm
         '
         'Gb
         '
+        Me.Gb.Controls.Add(Me.TxtNroCarta)
+        Me.Gb.Controls.Add(Me.TxtNroArm)
+        Me.Gb.Controls.Add(Me.BtnNuevo)
         Me.Gb.Controls.Add(Me.BtnPdf)
         Me.Gb.Controls.Add(Me.LblCant)
         Me.Gb.Controls.Add(Me.DgvSeleccion)
-        Me.Gb.Controls.Add(Me.LblRemitente)
-        Me.Gb.Controls.Add(Me.CmbRemitente)
-        Me.Gb.Controls.Add(Me.LblRemitoPendiente)
-        Me.Gb.Controls.Add(Me.CmbRemitoPendiente)
         Me.Gb.Size = New System.Drawing.Size(928, 612)
         Me.Gb.Controls.SetChildIndex(Me.PBLogo, 0)
         Me.Gb.Controls.SetChildIndex(Me.BtnSalir, 0)
-        Me.Gb.Controls.SetChildIndex(Me.CmbRemitoPendiente, 0)
-        Me.Gb.Controls.SetChildIndex(Me.LblRemitoPendiente, 0)
-        Me.Gb.Controls.SetChildIndex(Me.CmbRemitente, 0)
-        Me.Gb.Controls.SetChildIndex(Me.LblRemitente, 0)
         Me.Gb.Controls.SetChildIndex(Me.DgvSeleccion, 0)
         Me.Gb.Controls.SetChildIndex(Me.LblCant, 0)
         Me.Gb.Controls.SetChildIndex(Me.BtnPdf, 0)
-        '
-        'LblRemitente
-        '
-        Me.LblRemitente.AutoSize = True
-        Me.LblRemitente.Location = New System.Drawing.Point(27, 16)
-        Me.LblRemitente.Name = "LblRemitente"
-        Me.LblRemitente.Size = New System.Drawing.Size(55, 13)
-        Me.LblRemitente.TabIndex = 34
-        Me.LblRemitente.Text = "Remitente"
-        '
-        'CmbRemitente
-        '
-        Me.CmbRemitente.FormattingEnabled = True
-        Me.CmbRemitente.Location = New System.Drawing.Point(30, 36)
-        Me.CmbRemitente.Name = "CmbRemitente"
-        Me.CmbRemitente.Size = New System.Drawing.Size(118, 21)
-        Me.CmbRemitente.TabIndex = 33
-        '
-        'LblRemitoPendiente
-        '
-        Me.LblRemitoPendiente.AutoSize = True
-        Me.LblRemitoPendiente.Location = New System.Drawing.Point(209, 16)
-        Me.LblRemitoPendiente.Name = "LblRemitoPendiente"
-        Me.LblRemitoPendiente.Size = New System.Drawing.Size(101, 13)
-        Me.LblRemitoPendiente.TabIndex = 30
-        Me.LblRemitoPendiente.Text = "Remitos Pendientes"
-        '
-        'CmbRemitoPendiente
-        '
-        Me.CmbRemitoPendiente.FormattingEnabled = True
-        Me.CmbRemitoPendiente.Location = New System.Drawing.Point(193, 36)
-        Me.CmbRemitoPendiente.Name = "CmbRemitoPendiente"
-        Me.CmbRemitoPendiente.Size = New System.Drawing.Size(117, 21)
-        Me.CmbRemitoPendiente.TabIndex = 29
+        Me.Gb.Controls.SetChildIndex(Me.BtnNuevo, 0)
+        Me.Gb.Controls.SetChildIndex(Me.TxtNroArm, 0)
+        Me.Gb.Controls.SetChildIndex(Me.TxtNroCarta, 0)
         '
         'DgvSeleccion
         '
@@ -116,14 +79,41 @@ Partial Class FrmArm
         'BtnPdf
         '
         Me.BtnPdf.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.BtnPdf.Image = Global.Correo.My.Resources.Resources.DefaultPrinterNetwork_32x32
+        Me.BtnPdf.Image = Global.Correo.My.Resources.Resources.PasteSpecial_32x32
         Me.BtnPdf.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.BtnPdf.Location = New System.Drawing.Point(786, 480)
+        Me.BtnPdf.Location = New System.Drawing.Point(464, 25)
         Me.BtnPdf.Name = "BtnPdf"
         Me.BtnPdf.Size = New System.Drawing.Size(50, 47)
         Me.BtnPdf.TabIndex = 39
         Me.BtnPdf.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.BtnPdf.UseVisualStyleBackColor = True
+        '
+        'BtnNuevo
+        '
+        Me.BtnNuevo.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BtnNuevo.Location = New System.Drawing.Point(30, 37)
+        Me.BtnNuevo.Name = "BtnNuevo"
+        Me.BtnNuevo.Size = New System.Drawing.Size(100, 35)
+        Me.BtnNuevo.TabIndex = 40
+        Me.BtnNuevo.Text = "Nuevo"
+        Me.BtnNuevo.UseVisualStyleBackColor = True
+        '
+        'TxtNroArm
+        '
+        Me.TxtNroArm.Enabled = False
+        Me.TxtNroArm.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNroArm.Location = New System.Drawing.Point(146, 40)
+        Me.TxtNroArm.Name = "TxtNroArm"
+        Me.TxtNroArm.Size = New System.Drawing.Size(100, 31)
+        Me.TxtNroArm.TabIndex = 41
+        '
+        'TxtNroCarta
+        '
+        Me.TxtNroCarta.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNroCarta.Location = New System.Drawing.Point(295, 41)
+        Me.TxtNroCarta.Name = "TxtNroCarta"
+        Me.TxtNroCarta.Size = New System.Drawing.Size(120, 31)
+        Me.TxtNroCarta.TabIndex = 42
         '
         'FrmArm
         '
@@ -141,12 +131,10 @@ Partial Class FrmArm
         Me.ResumeLayout(False)
 
     End Sub
-
-    Friend WithEvents LblRemitente As Label
-    Friend WithEvents CmbRemitente As ComboBox
-    Friend WithEvents LblRemitoPendiente As Label
-    Friend WithEvents CmbRemitoPendiente As ComboBox
     Friend WithEvents DgvSeleccion As DataGridView
     Friend WithEvents LblCant As Label
     Friend WithEvents BtnPdf As Button
+    Friend WithEvents TxtNroCarta As TextBox
+    Friend WithEvents TxtNroArm As TextBox
+    Friend WithEvents BtnNuevo As Button
 End Class

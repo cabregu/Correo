@@ -3121,6 +3121,43 @@ Public Class CN_Correo
 
     End Function
 
+    Public Shared Function BuscarParaArm(ByVal carta As String) As DataTable
+        ' Crear DataTable para almacenar resultados
+        Dim dt As New DataTable()
+
+        ' Consulta SQL
+        Dim sql As String = "SELECT NRO_CARTA, EMPRESA, APELLIDO, CALLE, CP, LOCALIDAD, PROVINCIA, NRO_CART2, SOCIO, OBS, OBS2, OBS3, OBS4, REMITENTE, TRABAJO, FECH_TRAB, NRO, PISO_DEPTO FROM cartas WHERE NRO_CARTA = @carta"
+
+        Using cn As New MySqlConnection(CadenaDeConeccionProduccion),
+          cm As New MySqlCommand(sql, cn)
+
+
+            ' Agregar parámetro
+            cm.Parameters.AddWithValue("@carta", carta)
+
+            Try
+                cn.Open()
+
+                ' Usar MySqlDataAdapter para llenar el DataTable
+                Using da As New MySqlDataAdapter(cm)
+                    da.Fill(dt)
+                End Using
+
+            Catch ex As MySqlException
+                ' Registrar el error según tu sistema de logging
+                Throw New ApplicationException("Error al buscar la carta en la base de datos", ex)
+            Finally
+                If cn.State = ConnectionState.Open Then
+                    cn.Close()
+                End If
+            End Try
+        End Using
+
+        Return dt
+    End Function
+
+
+
     Public Shared Function LlenarDatatableImprimirArm(ByVal Remito As String) As DataTable
 
         Dim sql As String = "SELECT COUNT(CALLE) AS CANTIDAD, TRABAJO, EMPRESA, CALLE, CP, LOCALIDAD, PROVINCIA " &
@@ -5015,18 +5052,46 @@ Public Class CN_Correo
 
     End Function
 
-    Public Shared Function ActualizarNroPlanillaArm(ByVal NroActual As String) As Boolean
-        'Cargar insert sql
-        Dim sqlNumero As String = "UPDATE configuracion SET Desde='" & NroActual + 1 & "'" & " Where Operacion='NUMEROARM'"
-        Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
-        Dim cm As New MySqlCommand(sqlNumero, cn)
-        Dim NumeroCarta As Integer
-        cn.Open()
-        NumeroCarta = cm.ExecuteScalar
-        cn.Close()
-        Return NumeroCarta
 
+
+    Public Shared Function ActualizarNroPlanillaArm(ByVal NroActual As String) As Boolean
+        Try
+            ' Convertir a número, incrementar y volver a string
+            Dim nuevoNumero As String = (Integer.Parse(NroActual) + 1).ToString()
+
+            Dim sql As String = "UPDATE configuracion SET Desde = @NuevoNumero WHERE Operacion = 'NUMEROARM'"
+
+            Using cn As New MySqlConnection(CadenaDeConeccionProduccion)
+                Using cmd As New MySqlCommand(sql, cn)
+                    cmd.Parameters.AddWithValue("@NuevoNumero", nuevoNumero)
+                    cn.Open()
+                    Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
+                    cn.Close()
+
+                    ' Retorna True si se actualizó al menos una fila
+                    Return rowsAffected > 0
+                End Using
+            End Using
+        Catch ex As Exception
+            ' Log del error
+            Console.WriteLine($"Error al actualizar número de planilla: {ex.Message}")
+            Return False
+        End Try
     End Function
+
+
+    'Public Shared Function ActualizarNroPlanillaArm(ByVal NroActual As String) As Boolean
+    '    'Cargar insert sql
+    '    Dim sqlNumero As String = "UPDATE configuracion SET Desde='" & NroActual + 1 & "'" & " Where Operacion='NUMEROARM'"
+    '    Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
+    '    Dim cm As New MySqlCommand(sqlNumero, cn)
+    '    Dim NumeroCarta As Integer
+    '    cn.Open()
+    '    NumeroCarta = cm.ExecuteScalar
+    '    cn.Close()
+    '    Return NumeroCarta
+
+    'End Function
 
     Public Shared Function InsertarEnArmPlanilla(dtppalDatos As DataTable) As Boolean
         Try
@@ -5034,12 +5099,12 @@ Public Class CN_Correo
                 connection.Open()
 
                 For Each row In dtppalDatos.Rows
-                    Dim trabajo As String = row("TRABAJO").ToString()
+
 
                     Dim queryInsert As String = "INSERT INTO armplanilla (CANTIDAD, TRABAJO, EMPRESA, CALLE, CP, LOCALIDAD, PROVINCIA, NumeroArm) VALUES (@CANTIDAD, @TRABAJO, @EMPRESA, @CALLE, @CP, @LOCALIDAD, @PROVINCIA, @NumeroArm)"
                     Using cmdInsert As New MySqlCommand(queryInsert, connection)
                         cmdInsert.Parameters.AddWithValue("@CANTIDAD", row("CANTIDAD"))
-                        cmdInsert.Parameters.AddWithValue("@TRABAJO", trabajo)
+                        cmdInsert.Parameters.AddWithValue("@TRABAJO", row("TRABAJO"))
                         cmdInsert.Parameters.AddWithValue("@EMPRESA", row("EMPRESA"))
                         cmdInsert.Parameters.AddWithValue("@CALLE", row("CALLE"))
                         cmdInsert.Parameters.AddWithValue("@CP", row("CP"))
@@ -5066,13 +5131,13 @@ Public Class CN_Correo
                 connection.Open()
 
                 For Each row In dtDatosDetalle.Rows
-                    Dim trabajo As String = row("TRABAJO").ToString()
+
 
                     Dim queryInsert As String = "INSERT INTO armdetalle (NRO_CARTA, REMITENTE, TRABAJO, FECH_TRAB, APELLIDO, CALLE, NRO, PISO_DEPTO, CP, LOCALIDAD, PROVINCIA, EMPRESA, NRO_CART2, SOCIO, OBS, OBS2, OBS3, OBS4, ARM) VALUES (@NRO_CARTA, @REMITENTE, @TRABAJO, @FECH_TRAB, @APELLIDO, @CALLE, @NRO, @PISO_DEPTO, @CP, @LOCALIDAD, @PROVINCIA, @EMPRESA, @NRO_CART2, @SOCIO, @OBS, @OBS2, @OBS3, @OBS4, @ARM)"
                     Using cmdInsert As New MySqlCommand(queryInsert, connection)
                         cmdInsert.Parameters.AddWithValue("@NRO_CARTA", row("NRO_CARTA"))
                         cmdInsert.Parameters.AddWithValue("@REMITENTE", row("REMITENTE"))
-                        cmdInsert.Parameters.AddWithValue("@TRABAJO", trabajo)
+                        cmdInsert.Parameters.AddWithValue("@TRABAJO", row("TRABAJO"))
                         cmdInsert.Parameters.AddWithValue("@FECH_TRAB", row("FECH_TRAB"))
                         cmdInsert.Parameters.AddWithValue("@APELLIDO", row("APELLIDO"))
                         cmdInsert.Parameters.AddWithValue("@CALLE", row("CALLE"))
@@ -5088,7 +5153,7 @@ Public Class CN_Correo
                         cmdInsert.Parameters.AddWithValue("@OBS2", row("OBS2"))
                         cmdInsert.Parameters.AddWithValue("@OBS3", row("OBS3"))
                         cmdInsert.Parameters.AddWithValue("@OBS4", row("OBS4"))
-                        cmdInsert.Parameters.AddWithValue("@ARM", arm) ' New parameter for the ARM field
+                        cmdInsert.Parameters.AddWithValue("@ARM", arm)
                         cmdInsert.ExecuteNonQuery()
                     End Using
 
@@ -5098,10 +5163,14 @@ Public Class CN_Correo
                 Return True
             End Using
         Catch ex As Exception
-            ' Handle the exception if any error occurs during the insertion
+
             Return False
         End Try
     End Function
+
+
+
+
 
     Public Shared Function VerificarSiExisteArm(ByVal trabajo As String) As Boolean
         Dim existe As Boolean = False
