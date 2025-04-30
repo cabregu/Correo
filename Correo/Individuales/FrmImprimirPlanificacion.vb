@@ -1,5 +1,10 @@
-﻿Imports ConfigCorreo.CN_Correo
+﻿Imports System.IO
+Imports System.Net
+Imports ConfigCorreo
+Imports ConfigCorreo.CN_Correo
 Imports Microsoft.Office.Interop
+Imports Newtonsoft.Json
+Imports Newtonsoft.Json.Linq
 Public Class FrmImprimirPlanificacion
     Dim dtn As New DataTable
     Dim ArrayRemitentes As New ArrayList
@@ -665,56 +670,118 @@ Public Class FrmImprimirPlanificacion
 
 
 
-    Private Sub BtnSubirRecorrido_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSubirRecorrido.Click
-
-        Dim cadena As New System.Text.StringBuilder
-        Dim txtsql As String = ""
-        Dim Dtenviar As New DataTable
-
-        Dtenviar = ConsultarRecorridosParaEnviarWeb(txtrecorrido.Text)
-
-        ' Comienza la consulta SQL
-        cadena.Append("INSERT INTO recorridos (NRO_CARTA, PLANILLA_RECORRIDO, FECHA_RECORRIDO, CARTERO, ZONA, REMITENTE, TRABAJO, FECHA_TRABAJO, NOMBRE_APELLIDO, CP, CALLE, LOCALIDAD, PROVINCIA, EMPRESA, NRO_CARTA2, FECHAF, ESTADO, MOTIVO) VALUES ")
-
-        For Each drw As DataRow In Dtenviar.Rows
-            txtsql = "(" & "'" & If(IsDBNull(drw("NRO_CARTA")), "", drw("NRO_CARTA")) & "' , " _
-        & "'" & If(IsDBNull(drw("PLANILLA_RECORRIDO")), "", drw("PLANILLA_RECORRIDO")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("FECHA_RECORRIDO")), "", Converfecha(drw("FECHA_RECORRIDO"))) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("CARTERO")), "", drw("CARTERO")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("ZONA")), "", drw("ZONA")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("REMITENTE")), "", drw("REMITENTE")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("TRABAJO")), "", drw("TRABAJO")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("FECHA_TRABAJO")), "", Converfecha(drw("FECHA_TRABAJO"))) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("NOMBRE_APELLIDO")), "", drw("NOMBRE_APELLIDO")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("CP")), "", drw("CP")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("CALLE")), "", drw("CALLE")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("LOCALIDAD")), "", drw("LOCALIDAD")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("PROVINCIA")), "", drw("PROVINCIA")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("EMPRESA")), "", drw("EMPRESA")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("NRO_CARTA2")), "", drw("NRO_CARTA2")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("FECHAF")), "", Converfecha(drw("FECHAF"))) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("ESTADO")), "", drw("ESTADO")) & "'" & ", " _
-        & "'" & If(IsDBNull(drw("MOTIVO")), "", drw("MOTIVO")) & "'" & ")" & ", "
-
-            cadena.Append(txtsql)
-        Next
-
-        Dim Archtxt3 As String = cadena.ToString()
-        If Len(Archtxt3) > 0 Then
-            Archtxt3 = Mid(Archtxt3, 1, Len(Archtxt3) - 2)
-        End If
-
-
-        ' Enviar la consulta al endpoint
-        If ConfigCorreo.CN_Correo.InstertarRecorridosWeb(Archtxt3) = True Then
-            'MsgBox("OK")
+    Private Function EscapeSqlValue(value As Object) As String
+        If value Is DBNull.Value OrElse value Is Nothing Then
+            Return ""
         Else
-            MsgBox("Error")
+            ' Escapar comillas simples y otros caracteres problemáticos
+            Return value.ToString().Replace("'", "''").Replace("\", "\\")
         End If
+    End Function
 
-        CargarDatosPlanillas()
+    Private Sub BtnSubirRecorrido_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSubirRecorrido.Click
+        Try
+            Dim cadena As New System.Text.StringBuilder
+            Dim Dtenviar As New DataTable
 
+            Dtenviar = ConsultarRecorridosParaEnviarWeb(txtrecorrido.Text)
+
+            ' Comienza la consulta SQL
+            cadena.Append("INSERT INTO recorridos (NRO_CARTA, PLANILLA_RECORRIDO, FECHA_RECORRIDO, CARTERO, ZONA, REMITENTE, TRABAJO, FECHA_TRABAJO, NOMBRE_APELLIDO, CP, CALLE, LOCALIDAD, PROVINCIA, EMPRESA, NRO_CARTA2, FECHAF, ESTADO, MOTIVO) VALUES ")
+
+            For Each drw As DataRow In Dtenviar.Rows
+                cadena.Append("(")
+                cadena.Append("'" & EscapeSqlValue(drw("NRO_CARTA")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("PLANILLA_RECORRIDO")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(If(IsDBNull(drw("FECHA_RECORRIDO")), "", Converfecha(drw("FECHA_RECORRIDO")))) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("CARTERO")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("ZONA")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("REMITENTE")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("TRABAJO")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(If(IsDBNull(drw("FECHA_TRABAJO")), "", Converfecha(drw("FECHA_TRABAJO")))) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("NOMBRE_APELLIDO")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("CP")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("CALLE")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("LOCALIDAD")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("PROVINCIA")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("EMPRESA")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("NRO_CARTA2")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(If(IsDBNull(drw("FECHAF")), "", Converfecha(drw("FECHAF")))) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("ESTADO")) & "', ")
+                cadena.Append("'" & EscapeSqlValue(drw("MOTIVO")) & "'")
+                cadena.Append("), ")
+            Next
+
+            Dim Archtxt3 As String = cadena.ToString()
+            If Len(Archtxt3) > 0 Then
+                Archtxt3 = Archtxt3.Substring(0, Archtxt3.Length - 2) ' Elimina la última coma y espacio
+            End If
+
+            If Dtenviar.Rows.Count > 0 Then
+                If CN_Correo.InstertarRecorridosWeb(Archtxt3) Then
+                    MessageBox.Show($"Se subieron correctamente {Dtenviar.Rows.Count} registros",
+                              "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Else
+                    MessageBox.Show("Ocurrió un error al subir los datos",
+                              "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+            Else
+                MessageBox.Show("No hay datos para subir",
+                           "Información", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+
+            CargarDatosPlanillas()
+        Catch ex As System.Exception
+            MessageBox.Show("Error al preparar datos: " & ex.Message,
+                       "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
+
+
+    'Private Sub BtnSubirRecorrido_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSubirRecorrido.Click
+
+    '    Dim cadena As New System.Text.StringBuilder
+    '    Dim txtsql As String = ""
+    '    Dim Dtenviar As New DataTable
+
+    '    Dtenviar = ConsultarRecorridosParaEnviarWeb(txtrecorrido.Text)
+
+    '    ' Comienza la consulta SQL
+    '    cadena.Append("INSERT INTO recorridos (NRO_CARTA, PLANILLA_RECORRIDO, FECHA_RECORRIDO, CARTERO, ZONA, REMITENTE, TRABAJO, FECHA_TRABAJO, NOMBRE_APELLIDO, CP, CALLE, LOCALIDAD, PROVINCIA, EMPRESA, NRO_CARTA2, FECHAF, ESTADO, MOTIVO) VALUES ")
+
+    '    For Each drw As DataRow In Dtenviar.Rows
+    '        txtsql = "(" & "'" & If(IsDBNull(drw("NRO_CARTA")), "", drw("NRO_CARTA")) & "' , " _
+    '    & "'" & If(IsDBNull(drw("PLANILLA_RECORRIDO")), "", drw("PLANILLA_RECORRIDO")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("FECHA_RECORRIDO")), "", Converfecha(drw("FECHA_RECORRIDO"))) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("CARTERO")), "", drw("CARTERO")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("ZONA")), "", drw("ZONA")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("REMITENTE")), "", drw("REMITENTE")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("TRABAJO")), "", drw("TRABAJO")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("FECHA_TRABAJO")), "", Converfecha(drw("FECHA_TRABAJO"))) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("NOMBRE_APELLIDO")), "", drw("NOMBRE_APELLIDO")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("CP")), "", drw("CP")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("CALLE")), "", drw("CALLE")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("LOCALIDAD")), "", drw("LOCALIDAD")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("PROVINCIA")), "", drw("PROVINCIA")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("EMPRESA")), "", drw("EMPRESA")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("NRO_CARTA2")), "", drw("NRO_CARTA2")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("FECHAF")), "", Converfecha(drw("FECHAF"))) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("ESTADO")), "", drw("ESTADO")) & "'" & ", " _
+    '    & "'" & If(IsDBNull(drw("MOTIVO")), "", drw("MOTIVO")) & "'" & ")" & ", "
+
+    '        cadena.Append(txtsql)
+    '    Next
+
+    '    Dim Archtxt3 As String = cadena.ToString()
+    '    If Len(Archtxt3) > 0 Then
+    '        Archtxt3 = Mid(Archtxt3, 1, Len(Archtxt3) - 2)
+    '    End If
+
+    '    CN_Correo.InstertarRecorridosWeb(Archtxt3)
+
+    '    CargarDatosPlanillas()
+
+    'End Sub
 
 
 

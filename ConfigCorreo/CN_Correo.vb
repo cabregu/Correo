@@ -9,6 +9,7 @@ Imports iTextSharp.text.pdf
 Imports iTextSharp.text
 Imports System.Net
 Imports Newtonsoft.Json.Linq
+Imports System.Windows.Forms
 
 Public Class CN_Correo
     Public Shared CadenaDeConeccionProduccion As String = ""
@@ -20,6 +21,7 @@ Public Class CN_Correo
             Dim request As Net.HttpWebRequest = CType(WebRequest.Create("https://lexs.com.ar/insertardatos.php"), HttpWebRequest)
             request.Method = "POST"
             request.ContentType = "application/x-www-form-urlencoded"
+            request.Timeout = 300000 ' 5 minutos timeout
 
             ' Escribir la consulta SQL en el cuerpo de la solicitud
             Using streamWriter As New StreamWriter(request.GetRequestStream())
@@ -29,18 +31,36 @@ Public Class CN_Correo
             End Using
 
             ' Obtener la respuesta
-            Dim response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
-            Using streamReader As New StreamReader(response.GetResponseStream())
-                Dim result As String = streamReader.ReadToEnd()
-                ' Aquí puedes procesar la respuesta JSON si es necesario
-                Dim jsonResponse As JObject = JObject.Parse(result)
-                Return jsonResponse("status").ToString() = "success"
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Using streamReader As New StreamReader(response.GetResponseStream())
+                    Dim result As String = streamReader.ReadToEnd()
+                    Try
+                        Dim jsonResponse As JObject = JObject.Parse(result)
+                        If jsonResponse("status").ToString() = "error" Then
+                            MessageBox.Show("Error del servidor: " & jsonResponse("message").ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            Return False
+                        End If
+                        Return True
+                    Catch ex As Exception
+                        MessageBox.Show("Error al procesar respuesta: " & ex.Message & vbCrLf & "Respuesta: " & result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Return False
+                    End Try
+                End Using
             End Using
 
+        Catch ex As WebException
+            If ex.Response IsNot Nothing Then
+                Using streamReader As New StreamReader(ex.Response.GetResponseStream())
+                    Dim errorResponse As String = streamReader.ReadToEnd()
+                    MessageBox.Show("Error de red: " & ex.Message & vbCrLf & "Detalles: " & errorResponse, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Using
+            Else
+                MessageBox.Show("Error de red: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+            Return False
         Catch ex As Exception
-        ' Manejo de errores
-        MsgBox("Error: " & ex.Message)
-        Return False
+            MessageBox.Show("Error inesperado: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return False
         End Try
     End Function
 
@@ -3069,7 +3089,7 @@ Public Class CN_Correo
     End Function
     Public Shared Function LlenarDatatableImprimir(ByVal Remito As String) As DataTable
 
-        Dim sql As String = "Select NRO_CARTA, REMITENTE, TRABAJO, FECH_TRAB, APELLIDO, CP, CALLE, NRO, PISO_DEPTO, LOCALIDAD, PROVINCIA, NRO_CART2, EMPRESA, SOCIO, OBS, OBS2, OBS3, OBS4 from cartas where TRABAJO='" & Remito & "' AND OBS2<>'ARM' AND OBS2<>'MODO S' AND OBS2<>'REFEREN'"
+        Dim sql As String = "Select NRO_CARTA, REMITENTE, TRABAJO, FECH_TRAB, APELLIDO, CP, CALLE, NRO, PISO_DEPTO, LOCALIDAD, PROVINCIA, NRO_CART2, EMPRESA, SOCIO, OBS, OBS2, OBS3, OBS4 from cartas where TRABAJO='" & Remito & "' AND OBS2<>'MODO S' AND OBS2<>'REFEREN'"
 
 
         Dim cn As New MySqlConnection(CadenaDeConeccionProduccion)
